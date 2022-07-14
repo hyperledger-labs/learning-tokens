@@ -12,7 +12,7 @@ This is a whole fungible token that makes it possible for a list of participants
 ### 1. Token Base: Whole Fungible `tF{~d}`
 > Whole Fungible tokens have interchangeable value with each other, where any owned sum of them from a class has the same value as another owned sum from the same class. A whole token cannot be sub-divided so it doesn't support the notion of 'making change'.
 
-Artifact [whole-fungible](https://github.com/hyperledger-labs/learning-tokens/practices/community-reward-token/artifacts/whole_fungible)
+Artifact [whole-fungible](https://github.com/hyperledger-labs/learning-tokens/tree/main/Practices/community-reward-token/artifacts/whole_fungible)
 
 #
 
@@ -20,21 +20,21 @@ Artifact [whole-fungible](https://github.com/hyperledger-labs/learning-tokens/pr
 #### - Indivisible  `~d`
 > An ability or restriction on the token where it cannot be divided from a single whole token into fractions. Sets the base token Decimals property to 0 which will make the token indivisible and a whole token is the smallest ownable unit of the token.
 
-Artifact [indivisible](https://github.com/hyperledger-labs/learning-tokens/practices/community-reward-token/artifacts/indivisible)
+Artifact [indivisible](https://github.com/hyperledger-labs/learning-tokens/tree/main/Practices/community-reward-token/artifacts/indivisible)
 
 #
 
 #### - Transferable  `t`
 > Every token instance has an owner. The Transferable behavior provides the owner the ability to transfer the ownership to another party or account.
 
-Artifact [transferable](https://github.com/hyperledger-labs/learning-tokens/practices/community-reward-token/artifacts/transferable)
+Artifact [transferable](https://github.com/hyperledger-labs/learning-tokens/tree/main/Practices/community-reward-token/artifacts/transferable)
 
 #
 
 #### - Roles  `r`
 > A token can have behaviors that the class will restrict invocations to a select set of parties or accounts that are members of a role or group. This is a generic behavior that can apply to a token many times to represent many role definitions within the template. This behavior will allow you to define what role(s) to create and what behavior(s) to apply the role to in the TemplateDefinition.
 
-Artifact [roles](https://github.com/hyperledger-labs/learning-tokens/practices/community-reward-token/artifacts/roles)
+Artifact [roles](https://github.com/hyperledger-labs/learning-tokens/tree/main/Practices/community-reward-token/artifacts/roles)
 
 #
 
@@ -42,7 +42,7 @@ Artifact [roles](https://github.com/hyperledger-labs/learning-tokens/practices/c
 #### - Supply Control  `SC`
 > A token class that implements this behavior will provide controls to increase and decrease supply of tokens within the class. Additionally, it will include the ability to support a role, like Minters, that will be allowed to invoke the Mintable behavior. The owner can add accounts to the role and any account that is a member of the role will be able to mint tokens in the class.
 
-Artifact [supply-control](https://github.com/hyperledger-labs/learning-tokens/practices/community-reward-token/artifacts/supply-control)
+Artifact [supply-control](https://github.com/hyperledger-labs/learning-tokens/tree/main/Practices/community-reward-token/artifacts/supply-control)
 
 #
 
