@@ -34,7 +34,7 @@ We propose to work with Linux Foundation and GBBA GSMI Area 4. We already have o
 | Milestone 1 | Status |
 | ----- | ----- |
 | Hosting workshop for Business Case and Economic Model | In Progress | 
-| Two virtual meetups and one workshop to engage communities and interested parties | In Progress |
+| Two virtual meetups and one workshop to engage communities and interested parties | Done |
 
 | Milestone 2 | Status |
 | ----- | ----- |
