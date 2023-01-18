@@ -88,3 +88,6 @@ https://wiki.hyperledger.org/display/INTERN/Project+plan+-+Learning+Tokens
 
 https://wiki.hyperledger.org/display/INTERN/Learning+Tokens
 
+Business Definition of targeted tokens:
+https://www.notion.so/jmarvinh/Business-Definition-of-Targeted-Tokens-f8fb3bf51bf24f9eb09bee98abd35d01
+
