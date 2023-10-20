@@ -1,1 +1,0 @@
-# Loyalty a TTF TokenTemplate
