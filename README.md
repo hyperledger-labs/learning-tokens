@@ -224,7 +224,7 @@ Curriculum management[14]
 | 5.3. Learning Token Sequence Diagram |
 | ------------------------------------ |
 
-[Imgur](https://imgur.com/LqUGsR0)
+[Imgur](https://imgur.com/WROJOl8.jpg)
 
 ## ====
 
