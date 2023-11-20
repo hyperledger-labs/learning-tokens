@@ -9,7 +9,7 @@
       "templateValidated": true
     },
     "name": "[tN{~d,~t,m,a,r}+phDR+phGL]",
-    "aliases": ["Attendance Token", "Score Token"],
+    "aliases": ["Attendance Token", "Score Token" , "Score Token For Instructor"],
     "artifactDefinition": {
       "businessDescription": "This is a Unique Whole Fungible Token with Variable Supply where supply is set when the tokens are fabricated and supply can be added to new owners and removed by owners by redeeming. It is Whole by setting the Decimals property on the dividable behavior = 0.",
       "businessExample": "Loyalty points are a common use of this type of token. Representing a loyalty point using fractional amounts like `.081231` does not make sense, so a point is just that a single whole unit. Redemption of these is easy for users to understand using whole numbers. New points can be fabricated or issued based on customer activity and points can be removed when they are redeemed. This formula supports transferable points as well.",
