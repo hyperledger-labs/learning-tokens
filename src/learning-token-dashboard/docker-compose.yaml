@@ -1,0 +1,26 @@
+version: "3"
+services:
+  learning-token-fronted:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+
+      # args:
+      #     - VITE_API_URL=http://192.168.9.228:3000/api
+      #     - VITE_SOCKET_URL=http://192.168.9.228:3000
+      #     - VITE_AI_URL=http://dune.anchorblock.vc:3050
+
+      #     - VITE_ZOHO_CLIENT_ID=1000.NGLFO7A6NQZTEILTTJPWLOGPHB0Z8D
+      #     - VITE_ZOHO_CLIENT_SECRET=9169c3bdb23d34d799a4e368de41eb24e7faf8b09a
+      #     - VITE_ZOHO_REDIRECT_URI=http://localhost:3001/integrations/zoho
+
+      #     - VITE_GOOGLE_CLIENT_ID=972106470134-lnu97g80nebp29c1r9905ngbh076hvvl.apps.googleusercontent.com
+      #     - VITE_GOOGLE_REDIRECT_URL=https://app.anchorbooks.ai/auth
+
+    image: learning-token-fronted
+    ports:
+      - "5173:5173"
+    container_name: learning-token-fronted
+    environment:
+      - VITE_API_URL=http://localhost:3000/api
+      - VITE_SMART_CONTRACT=0x5FbDB2315678afecb367f032d93F642f64180aa3
