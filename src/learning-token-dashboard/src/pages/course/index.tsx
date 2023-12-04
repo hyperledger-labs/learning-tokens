@@ -11,18 +11,21 @@ const Course = () => {
   const getCourse = async () => {
     const contract = await initWeb3Method();
     const courseLength = await contract!.courseId();
+
     let temp: any = [];
     if (Number(courseLength) > 0) {
       for (let index = 0; index < Number(courseLength); index++) {
         const tx = await contract!.courses(index);
+        let obj = { value: 0, label: "" };
         for (let key in tx) {
-          let obj: any;
           if (+key === 3 && auth.user.publicAddress) {
-            obj["value"] = index;
+            obj.value = index + 1;
           }
           if (+key === 5) {
-            obj["label"] = tx[key];
+            obj.label = tx[key];
           }
+        }
+        if (obj.value !== 0) {
           temp.push(obj);
         }
       }
