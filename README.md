@@ -4,7 +4,7 @@
 
 Learning Tokens is an Open Source mechanism that uses the composable Interwork Alliance Token Taxonomy Framework (IWA TTF) to produce a Learning Token as a positive reinforcer that recognizes, registers, and rewards community engagement in collective learning and also certifies skills acquisition and competencies.
 
-# Explore our initial achievements from the year 2022 by visiting our GitHub repository: https://github.com/hyperledger-labs/learning-tokens/commit/fd834c18bc1267aa14065fda07ce28f366da6ef5
+
 
 ## Learning Tokens - Hyperledger + GBBC, Mentorship 2023 Document
 
@@ -274,3 +274,8 @@ Curriculum management[14]
 https://wiki.hyperledger.org/display/INTERN/Project+plan+-+Learning+Tokens
 
 https://wiki.hyperledger.org/display/INTERN/Learning+Tokens
+
+
+
+
+## Explore our initial achievements from the year 2022 by visiting our GitHub repository: https://github.com/hyperledger-labs/learning-tokens/commit/fd834c18bc1267aa14065fda07ce28f366da6ef5
