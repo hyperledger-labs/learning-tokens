@@ -33,8 +33,8 @@ const initialValues = {
   confirm: "",
   publicAddress: "",
   type: "learner",
-  latitude: "",
-  longitude: "",
+  latitude: "23.7984463",
+  longitude: "90.4031033",
 };
 
 const validationSchema = object().shape({
