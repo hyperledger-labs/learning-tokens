@@ -1,0 +1,12 @@
+@import "rsuite/dist/rsuite.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  body {
+    @apply font-poppins;
+  }
+  a{
+    text-decoration: none !important;
+  }
+}

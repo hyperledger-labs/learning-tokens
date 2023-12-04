@@ -1,0 +1,26 @@
+version: '3'
+services:
+    learning-token-backend:
+        image: learning-token-backend
+        ports:
+            - '3000:3000'
+        container_name: learning-token-backend
+        environment:
+            - APP_URL=http://localhost:3000/api
+            - APP_PORT=3000
+            - APP_SECRET=3QANyH2zMoHrfxqfRWTLbPM
+            - APP_EXPIRES=3600
+            - POSTGRES_HOST=host.docker.internal
+            - POSTGRES_PORT=5432
+            - DB_TYPE=postgres
+            - DB_USERNAME=postgres
+            - DB_PASSWORD=password
+            - DB_NAME=learning-token
+            - REDIS_HOST=host.docker.internal
+            - REDIS_PORT=6379
+            - REDIS_TTL=600
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        volumes:
+            - /app/node_modules
