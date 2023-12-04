@@ -70,8 +70,8 @@ Table of Contents
 7.  Potential Alignment with Educational Market Governance
 8.  Conclusions
 
-| 1 Foreword |
-| ---------- |
+| 1. Foreword |
+| ----------- |
 
 Learning Tokens represent the value of –and rights over– the transmission of knowledge. In a network society, education is the fundamental asset that develops human capacities to transform people’s minds. Learning environments, diverse and different, foster self-regulated activities that construct wisdom collaboratively. However, our expanding universe of knowledge, skills, attitudes, and values demands constant understanding to better human lives and labor markers. The Skills-first initiative provides one common foundation for that purpose, while our tokenization of learning contributes a much-needed currency of expertise.
 
@@ -79,15 +79,15 @@ This report presents the result of the Learning Tokens project of the Hyperledge
 
 A collaboration with the Global Blockchain Business Council, GBBC, facilitated using the InterWork Alliance Token Taxonomy Framework, IWA-TTF, a meta-model for digital assets to standardize the characteristics of the Learning Tokens templates first and then promoting its use across the educational institutes registered in their Global Standard Mapping Initiatives 4.0.
 
-| 2 Document Overview |
-| ------------------- |
+| 2. Document Overview |
+| -------------------- |
 
 The document begins with an overall view of educational markets, their learning principles and environments, the skill-based learning initiative, the relevance of evaluation and certification, the market roles of institutions, instructors, courses –content, assessments, scoring guides, and certificates–, learners, verifiers, and standard bodies.
 
 Explains tokenizing the learning process with the relevance of the concept of granularity. It describes tokens as a currency of expertise, presents scoring guides as oracles that coordinate the flow of creating and transferring token ownership across different stakeholders, explores the lifecycle and impact of tokens, and concludes with the potential alignment with educational market governance.
 
-| 3 Educational Market Background |
-| ------------------------------- |
+| 3. Educational Market Background |
+| -------------------------------- |
 
 Education is a fundamental asset for our network society, that new form of social organization structured by global networks powered by digital information and communication technologies.
 
@@ -97,8 +97,8 @@ However, education matters because this logic of inclusion and exclusion changes
 
 Beyond immediate narratives, the network society values developing the human capacity to combine information and communication technology with the organizational transformation of social structures that raise creativity and productivity, stimulate innovation and entrepreneurship with social inclusion, and promote collaboration for technological breakthroughs.
 
-| 3.1 Learning Principles |
-| ----------------------- |
+| 3.1. Learning Principles |
+| ------------------------ |
 
 Today, the dominant learning theory is socio-constructivist, shaped by the context in which it is situated and actively constructed through social negotiation with others. On this understanding, learning environments should be constructive, fostering self-regulated activities, sensitive to context, and often collaborative.
 
@@ -108,8 +108,8 @@ Seven principles guide the development of learning environments: to recognize it
 
 In such environments, learners can engage actively, understand their individual and cooperative roles, accept their different emotions and motivations, confront challenges that demand hard work, and face clear assessment strategies that support learning with formative feedback within a common framework that connects knowledge, colleagues, and instructors.
 
-| 3.2 Learning Environments |
-| ------------------------- |
+| 3.2. Learning Environments |
+| -------------------------- |
 
 Educational experiences happen in different contexts, such as structured learning, vocational or training programs, and self-learning environments.
 
@@ -117,7 +117,7 @@ Educational experiences happen in different contexts, such as structured learnin
 <img src="https://imgur.com/usN8Kos.jpg"/>
 </p>
 <p align="center">
-Fig. 1.
+Fig. 1. Contexts for learning
 </p>
 
 Structural education encompasses experiences planned and conducted by teachers or instructors in institutional settings, with controlled or open access, presential, online, or mobile, where a curriculum or learning framework sets a course of study to earn a degree.
@@ -126,8 +126,8 @@ Vocational Education and Training programs are school-based or work-based employ
 
 Self-learning refers to education one initiates to improve knowledge or skill set away from formal education. It is individually motivated, presential, or online, not necessarily structured, and mainly conducted through the Internet.
 
-| 3.3 Skill-based Education |
-| ------------------------- |
+| 3.3. Skill-based Education |
+| -------------------------- |
 
 Each of these contexts empowers learners of all ages with abilities, skills, attitudes, and values to develop their unique human qualities and set them for a lifetime of learning.
 
@@ -167,11 +167,11 @@ Digital credentials, on the other hand, don't allow learners to manage the flow 
 <img src="https://imgur.com/UMNLHXt.jpg"/>
 </p>
 <p align="center">
-Fig. 3. 
+Fig. 3. Two ways to certificate acquisition of skills: overall or granular
 </p>
 
-| 4 Educational Market Roles |
-| -------------------------- |
+| 4. Educational Market Roles |
+| --------------------------- |
 
 Communication theory provides a framework for understanding education components, relationships, and commitments.
 
@@ -185,7 +185,7 @@ The principal roles of the educational market are institutions, instructors, cou
 <img src="https://imgur.com/l5zNZya.jpg"/>
 </p>
 <p align="center">
-Fig. 4.
+Fig. 4. Interactions of educational market roles
 </p>
 
 | 4.1 Institutions |
@@ -198,54 +198,54 @@ Institutions are learning environments in physical settings, online places, or w
 
 Instructors create and teach courses for learners. They develop instructional plans, deliver lessons, assemble, and distribute educational content, and conduct specific evaluation strategies. They are the source of trust for the expertise they transmit.
 
-| 4.3 Courses |
-| ----------- |
+| 4.3. Courses |
+| ------------ |
 
 Courses convey knowledge, skills, attitudes, and values at different places, from academic classes to in-work training, professional or trade conferences, seminars, workshops, webinars, and online tutorials. Their learning materials range from all kinds of available media. They are the source of trust for the learning experience they provide.
 
-| 4.3.1 Content |
-| ------------- |
+| 4.3.1. Content |
+| -------------- |
 
 Key topics are structured as transmittable units that respond to learning objectives and pedagogical strategy. Their format and layout presentation techniques are frequently ordered in sections, lectures, or units, at the end of which assessments verify the quality of the learning experience.
 
-| 4.3.2 Assessment |
-| ---------------- |
+| 4.3.2. Assessment |
+| ----------------- |
 
 The evaluation confirms the quality of instruction. It judges the acquisition of knowledge and skills by learners. It helps instructors improve their teaching practices. There are four traditional measurements: assistance to lessons, the score of responses to tests and tasks, engagement in class, and feedback scores to instructors.
 
-| 4.3.3 Scoring Guides |
-| -------------------- |
+| 4.3.3. Scoring Guides |
+| --------------------- |
 
 Scoring guides give points to the performance of each learner. Upfront, at the beginning of a course, they post the total amount of partial credits available for each lesson, task, test, and even particular questions. Their distribution of values reflects the relative importance of each unit of knowledge with a transparent grading policy to measure individual assistance, scores, and class participation. As the course progresses, these evaluation records give feedback to both instructors and learners.
 
-| 4.3.4 Certificates |
-| ------------------ |
+| 4.3.4. Certificates |
+| ------------------- |
 
 Educational credentials certify competence in a specific skill. They attest to the satisfactory completion of an educational program. Their official documents verify the awarding institution and the claim of proficiency in a field of knowledge.
 
-| 4.4 Learners |
-| ------------ |
+| 4.4. Learners |
+| ------------- |
 
 Learning is the ultimate skill for lifelong success. Learners are passionate about new things and concepts. They want to understand, acquire, and apply knowledge. Their way to claim and prove their competence is by holding credentials.
 
-| 4.5 Verifiers |
-| ------------- |
+| 4.5. Verifiers |
+| -------------- |
 
 To navigate a market of skill-first credentials, stakeholders need a simple validation process to match competencies for task descriptions employers need, abilities profiles for entrepreneurial partnerships, and investment opportunities for financial intermediaries.
 
-| 4.6 Standards |
-| ------------- |
+| 4.6. Standards |
+| -------------- |
 
 Standard organizations oversee quality assurance, accountability, and
 qualification frameworks for academic standards. They develop and coordinate standards that support uniformity across learning institutions. In the recent past, as reviewed by UNESCO, they “vary enormously in focus, reach, objectives, and impact.” However, taxonomies of fields of knowledge and skillsets, especially the new skills-first initiative, make new synergies possible with homogeneous databases for policymaking.
 
-| 5 Tokenizing the Learning Process |
-| --------------------------------- |
+| 5. Tokenizing the Learning Process |
+| ---------------------------------- |
 
 Skills are taught and learned through the transmission of knowledge. Learning is a lifelong journey where skills are your wealth. Learning Tokens represent the value of that wealth.
 
-| 5.1 Granularity |
-| --------------- |
+| 5.1. Granularity |
+| ---------------- |
 
 Eleven millennia ago, at their appearance, tokens referred to the measurement of goods. In the Neolithic, the appearance of this new counting technology, later morphed into writing, coincided with the cultivation of cereals, the management of communal storage for grains, and the commercial needs of the Agricultural Revolution.
 
@@ -272,11 +272,11 @@ The original function of tokens, measuring grains as goods in communal storage, 
 <img src="https://imgur.com/ZQi3tzq.jpg"/>
 </p>
 <p align="center">
-Fig. 6. 
+Fig. 6. Transmission of knowledge, skills, attitudes, and values
 </p>
 
-| 5.2 Supply of Learning Opportunities |
-| ------------------------------------ |
+| 5.2. Supply of Learning Opportunities |
+| ------------------------------------- |
 
 Learning opportunities grow every day. Universities go beyond formal education and are open to lifelong learners. Vocational training supports trades and apprenticeships. The industry trains employees for better jobs. Online teaching platforms offer courses, and the Internet hosts videos and tutorials for self-learning.
 
@@ -304,15 +304,15 @@ Four Tokens can attest to such assessments and become our currency of expertise.
 
 Scoring guides are the oracles to minting –creating– and transferring these tokens.
 
-| 5.3.1 Scoring Guides as Oracles |
-| ------------------------------- |
+| 5.3.1. Scoring Guides as Oracles |
+| -------------------------------- |
 
 Scoring guides are the oracle –in tokenization terms– instructors use to assign tokens to learners. At the beginning of a course, they set a transparent grading policy with the maximum number of points available for each assessment. As the course advances, instructors transfer tokens according to the quality of the learner responses to the evaluation.
 
 Scoring tables are the equivalent of nutrition tables that make possible informed food choices for a healthy diet. In this case, they detail the knowledge, skills, attitudes, and values available in each course to nourish a well-prepared mind. As learners learn, acquired units of competency become instructional facts consumed.
 
-| 5.3.2 Attendance Token for Learners |
-| ----------------------------------- |
+| 5.3.2. Attendance Token for Learners |
+| ------------------------------------ |
 
 The attendance token represents the value of being present to acquire a unit of competency.
 
@@ -334,11 +334,11 @@ A Learning Token Register assigns the IDs for Institutions, Instructors, and Cou
 <img src="https://imgur.com/0W4035P.jpg"/>
 </p>
 <p align="center">
-Fig. 7. 
+Fig. 7. Attendance Token
 </p>
 
-| 5.3.3 Score Token for Learners |
-| ------------------------------ |
+| 5.3.3. Score Token for Learners |
+| ------------------------------- |
 
 The score token for learners represents the value of acquiring a unit of competency.
 
@@ -354,11 +354,11 @@ Score tokens for learners are Non-Fungible Tokens. Their metadata records the fi
 <img src="https://imgur.com/2fnfhHS.jpg"/>
 </p>
 <p align="center">
-Fig. 8. 
+Fig. 8. Score Token for Learners
 </p>
 
-| 5.3.4 Help Token for Learners |
-| ----------------------------- |
+| 5.3.4. Help Token for Learners |
+| ------------------------------ |
 
 Help tokens for learners represent the value of engagement in collaborative support.
 Context shapes the learning environment actively constructed through social interaction. Instructors define the activities that promote collective engagement. Learners aid instructors by commenting in course forums, assisting colleagues in their homework, or collectively reviewing and grading assessments. Their help puts them at the center of the social nature of education, fuels the powerful emotion of belonging to a group, and builds horizontal connections across fields of knowledge and skill communities around the globe.
@@ -373,11 +373,11 @@ Like the previous tokens, its metadata records the field of knowledge, the skill
 <img src="https://imgur.com/PuH5Kx9.jpg"/>
 </p>
 <p align="center">
-Fig. 9. 
+Fig. 9. Help Token for Learners
 </p>
 
-| 5.3.5 Score Token for Instructors |
-| --------------------------------- |
+| 5.3.5. Score Token for Instructors |
+| ---------------------------------- |
 
 Score tokens for instructors represent the value of their teaching performance.
 With the scoring guide, instructors can ask learners to assess their performance at specific moments in a course and receive feedback to improve their teaching strategies.
@@ -390,7 +390,7 @@ Learning Tokens, our currency of expertise, represent the value of –and rights
 <img src="https://imgur.com/nVFoBof.jpg"/>
 </p>
 <p align="center">
-Fig. 10. 
+Fig. 10. Score Token for Instructors
 </p>
 
 | 5.4 Token Taxonomy Framework |
@@ -406,13 +406,14 @@ Existing templates are open source to use. New requirements justify the creation
 <img src="https://imgur.com/zGz4PtP.jpg"/>
 </p>
 <p align="center">
-Fig. 11. 
+Fig. 11. Learning Tokens in Token Taxonomy Framework
 </p>
 Learning Tokens proposes two new templates according to TTF. The first is a non-fungible formula with two definitions: attendance –one class only– and scores – for learners and instructors–. The second template is a fungible formula for collective support -one class for help–. All have multiple instances. The following table describes the characteristics of their base types, behaviors, and property sets, followed by their corresponding formulas.
 <p align="center">
 <img src="https://imgur.com/wo25jZ7.jpg"/>
 </p>
 <p align="center">
+Table 1. Learning Tokens Formulas, details of base types, behaviours and property sets.
 </p>
 
 **Token Taxonomy Framework Formula Format**
@@ -449,42 +450,45 @@ This figure shows the steps for interacting with Learning Tokens.
 <img src="https://imgur.com/wdZgU3c.jpg"/>
 </p>
 <p align="center">
-Fig. 12. 
+Fig.12. Interactions of educational market roles with Learning Tokens
 </p>
 
-1. An Institution registers in Learning Tokens.
+<p align="center">
+An Institution registers in Learning Tokens.
 
-2. A registered Institution registers an Instructor in Learning Tokens.
+A registered Institution registers an Instructor in Learning Tokens.
 
-3. A registered Instructor registers a Course in Learning Tokens with its field(s) of knowledge and skill(s).
+A registered Instructor registers a Course in Learning Tokens with its field(s) of knowledge and skill(s).
 
-4. An Institution accepts Learners to take Courses, presential or online, with or without payment.
+An Institution accepts Learners to take Courses, presential or online, with or without payment.
 
-5. Learners register for a Course and share their Skill-Wallet to accumulate Learning Tokens into their Skill Profiles.
+Learners register for a Course and share their Skill-Wallet to accumulate Learning Tokens into their Skill Profiles.
 
-6. Instructors create content and assessments for each course on their preferred platforms.
+Instructors create content and assessments for each course on their preferred platforms.
 
-7. Courses structure their transmission of knowledge and skills through sequences of sections, units, lessons, or chapters.
+Courses structure their transmission of knowledge and skills through sequences of sections, units, lessons, or chapters.
 
-8. There is an evaluation at the end of each section or lesson to assess the degree of assimilation by Learners. Instructors evaluate manually or automatically as they prefer and their platforms allow.
+There is an evaluation at the end of each section or lesson to assess the degree of assimilation by Learners. Instructors evaluate manually or automatically as they prefer and their platforms allow.
 
-9. There are many types and numbers of assessments, each with different weights of the total grade.
+There are many types and numbers of assessments, each with different weights of the total grade.
 
-10. Course assessments use Rubrics and Scoring Guides for transparent evaluation and grading policies.
+Course assessments use Rubrics and Scoring Guides for transparent evaluation and grading policies.
 
-11. Grading systems are different around the world. We suggest using percentages from 0 to 100 for the overall grading range.
+Grading systems are different around the world. We suggest using percentages from 0 to 100 for the overall grading range.
 
-12. To register Fields of Knowledge, we suggest CIP Codes, The Classification of Instructional Programs, by NCES, National Center for Educational Statistics of IES, Institute of Education Sciences, in the U.S. Department of Education. https://nces.ed.gov/ipeds/cipcode/default.aspx?y=55
+To register Fields of Knowledge, we suggest CIP Codes, The Classification of Instructional Programs, by NCES, National Center for Educational Statistics of IES, Institute of Education Sciences, in the U.S. Department of Education. https://nces.ed.gov/ipeds/cipcode/default.aspx?y=55
 
-13. To register Skills, we suggest the World Economic Forum Reskilling Revolution Interactive Tools Global Skills Taxonomy and Education 4.0 https://www1.reskillingrevolution2030.org/skills-taxonomy/index.html
+To register Skills, we suggest the World Economic Forum Reskilling Revolution Interactive Tools Global Skills Taxonomy and Education 4.0 https://www1.reskillingrevolution2030.org/skills-taxonomy/index.html
 
-14. Instructors tokenize their Scoring Guides by assigning several tokens equivalent to the percentage weight of the total grade for each assessment.
+Instructors tokenize their Scoring Guides by assigning several tokens equivalent to the percentage weight of the total grade for each assessment.
 
-15. Instructors register Tokenized Scoring Guides in Learning Tokens as a Source of Truth and oracle for minting and transferring tokens to Learners.
+Instructors register Tokenized Scoring Guides in Learning Tokens as a Source of Truth and oracle for minting and transferring tokens to Learners.
 
-16. As the Course progresses, at the end of each Lesson, Learners are evaluated, individual Grades are assigned accordingly, and registered Learner's Scoring Guides serve as oracles that trigger Smart Contracts to mint and transfer Learning Tokens to each registered Learner's Skill Wallets
+As the Course progresses, at the end of each Lesson, Learners are evaluated, individual Grades are assigned accordingly, and registered Learner's Scoring Guides serve as oracles that trigger Smart Contracts to mint and transfer Learning Tokens to each registered Learner's Skill Wallets
 
 As an example of a Scoring Guide for Course X. There are three assessments. The grading policy sets 100 points for learners, 40 for each of the two lessons, and 20 for the final evaluation. Partial weights define the importance of attendance, assessments, and engagement. Learners have 10 points to give feedback to instructors.
+
+</p>
 
 <p align="center">
 <img src="https://imgur.com/V7lmxf1.jpg"/>
