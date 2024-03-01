@@ -100,11 +100,11 @@ Beyond immediate narratives, the network society values developing the human cap
 | 3.1. Learning Principles |
 | ------------------------ |
 
-Today, the dominant learning theory is socio-constructivist, shaped by the context in which it is situated and actively constructed through social negotiation with others. On this understanding, learning environments should be constructive, fostering self-regulated activities, sensitive to context, and often collaborative.
+Today, the dominant learning theory is socio-constructivist<sup>2</sup>, shaped by the context in which it is situated and actively constructed through social negotiation with others. On this understanding, learning environments should be constructive, fostering self-regulated activities, sensitive to context, and often collaborative.
 
-The principal goal is to acquire adaptive expertise throughout a lifelong journey, “The ability to apply meaningfully-learned knowledge and skills flexibly and creatively in different situations.”
+The principal goal is to acquire adaptive expertise throughout a lifelong journey, “The ability to apply meaningfully-learned knowledge and skills flexibly and creatively in different situations<sup>3</sup>.”
 
-Seven principles guide the development of learning environments: to recognize its social nature; put learners at the center; accept how integral emotions are; be aware that individuals are different, and education should be inclusive; value the importance of assessments; promote building horizontal connections across fields of knowledge, communities, and the wider world.
+Seven principles guide the development of learning environments: to recognize its social nature; put learners at the center; accept how integral emotions are; be aware that individuals are different, and education should be inclusive; value the importance of assessments; promote building horizontal connections across fields of knowledge, communities, and the wider world<sup>4</sup>.
 
 In such environments, learners can engage actively, understand their individual and cooperative roles, accept their different emotions and motivations, confront challenges that demand hard work, and face clear assessment strategies that support learning with formative feedback within a common framework that connects knowledge, colleagues, and instructors.
 
@@ -129,11 +129,11 @@ Self-learning refers to education one initiates to improve knowledge or skill se
 | 3.3. Skill-based Education |
 | -------------------------- |
 
-Each of these contexts empowers learners of all ages with abilities, skills, attitudes, and values to develop their unique human qualities and set them for a lifetime of learning.
+Each of these contexts empowers learners of all ages with abilities, skills, attitudes, and values to develop their unique human qualities and set them for a lifetime of learning<sup>5</sup>.
 
 At a moment when labor shortages and the inability to attract talent prevent the transformation of industry, skills become a much-needed currency of knowledge, and a skill-first initiative has the potential to transform human lives and labor markets.
 
-We need a taxonomy of skills or common foundation to define and understand these abilities, attitudes, and values required across diverse learning opportunities .
+We need a taxonomy of skills or common foundation to define and understand these abilities, attitudes, and values required across diverse learning opportunities<sup>6</sup> <sup>7</sup>.
 
 <p align="center">
 <img src="https://imgur.com/fkqUEtR.jpg"/>
@@ -142,16 +142,16 @@ We need a taxonomy of skills or common foundation to define and understand these
 Fig. 2. Coursera Skills Graph
 </p>
 
-Such a framework can help us build multiple roadmaps that connect personal lifelong journeys, guide educators and education policymakers, respond to labor markets, facilitate prioritizing private investment in skills development, allow exchanging best practices, and incorporate work-relevant skills of the future into current childhood education.
+Such a framework can help us build multiple roadmaps that connect personal lifelong journeys, guide educators and education policymakers, respond to labor markets, facilitate prioritizing private investment in skills development, allow exchanging best practices, and incorporate work-relevant skills of the future into current childhood education<sup>8</sup>.
 
 | 3.4. Evaluation and Certification |
 | --------------------------------- |
 
 Evaluation and certification are fundamental for a lifetime of learning experiences. Assessments evaluate the transmission and acquisition of knowledge. Achievements become powerful emotional motivators. Recognitions validate achievements for anyone in need of a trustful certification of proficiency.
 
-Online certificates, once questionable, evolved into valid alternatives as the importance of online learning grew over the past 40 years.
+Online certificates, once questionable, evolved into valid alternatives as the importance of online learning grew over the past 40 years<sup>9</sup>.
 
-Lifelong digital badges appeared first as Mozilla Open Badges, 1EdTech, and Open Badges Standard. Afterwards, projects as Blockcerts at MIT, The Open Standard for Blockchain Credentials, and Sony Global Education, among others, promoted blockchain-based digital and verifiable credentials across all levels of academia and corporate learning.
+Lifelong digital badges appeared first as Mozilla Open Badges<sup>10</sup>, 1EdTech, and Open Badges Standard<sup>11</sup>. Afterwards, projects as Blockcerts<sup>12</sup> at MIT, The Open Standard for Blockchain Credentials<sup>13</sup>, and Sony Global Education<sup>14</sup>, among others, promoted blockchain-based digital and verifiable credentials across all levels of academia and corporate learning.
 
 These initiatives can benefit from recognizing the granularity of assessments, supporting the management of certificate registries, and promoting the governance of education.
 
@@ -237,7 +237,7 @@ To navigate a market of skill-first credentials, stakeholders need a simple vali
 | -------------- |
 
 Standard organizations oversee quality assurance, accountability, and
-qualification frameworks for academic standards. They develop and coordinate standards that support uniformity across learning institutions. In the recent past, as reviewed by UNESCO, they “vary enormously in focus, reach, objectives, and impact.” However, taxonomies of fields of knowledge and skillsets, especially the new skills-first initiative, make new synergies possible with homogeneous databases for policymaking.
+qualification frameworks for academic standards<sup>15</sup> <sup>16</sup>. They develop and coordinate standards that support uniformity across learning institutions. In the recent past, as reviewed by UNESCO<sup>17</sup>, they “vary enormously in focus, reach, objectives, and impact.” However, taxonomies of fields of knowledge and skillsets, especially the new skills-first initiative, make new synergies possible with homogeneous databases for policymaking.
 
 | 5. Tokenizing the Learning Process |
 | ---------------------------------- |
@@ -247,9 +247,9 @@ Skills are taught and learned through the transmission of knowledge. Learning is
 | 5.1. Granularity |
 | ---------------- |
 
-Eleven millennia ago, at their appearance, tokens referred to the measurement of goods. In the Neolithic, the appearance of this new counting technology, later morphed into writing, coincided with the cultivation of cereals, the management of communal storage for grains, and the commercial needs of the Agricultural Revolution.
+Eleven millennia ago, at their appearance, tokens referred to the measurement of goods. In the Neolithic, the appearance of this new counting technology, later morphed into writing, coincided with the cultivation of cereals, the management of communal storage for grains, and the commercial needs of the Agricultural Revolution<sup>18</sup>.
 
-Nowadays, as bits replace clay, digital tokens are unique representations of a value recorded in a distributed ledger or blockchain. Cryptography supports their ownership and transfer. Consensus builds the collective registry of transactions for a network of stakeholders. They cannot be forged, are traceable, and can become negotiable instruments when they incorporate rights over financial or non-financial, material, or immaterial assets.
+Nowadays, as bits replace clay, digital tokens are unique representations of a value recorded in a distributed ledger or blockchain<sup>19</sup>. Cryptography supports their ownership and transfer. Consensus builds the collective registry of transactions for a network of stakeholders. They cannot be forged, are traceable, and can become negotiable instruments when they incorporate rights over financial or non-financial, material, or immaterial assets.
 
 <p align="center">
 <img src="https://imgur.com/igqz6eX.jpg"/>
@@ -262,7 +262,7 @@ Learning Tokens represent the value of –and rights over– the transmission of
 
 At a granular level of detail, Learning Tokens recognize units of competency and five sequential actions to transmit them. An instructor conveys a unit of competency. A learner acquires it. The instructor assesses such acquisition. The learner responds correctly to this evaluation. The instructor awards the learner formal recognition of competence.
 
-Units of competency are consensually agreed statements of knowledge, skills, attitudes, and values required for effective performance in a particular function. Instructors define units of competence in a course or a training program that transmits and certifies them. Lessons might convey multiple units of competency, and diverse assessments might confirm the efficacy of an educational strategy.
+Units of competency<sup>20</sup> are consensually agreed statements of knowledge, skills, attitudes, and values required for effective performance in a particular function. Instructors define units of competence in a course or a training program that transmits and certifies them. Lessons might convey multiple units of competency, and diverse assessments might confirm the efficacy of an educational strategy.
 
 Their granularity allows for measuring assessments in detail, describing the logic of their aggregations throughout curricula, interweaving individual learning paths, and assembling skill profiles for life.
 
@@ -280,15 +280,15 @@ Fig. 6. Transmission of knowledge, skills, attitudes, and values
 
 Learning opportunities grow every day. Universities go beyond formal education and are open to lifelong learners. Vocational training supports trades and apprenticeships. The industry trains employees for better jobs. Online teaching platforms offer courses, and the Internet hosts videos and tutorials for self-learning.
 
-Capacity development strengthens individuals, organizations, and society. Tokenization can help by focusing on results and long-term impacts, being transparent and open, and supporting ownership and leadership of those who benefit from it.
+Capacity development strengthens individuals, organizations, and society. Tokenization can help by focusing on results and long-term impacts, being transparent and open, and supporting ownership and leadership of those who benefit from it<sup>21</sup>.
 
-Blockchain-based Learning Tokens differ from other applications that propose distributed ledger technology to transform e-learning platforms .
+Blockchain-based Learning Tokens differ from other applications that propose distributed ledger technology to transform e-learning platforms<sup>22</sup> <sup>23</sup>.
 
 Its goal is simple and modest: to provide a granular measuring tool for any educational program without interfering with their academic freedom or operating ways.
 
 For institutions –and instructors– such instrument can complement their definition of strategic goals and the evaluation of their methods, enhancing their assessment and grading policies with standardized detailed indicators, and most importantly, without interfering with their market ecosystems.
 
-Learners can own and control the privacy of their development data with a skills wallet or digital curriculum management tool to organize, keep track, and publicize verifiable credentials for their educational achievements.
+Learners can own and control the privacy of their development data with a skills wallet or digital curriculum management tool to organize, keep track, and publicize verifiable credentials for their educational achievements<sup>24</sup>.
 
 | 5.3 Tokenizing Learning Tokens |
 | ------------------------------ |
@@ -320,13 +320,13 @@ Presence in the learning environment is an indicator of interest. Frequency of a
 
 A Non-Fungible Token is a digital certificate of a unique asset, in this case, the attendance to a learning opportunity. For a specific event, an instructor gives access to a learner, and when its presence is confirmed, the instructor creates -mints- a dated token that sends -transfers- to the learner.
 
-They are not digital mementos of assistance to an event, like POAPs, but an initial and essential link in a chain that proves the learner's engagement in acquiring a specific field of knowledge and skill.
+They are not digital mementos of assistance to an event, like POAPs<sup>25</sup>, but an initial and essential link in a chain that proves the learner's engagement in acquiring a specific field of knowledge and skill.
 
 Metadata that records the field of knowledge and the skill taught at the course the instructor teaches on behalf of a registered institution connects all Learning Tokens.
 
-Fields of knowledge are standard CIP Codes from the Classification of Instructional Programs created by the National Center for Educational Statistics of the Institute of Education Sciences in the U.S. Department of Education.
+Fields of knowledge are standard CIP Codes from the Classification of Instructional Programs created by the National Center for Educational Statistics of the Institute of Education Sciences in the U.S. Department of Education<sup>26</sup>.
 
-Skills come from the World Economic Forum Reskilling Revolution Interactive Tools Global Skills Taxonomy and Education 4.0.
+Skills come from the World Economic Forum Reskilling Revolution Interactive Tools Global Skills Taxonomy and Education 4.0<sup>27</sup>.
 
 A Learning Token Register assigns the IDs for Institutions, Instructors, and Courses, becoming the source of trust for each digital asset.
 
@@ -396,7 +396,7 @@ Fig. 10. Score Token for Instructors
 | 5.4 Token Taxonomy Framework |
 | ---------------------------- |
 
-The Token Taxonomy Framework, TTF, of the InterWork Alliance of the Global Blockchain Business Council, is a meta-model for digital assets. Its goals are to establish a common ground with a language that shares base components and controls for the industry to work together in the Blockchain space.
+The Token Taxonomy Framework<sup>28</sup> (TTF) of the InterWork Alliance of the Global Blockchain Business Council, is a meta-model for digital assets. Its goals are to establish a common ground with a language that shares base components and controls for the industry to work together in the Blockchain space.
 
 A common language of templates, classes, and instances, orders tokens. Formulas set reusable taxonomy components to describe their type, behavior, and property sets. Definitions fill the details to deploy token classes with one or more instances of these digital assets.
 
