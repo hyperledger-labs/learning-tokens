@@ -89,7 +89,7 @@ Explains tokenizing the learning process with the relevance of the concept of gr
 | 3. Educational Market Background |
 | -------------------------------- |
 
-Education is a fundamental asset for our network society, that new form of social organization structured by global networks powered by digital information and communication technologies.
+Education is a fundamental asset for our network society, that new form of social organization structured by global networks powered by digital information and communication technologies<sup>1</sup>.
 
 Although the core activities of the network society shape and control human life, most people, for the time being, are not included because the logic of networks incorporates only relevant additions, excluding those with little or no value for the network society itself.
 
