@@ -9,7 +9,7 @@
     "deploy-quorumtoken": "npx hardhat run ./scripts/deploy_quorumtoken.ts --network quickstart "
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.9.3",
+    "@openzeppelin/contracts": "^4.9.6",
     "hardhat": "^2.17.1"
   },
   "devDependencies": {
