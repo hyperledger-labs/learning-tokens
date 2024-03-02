@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/hyperledger-labs/learning-tokens/blob/main/LICENSE)
 
-Learning Tokens is an Open Source mechanism that uses the composable Interwork Alliance Token Taxonomy Framework (IWA TTF) to produce a Learning Token as a positive reinforcer that recognizes, registers, and rewards community engagement in collective learning and also certifies skills acquisition and competencies.
+Learning Tokens is an open-source mechanism that uses the composable Interwork Alliance Token Taxonomy Framework (IWA TTF) to produce a Learning Token as a positive reinforcer that recognizes, registers, and certifies skills acquisition and competencies while rewarding community engagement in collective learning.
 
 Table of Contents
 
@@ -36,11 +36,11 @@ Table of Contents
 
     4.4. Learners
 
-    4.5. Readers: Employers, Investors, Marketplace, Financial Intermediaries
+    4.5. Verifiers
 
     4.6. Standards Body
 
-5.  Tokenizing the Learning Process – Basic Flow
+5.  Tokenizing the Learning Process
 
     5.1. Granularity
 
@@ -73,23 +73,23 @@ Table of Contents
 | 1. Foreword |
 | ----------- |
 
-Learning Tokens represent the value of –and rights over– the transmission of knowledge. In a network society, education is the fundamental asset that develops human capacities to transform people’s minds. Learning environments, diverse and different, foster self-regulated activities that construct wisdom collaboratively. However, our expanding universe of knowledge, skills, attitudes, and values demands constant understanding to better human lives and labor markers. The Skills-first initiative provides one common foundation for that purpose, while our tokenization of learning contributes a much-needed currency of expertise.
+Learning Tokens represent the value of –and rights over– the transmission of knowledge. In a network society, education is the fundamental asset that develops human capacities to transform people’s minds. Diverse learning environments foster self-regulated activities that construct wisdom collaboratively. However, our expanding universe of knowledge, skills, attitudes, and values demands constant understanding to better human lives and labor markers. The Skills-first initiative provides one common foundation for that purpose, while our tokenization of learning contributes a much-needed *currency of expertise*.
 
-This report presents the result of the Learning Tokens project of the Hyperledger Mentorship Program 2023 at The Linux Foundation. It continues the 2022 mentorship and the work at the Hyperledger Lab with the same name.
+This report presents the result of the Learning Tokens project of the Hyperledger Mentorship Program 2023 at The Linux Foundation. It expands on the 2022 mentorship and continues the work at the Hyperledger Lab with the same name.
 
-A collaboration with the Global Blockchain Business Council, GBBC, facilitated using the InterWork Alliance Token Taxonomy Framework, IWA-TTF, a meta-model for digital assets to standardize the characteristics of the Learning Tokens templates first and then promoting its use across the educational institutes registered in their Global Standard Mapping Initiatives 4.0.
+Adopting the Token Taxonomy Framework (TTF) of the InterWork Alliance (IWA) initiative of Global Blockchain Business Council (GBBC), a meta-model for digital assets was designed to standardize the characteristics of the Learning Tokens templates. Eventually, this token model can be promoted for use across the educational institutes registered in GBBC's Global Standards Mapping Initiative (GSMI).
 
 | 2. Document Overview |
 | -------------------- |
 
-The document begins with an overall view of educational markets, their learning principles and environments, the skill-based learning initiative, the relevance of evaluation and certification, the market roles of institutions, instructors, courses –content, assessments, scoring guides, and certificates–, learners, verifiers, and standard bodies.
+The document begins with an overall view of educational markets, and their learning principles and environments, in the context of the skill-based learning initiative. A following discussion on the relevance of evaluation and certification considers elements such as the market roles of institutions, instructors, courses (including content, assessments, scoring guides, and certificates), learners, verifiers, and standard bodies.
 
-Explains tokenizing the learning process with the relevance of the concept of granularity. It describes tokens as a currency of expertise, presents scoring guides as oracles that coordinate the flow of creating and transferring token ownership across different stakeholders, explores the lifecycle and impact of tokens, and concludes with the potential alignment with educational market governance.
+The document also explains how tokenizing the learning process adds relevance to the concept of granularity. It describes tokens as a currency of expertise, presents scoring guides as oracles that coordinate the flow of creating and transferring token ownership across different stakeholders, explores the lifecycle and impact of tokens, and concludes with the potential alignment with educational market governance.
 
 | 3. Educational Market Background |
 | -------------------------------- |
 
-Education is a fundamental asset for our network society, that new form of social organization structured by global networks powered by digital information and communication technologies<sup>1</sup>.
+Education is a fundamental asset for our network society, increasingly shifting toward a new form of social organization structured by global networks powered by digital information and communication technologies<sup>1</sup>.
 
 Although the core activities of the network society shape and control human life, most people, for the time being, are not included because the logic of networks incorporates only relevant additions, excluding those with little or no value for the network society itself.
 
@@ -131,7 +131,7 @@ Self-learning refers to education one initiates to improve knowledge or skill se
 
 Each of these contexts empowers learners of all ages with abilities, skills, attitudes, and values to develop their unique human qualities and set them for a lifetime of learning<sup>5</sup>.
 
-At a moment when labor shortages and the inability to attract talent prevent the transformation of industry, skills become a much-needed currency of knowledge, and a skill-first initiative has the potential to transform human lives and labor markets.
+At a moment when labor shortages and the inability to attract talent prevent the transformation of industry, skills become a much-needed currency of expertise, and a skill-first initiative has the potential to transform human lives and labor markets.
 
 We need a taxonomy of skills or common foundation to define and understand these abilities, attitudes, and values required across diverse learning opportunities<sup>6</sup> <sup>7</sup>.
 
@@ -142,7 +142,7 @@ We need a taxonomy of skills or common foundation to define and understand these
 Fig. 2. Coursera Skills Graph
 </p>
 
-Such a framework can help us build multiple roadmaps that connect personal lifelong journeys, guide educators and education policymakers, respond to labor markets, facilitate prioritizing private investment in skills development, allow exchanging best practices, and incorporate work-relevant skills of the future into current childhood education<sup>8</sup>.
+Such a framework can help us build multiple roadmaps that connect personal lifelong journeys, guide educators and education policymakers, respond to labor markets, facilitate prioritizing private investment in skills development, allow the exchange of best practices, and incorporate work-relevant skills of the future into current childhood education<sup>8</sup>.
 
 | 3.4. Evaluation and Certification |
 | --------------------------------- |
@@ -155,6 +155,13 @@ Lifelong digital badges appeared first as Mozilla Open Badges<sup>10</sup>, 1EdT
 
 These initiatives can benefit from recognizing the granularity of assessments, supporting the management of certificate registries, and promoting the governance of education.
 
+<p align="center">
+<img src="https://imgur.com/UMNLHXt.jpg"/>
+</p>
+<p align="center">
+Fig. 3. Two ways to certificate acquisition of skills: overall or granular
+</p>
+
 There has always been granularity of data in the planning, conducting, and evaluating of education. Digital platforms help with automatic grading and electronic submission of grades.
 
 Recognition of acquisition of skills, however, happens at the end of a course or program. Summative evaluation of a collection of experiences misses the advantage of step-by-step planning for learning processes and the platform aggregation of detailed responses at multiple evaluation points.
@@ -162,13 +169,6 @@ Recognition of acquisition of skills, however, happens at the end of a course or
 Without a simple digital measurement of granular advancements there is no way to recognize the partial efforts for completion of courses, neither an option to thread skill-based pathways of units of competence across different curricula, nor possibilities to apply big data science for comprehensive evaluations of teaching strategies.
 
 Digital credentials, on the other hand, don't allow learners to manage the flow of certificates into ordered curriculums, permit educational institutions to establish their mutual recognition of certificates, nor support regulatory bodies to compare learning alternatives.
-
-<p align="center">
-<img src="https://imgur.com/UMNLHXt.jpg"/>
-</p>
-<p align="center">
-Fig. 3. Two ways to certificate acquisition of skills: overall or granular
-</p>
 
 | 4. Educational Market Roles |
 | --------------------------- |
@@ -249,8 +249,6 @@ Skills are taught and learned through the transmission of knowledge. Learning is
 
 Eleven millennia ago, at their appearance, tokens referred to the measurement of goods. In the Neolithic, the appearance of this new counting technology, later morphed into writing, coincided with the cultivation of cereals, the management of communal storage for grains, and the commercial needs of the Agricultural Revolution<sup>18</sup>.
 
-Nowadays, as bits replace clay, digital tokens are unique representations of a value recorded in a distributed ledger or blockchain<sup>19</sup>. Cryptography supports their ownership and transfer. Consensus builds the collective registry of transactions for a network of stakeholders. They cannot be forged, are traceable, and can become negotiable instruments when they incorporate rights over financial or non-financial, material, or immaterial assets.
-
 <p align="center">
 <img src="https://imgur.com/igqz6eX.jpg"/>
 </p>
@@ -258,15 +256,11 @@ Nowadays, as bits replace clay, digital tokens are unique representations of a v
 Fig. 5. Tokens from Tepe Gawra, present day Iraq, ca. 4000 BC. Courtesy the University Museum, the University of Pennsylvania, Philadelphia. Photo by Denisse Schmandt-Besserat.
 </p>
 
+Nowadays, as bits replace clay, digital tokens are unique representations of a value recorded in a distributed ledger or blockchain<sup>19</sup>. Cryptography supports their ownership and transfer. Consensus builds the collective registry of transactions for a network of stakeholders. They cannot be forged, are traceable, and can become negotiable instruments when they incorporate rights over financial or non-financial, material, or immaterial assets.
+
 Learning Tokens represent the value of –and rights over– the transmission of knowledge.
 
 At a granular level of detail, Learning Tokens recognize units of competency and five sequential actions to transmit them. An instructor conveys a unit of competency. A learner acquires it. The instructor assesses such acquisition. The learner responds correctly to this evaluation. The instructor awards the learner formal recognition of competence.
-
-Units of competency<sup>20</sup> are consensually agreed statements of knowledge, skills, attitudes, and values required for effective performance in a particular function. Instructors define units of competence in a course or a training program that transmits and certifies them. Lessons might convey multiple units of competency, and diverse assessments might confirm the efficacy of an educational strategy.
-
-Their granularity allows for measuring assessments in detail, describing the logic of their aggregations throughout curricula, interweaving individual learning paths, and assembling skill profiles for life.
-
-The original function of tokens, measuring grains as goods in communal storage, becomes a relevant metaphor for harvesting educational results and gathering digital credentials in personal electronic wallets for the Digital Revolution.
 
 <p align="center">
 <img src="https://imgur.com/ZQi3tzq.jpg"/>
@@ -274,6 +268,12 @@ The original function of tokens, measuring grains as goods in communal storage, 
 <p align="center">
 Fig. 6. Transmission of knowledge, skills, attitudes, and values
 </p>
+
+Units of competency<sup>20</sup> are consensually agreed statements of knowledge, skills, attitudes, and values required for effective performance in a particular function. Instructors define units of competence in a course or a training program that transmits and certifies them. Lessons might convey multiple units of competency, and diverse assessments might confirm the efficacy of an educational strategy.
+
+Their granularity allows for measuring assessments in detail, describing the logic of their aggregations throughout curricula, interweaving individual learning paths, and assembling skill profiles for life.
+
+The original function of tokens, measuring grains as goods in communal storage, becomes a relevant metaphor for harvesting educational results and gathering digital credentials in personal electronic wallets for the Digital Revolution.
 
 | 5.2. Supply of Learning Opportunities |
 | ------------------------------------- |
@@ -361,6 +361,7 @@ Fig. 8. Score Token for Learners
 | ------------------------------ |
 
 Help tokens for learners represent the value of engagement in collaborative support.
+
 Context shapes the learning environment actively constructed through social interaction. Instructors define the activities that promote collective engagement. Learners aid instructors by commenting in course forums, assisting colleagues in their homework, or collectively reviewing and grading assessments. Their help puts them at the center of the social nature of education, fuels the powerful emotion of belonging to a group, and builds horizontal connections across fields of knowledge and skill communities around the globe.
 
 The psychology of helping can be contagious. Participation and cooperation can happen within one or several cohorts in a course, through cohorts of different classes, or across diverse learning environments. Helpers have multiple opportunities to build communities of learning.
@@ -380,11 +381,10 @@ Fig. 9. Help Token for Learners
 | ---------------------------------- |
 
 Score tokens for instructors represent the value of their teaching performance.
+
 With the scoring guide, instructors can ask learners to assess their performance at specific moments in a course and receive feedback to improve their teaching strategies.
 
 The token metadata refers again to the field of knowledge, the skill taught, and the IDs for the registered course, instructor, and institution.
-
-Learning Tokens, our currency of expertise, represent the value of –and rights over– the transmission of knowledge, skills, attitudes, and values. They recognize the importance of attendance, the engagement of learning, the collaborative support of help, and the feedback for the instructor's performance.
 
 <p align="center">
 <img src="https://imgur.com/nVFoBof.jpg"/>
@@ -393,10 +393,12 @@ Learning Tokens, our currency of expertise, represent the value of –and rights
 Fig. 10. Score Token for Instructors
 </p>
 
+Learning Tokens, our currency of expertise, represent the value of –and rights over– the transmission of knowledge, skills, attitudes, and values. They recognize the importance of attendance, the engagement of learning, the collaborative support of help, and the feedback for the instructor's performance.
+
 | 5.4 Token Taxonomy Framework |
 | ---------------------------- |
 
-The Token Taxonomy Framework<sup>28</sup> (TTF) of the InterWork Alliance of the Global Blockchain Business Council, is a meta-model for digital assets. Its goals are to establish a common ground with a language that shares base components and controls for the industry to work together in the Blockchain space.
+The Token Taxonomy Framework<sup>28</sup> (TTF) of the InterWork Alliance, an initiative of the Global Blockchain Business Council, is a meta-model for digital assets. Its goals are to establish a common ground on tokenization with a common language framework that shares base components and controls for the industry stakeholders to work together in the tokenization space.
 
 A common language of templates, classes, and instances, orders tokens. Formulas set reusable taxonomy components to describe their type, behavior, and property sets. Definitions fill the details to deploy token classes with one or more instances of these digital assets.
 
@@ -408,7 +410,9 @@ Existing templates are open source to use. New requirements justify the creation
 <p align="center">
 Fig. 11. Learning Tokens in Token Taxonomy Framework
 </p>
-Learning Tokens proposes two new templates according to TTF. The first is a non-fungible formula with two definitions: attendance –one class only– and scores – for learners and instructors–. The second template is a fungible formula for collective support -one class for help–. All have multiple instances. The following table describes the characteristics of their base types, behaviors, and property sets, followed by their corresponding formulas.
+
+Learning Tokens proposes two new templates according to TTF. The first is a non-fungible formula with two definitions: attendance –one class only– and scores – for learners and instructors. The second template is a fungible formula for collective support -one class for help. All have multiple instances. The following table describes the characteristics of their base types, behaviors, and property sets, followed by their corresponding formulas.
+
 <p align="center">
 <img src="https://imgur.com/wo25jZ7.jpg"/>
 </p>
@@ -440,7 +444,8 @@ Table 1. Learning Tokens Formulas, details of base types, behaviours and propert
 <p align="center">
 </p>
 
-Their definitions and specifications are in Annex 1, Learning Tokens, Definitions, Formulas, Specifications From here [GitHub Repository](https://github.com/TanjinAlam/learning-tokens/tree/tanjin/Labs/UCA).
+Their definitions and specifications are in the GitHub repository (URL) here: https://github.com/InterWorkAlliance/TokenTaxonomyFramework
+
 | 5.5. Proposed Roles/Steps |
 | ------------------------- |
 
@@ -454,6 +459,7 @@ Fig.12. Interactions of educational market roles with Learning Tokens
 </p>
 
 <p align="center">
+
 An Institution registers in Learning Tokens.
 
 A registered Institution registers an Instructor in Learning Tokens.
@@ -534,7 +540,9 @@ Their respective wallets show the balance of Learning Tokens at the end of the f
 Table 5. Final evaluation, personal scoring guide, oracle, and Skill Wallet balance.
 </p>
 <p align="center">
+    
 Two scoring guides shows the learner granular assessment against the grading policy for the course.
+
 </p>
 <p align="center">
 <img src="https://imgur.com/YVUKSfg.jpg"/>
@@ -590,9 +598,7 @@ It adds to all without interfering with their different units of competency, con
 
 Three aspects, however, guarantee the homogeneity of the tokenization. A set of taxonomies to categorize fields of knowledge and description of skills, the scoring guide as the oracle for token management, and the trusted registry as the ultimate source to confirm their issuance.
 
-It becomes relevant to understand how taxonomies, scoring guides, and the registry of trust accommodate the different market needs of structured learning,
-
-vocational education, training programs, professional development, online and self-learning on the Internet.
+It becomes relevant to understand how taxonomies, scoring guides, and the registry of trust accommodate the different market needs of structured learning,vocational education, training programs, professional development, online and self-learning on the Internet.
 
 | 7. Potential Alignment with Educational Market Governance, Terminology, and Emerging Principles |
 | ----------------------------------------------------------------------------------------------- |
@@ -604,7 +610,8 @@ Standards for granular evaluation of education can be a thematic workgroup task 
 Open-source communities at Hyperledger Foundation can develop digital connections for learning management systems.
 
 Expanding the benefits of Skill Wallets and Learning Tokens can begin with courses at the Linux Foundation and the blockchain-teaching institutions registered in the Global Standard Mapping Initiative of the Global Blockchain Business Council.
-| 8. Proposed Roles/Steps |
+
+| 8. Conclusions |
 | ----------------------- |
 
 Learning Tokens provide the ability to measure knowledge, skills, attitudes, and values in a granular standardized way, independent from pedagogical strategies, academic autonomy, learning management systems, or institutional records,
@@ -618,46 +625,83 @@ Learning Tokens support all stakeholders to create markets for collaborative lea
 | 9. GitHub Link to the implementation of Learning Tokens |
 | ------------------------------------------------------- |
 
-You can find the source code along with the instruction to run it locally from here [GitHub Repositroy](https://github.com/TanjinAlam/learning-tokens/tree/tanjin/src).
+You can find the source code along with the instruction to run it locally from here [https://github.com/hyperledger-labs/learning-tokens ](https://github.com/TanjinAlam/learning-tokens/tree/tanjin/src).
+
+
+| Authors |
+| ----------------------- |
+
+Alfonso Govela, Linux Foundation Mentor, Hyperledger Mentorship Program 2023
+
+Tanjin Alam, Linux Foundation Mentee, Hyperledger Mentorship Program 2023
+
+Diana Barrero Zalles, Head of Research and Sustainability, Global Blockchain Business Council
+
+Jackson Ross, Technical Program Lead, Global Blockchain Business Council
+
+
 
 | ENDNOTES |
 | -------- |
 
-| <sup>1</sup>Castells, M., Editor (2004), The Network Society, A Cross-Cultural Perspective. Edward Elgar Publishing, Inc., Cheltenham, UK, Northampton, MA, USA <br />
+<sup>1</sup>Castells, M., Editor (2004), The Network Society, A Cross-Cultural Perspective. Edward Elgar Publishing, Inc., Cheltenham, UK, Northampton, MA, USA <br />
+
 <sup>2</sup>Dumont, H., Istance, D., Benavides, F. OECD (2010), The Nature of Learning, Using Research to Inspire Practice. OECD, Publishing, Paris. Retrieved from https://doi.org/10.1787/9789264086487-en\ <br />
+
 <sup>3</sup>Catherine McAuley College. Learning: What is understood today. Retrieved from https://www.cmc.vic.edu.au/wp-content/uploads/2018/04/CMC-2019-Learning-and-Teaching-rationale-and-focus.pdf <br />
+
 <sup>4</sup>OECD (2017), The OECD Handbook for Innovative Learning Environments, OECD, Publishing, Paris, Retrieved from <br />
+
 <sup>5</sup>World Economic Forum (2023), Putting Skills First: A Framework for Action, World Economic Forum in collaboration with PwC. Retrieved from https://www.weforum.org/publications/putting-skills-first-a-framework-for-action <br />
+
 <sup>6</sup>World Economic Forum (2023), Defining Education 4.0: A Taxonomy for the Future of Learning. Retrieved from https://www3.weforum.org/docs/WEF_Defining_Education_4.0_2023.pdf <br />
+
 <sup>7</sup>Glassberg Sands, E. 2018. How our Skills Graph is helping learners find the right content to reach their goals. Medium. Retrieved from https://medium.com/coursera-engineering/courseras-skills-graph-helps-learners-find-the-right-content-to-reach-their-goals-b10418a05214 <br />
+
 <sup>8</sup>World Economic Forum (2023), op.cit.<br />
+
 <sup>9</sup>MIT Digital Credentials Consortium, https://digitalcredentials.mit.edu/ <br />
-<sup>10</sup> Surman, M. (2011). Mozilla Launches Open Badges Project. Mozilla Blog dist://ed, September 15, 2011. Retrieved from https://blog.mozilla.org/en/mozilla/openbadges/
-<br />
+
+<sup>10</sup> Surman, M. (2011). Mozilla Launches Open Badges Project. Mozilla Blog dist://ed, September 15, 2011. Retrieved from https://blog.mozilla.org/en/mozilla/openbadges/ <br />
+
 <sup>11</sup>Open Badges, https://openbadges.org/ <br />
+
 <sup>12</sup>Schmidt, P. (2016), Blockcerts – An Open Infrastructure for Academic Credentials on the Blockchain. MIT Media Lab Learning Initiative. Retrieved from Medium https://medium.com/mit-media-lab/blockcerts-an-open-infrastructure-for-academic-credentials-on-the-blockchain-899a6b880b2f <br />
-<sup>13</sup>Blockcerts, The Open Standard for Blockchain Credentials. Retrieved from https://www.blockcerts.org/
-<br />
+
+<sup>13</sup>Blockcerts, The Open Standard for Blockchain Credentials. Retrieved from https://www.blockcerts.org/ <br />
+
 <sup>14</sup>Sony Global Education (2016). Sony Global Education Develops Technology Using Blockchain for Open Sharing of Academic Proficiency and Progress Records. Retrieved from https://www.sony.com/en/SonyInfo/News/Press/201602/16-0222E/ <br />
-<sup>15</sup>EdMatrix, Directory of Learning Data and Content Standards, retrieved from https://www.edmatrix.org/organizations.html
-<br />
+
+<sup>15</sup>EdMatrix, Directory of Learning Data and Content Standards, retrieved from https://www.edmatrix.org/organizations.html <br />
+
 <sup>16</sup> Wikiversity, Educational Standards Organizations, retrieved from https://en.wikiversity.org/wiki/Educational_standards_organisations <br />
-<sup>17</sup> Altbach, P. G., Reisberg, L., and. Rumbley, L.E. (2009). "Trends in Global Higher Education: Tracking an Academic Revolution. A Report Prepared for the UNESCO 2009 World Conference on Higher Education" (France, UNESCO, 2009) retrieved from https://unesdoc.unesco.org/ark:/48223/pf0000183219
-<br />
-<sup>18</sup> Schmandt-Besserat, D. (2019). The Invention of Tokens. Included in Crisá, A., Gkikaki, M., and Rowan, C., Eds., TOKENS, Culture, Connections, Communities. Royal Numismatic Society, Special Publication No. 57. London
-<br />
+
+<sup>17</sup> Altbach, P. G., Reisberg, L., and. Rumbley, L.E. (2009). "Trends in Global Higher Education: Tracking an Academic Revolution. A Report Prepared for the UNESCO 2009 World Conference on Higher Education" (France, UNESCO, 2009) retrieved from https://unesdoc.unesco.org/ark:/48223/pf0000183219 <br />
+
+<sup>18</sup> Schmandt-Besserat, D. (2019). The Invention of Tokens. Included in Crisá, A., Gkikaki, M., and Rowan, C., Eds., TOKENS, Culture, Connections, Communities. Royal Numismatic Society, Special Publication No. 57. London <br />
+
 <sup>19</sup>Garrido, J.M. (2023). Digital Tokens: a Legal Perspective”. IMF Working Papers. Working Paper No. 2023/151. International Monetary Fund.
 <br />
+
 <sup>20</sup>UNESCO-UNEVOC TVETipedia Glossary, NCVER (Australia), VOCEDPlus: Glossary of VET. Source: retrieved from https://glossary-vet.voced.edu.au/default.asp?op=DISPTERM&searchString=Units+of+competency&lang=ENG <br />
+
 <sup>21</sup> OECD (2012), Supporting Partners to Develop their Capacity. 12 lessons from DAC Peer Reviews. OECD. Retrieved from https://www.oecd.org/fr/cad/examens-pairs/Capacity12lessons.pdf <br />
+
 <sup>22</sup> Lam, T.Y., Dongol, B. (2020). A blockchain-enabled e-learning platform. Interactive Learning Environments 30(3):1-23, February 2020. Retrieved from
 <br />
+
 <sup>23</sup>Lam, T.Y. The ‘Blockchain University’ project. Retrieved from https://github.com/dtylam/bcu
 <br />
+
 <sup>24</sup>Domingue, J., Mikroyannidis, A. (2022). Blockchain in Education. OpenLearn. Retrieved from https://www.open.edu/openlearn/digital-computing/blockchain-education <br />
+
 <sup>25</sup> POAP, Proof of Attendance Protocol, Retrieved from https://poap.xyz/ <br />
+
 <sup>26</sup> CIP Codes, The Classification of Instructional Programs, by NCES, National Center for Educational Statistics of IES, Institute of Education Sciences, at the US. Department of Education. https://nces.ed.gov/ipeds/cipcode/default.aspx?y=55 <br />
+
 <sup>27</sup>World Economic Forum, Reskilling Revolution Interactive Tools Global Skills Taxonomy and Education 4.0 https://www1.reskillingrevolution2030.org/skills-taxonomy/index.html <br />
+
 <sup>28</sup> InterWork Alliance Token Taxonomy Framework GitHub Repository. Retrieved from https://github.com/InterWorkAlliance/TokenTaxonomyFramework
+
 
 ## Explore our initial achievements from the year 2022 From [GitHub Repository](https://github.com/hyperledger-labs/learning-tokens).
