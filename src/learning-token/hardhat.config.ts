@@ -24,6 +24,13 @@ const {
 }: any = process.env;
 const config: HardhatUserConfig = {
   networks: {
+    hardhat: {
+      initialDate: "1970-01-01T00:00:00Z",
+      accounts: {
+        accountsBalance: "1000000000000000000000000000000",
+      },
+      hardfork: "berlin",
+    },
     // localhost: {
     //   url: "http://localhost:8545", // Replace with your local Hardhat node URL
     //   chainId: 31337, // Replace with the chain ID of your local Hardhat network
