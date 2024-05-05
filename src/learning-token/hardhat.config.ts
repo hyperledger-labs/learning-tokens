@@ -24,12 +24,9 @@ const {
 }: any = process.env;
 const config: HardhatUserConfig = {
   networks: {
-    hardhat: {
-      initialDate: "1970-01-01T00:00:00Z",
-      accounts: {
-        accountsBalance: "1000000000000000000000000000000",
-      },
-      hardfork: "berlin",
+    sepolia: {
+      url: SEPOLIA_RPC_URL,
+      accounts: [SEPOLIA_PRIV_KEY],
     },
     // localhost: {
     //   url: "http://localhost:8545", // Replace with your local Hardhat node URL
@@ -47,8 +44,8 @@ const config: HardhatUserConfig = {
     //   url: SEPOLIA_RPC_URL,
     //   chainId: 11155111,
     //   accounts: [SEPOLIA_PRIV_KEY],
-    //   // gasPrice: 80000000, // adjust as necessary
-    //   // gas: 124500 // adjust as necessary
+      // gasPrice: 80000000, // adjust as necessary
+      // gas: 124500 // adjust as necessary
     // },
     // mumbai: {
     //   url: POLYGON_RPC_URL,
@@ -69,7 +66,7 @@ const config: HardhatUserConfig = {
   },
 
   etherscan: {
-    apiKey: POLYGON_API_KEY,
+    apiKey: "S1VXKDQCP4P2VXAK9Q8B46K71TFP9WF692",
     //   constructorArguments: [owners, numConfirmationsRequired],
   },
 };
