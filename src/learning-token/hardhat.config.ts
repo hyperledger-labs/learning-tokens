@@ -66,7 +66,7 @@ const config: HardhatUserConfig = {
   },
 
   etherscan: {
-    apiKey: "S1VXKDQCP4P2VXAK9Q8B46K71TFP9WF692",
+    apiKey: POLYGON_API_KEY,
     //   constructorArguments: [owners, numConfirmationsRequired],
   },
 };
