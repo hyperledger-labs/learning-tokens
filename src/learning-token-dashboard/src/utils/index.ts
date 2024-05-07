@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
 import abi from "../contracts/LearningToken.json";
-// const SMART_CONTRACT = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
 const SMART_CONTRACT =  import.meta.env.VITE_SMART_CONTRACT;
 export const initWeb3 = async () => {
   if ((window as any).ethereum) {
