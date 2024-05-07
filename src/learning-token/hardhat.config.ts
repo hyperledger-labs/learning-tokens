@@ -24,32 +24,32 @@ const {
 }: any = process.env;
 const config: HardhatUserConfig = {
   networks: {
-    localhost: {
-      url: "http://localhost:8545", // Replace with your local Hardhat node URL
-      chainId: 31337, // Replace with the chain ID of your local Hardhat network
-    },
-    besu: {
-      accounts: [SUPER_ADMIN_PRI_KEY],
-      url: "http://localhost:8545",
-      chainId: 1337,
-      gasPrice: 0,
-      blockGasLimit: 8000000000,
-      timeout: 1800000,
-    },
-    sepolia: {
-      url: SEPOLIA_RPC_URL,
-      chainId: 11155111,
-      accounts: [SEPOLIA_PRIV_KEY],
-      // gasPrice: 80000000, // adjust as necessary
-      // gas: 124500 // adjust as necessary
-    },
-    mumbai: {
-      url: POLYGON_RPC_URL,
-      chainId: 80001,
-      accounts: [POLYGON_PRIV_KEY],
-      // gasPrice: 80000000, // adjust as necessary
-      // gas: 124500 // adjust as necessary
-    },
+    // localhost: {
+    //   url: "http://localhost:8545", // Replace with your local Hardhat node URL
+    //   chainId: 31337, // Replace with the chain ID of your local Hardhat network
+    // },
+    // besu: {
+    //   accounts: [SUPER_ADMIN_PRI_KEY],
+    //   url: "http://localhost:8545",
+    //   chainId: 1337,
+    //   gasPrice: 0,
+    //   blockGasLimit: 8000000000,
+    //   timeout: 1800000,
+    // },
+    // sepolia: {
+    //   url: SEPOLIA_RPC_URL,
+    //   chainId: 11155111,
+    //   accounts: [SEPOLIA_PRIV_KEY],
+    //  // gasPrice: 80000000, // adjust as necessary
+    //  // gas: 124500 // adjust as necessary
+    // },
+    // mumbai: {
+    //   url: POLYGON_RPC_URL,
+    //   chainId: 80001,
+    //   accounts: [POLYGON_PRIV_KEY],
+    //   // gasPrice: 80000000, // adjust as necessary
+    //   // gas: 124500 // adjust as necessary
+    // },
   },
   solidity: {
     version: "0.8.17",
