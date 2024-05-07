@@ -24,10 +24,6 @@ const {
 }: any = process.env;
 const config: HardhatUserConfig = {
   networks: {
-    sepolia: {
-      url: SEPOLIA_RPC_URL,
-      accounts: [SEPOLIA_PRIV_KEY],
-    },
     // localhost: {
     //   url: "http://localhost:8545", // Replace with your local Hardhat node URL
     //   chainId: 31337, // Replace with the chain ID of your local Hardhat network
