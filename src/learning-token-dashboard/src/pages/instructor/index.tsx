@@ -84,7 +84,6 @@ const Instructor = () => {
         onChangePage={pagination.handleChangePage}
         onChangeLimit={pagination.handleChangeLimit}
       />
-      <div className="addInstructor">Add Instructor</div>
     </div>
   );
 };
