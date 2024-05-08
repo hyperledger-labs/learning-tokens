@@ -1,4 +1,5 @@
-import { Loader, Table, Toggle } from "rsuite";
+import { Table, Toggle } from "rsuite";
+import ListSkeleton from "../../components/CardSkeleton/listSkeleton";
 import {
   useLazyGetInstructorQuery,
   useUpdateInstructorStatusMutation,
@@ -33,8 +34,8 @@ const Instructor = () => {
   };
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center">
-        <Loader />
+      <div>
+        <ListSkeleton _height={40} />
       </div>
     );
   }
