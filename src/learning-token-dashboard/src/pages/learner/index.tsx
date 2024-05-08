@@ -1,12 +1,14 @@
 import { Table } from "rsuite";
-
+import ListSkeleton from '../../components/CardSkeleton/listSkeleton';
 import {
   useLazyGetLearnerListQuery,
 } from "../../store/features/admin/adminApi";
 import usePagination from "../../hooks/usePagination";
 import { useEffect } from "react";
 import Pagination from "../../components/Pagination";
+
 const { Column, HeaderCell, Cell } = Table;
+
 const Learner = () => {
   const [getLearnerList, { data, isLoading }] = useLazyGetLearnerListQuery();
 
@@ -20,9 +22,13 @@ const Learner = () => {
   }, [pagination.page, pagination.limit]);
 
   if (isLoading) {
-    return <>Loading...</>;
+    return (
+      <div>
+        <ListSkeleton _height={40} />
+      </div>
+    );
   }
-
+  
   return (
     <div className="py-3">
       <Table data={data?.result?.data} autoHeight rowClassName={"cursor-pointer"}>
