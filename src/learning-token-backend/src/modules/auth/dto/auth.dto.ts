@@ -59,7 +59,7 @@ export class RegisterInstitutionDTO {
     readonly password: string
 
     @IsOptional()
-    public type: string
+    public type: string // TODO: should be enum
 
     @IsString()
     @IsNotEmpty()

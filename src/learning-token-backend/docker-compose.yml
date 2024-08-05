@@ -10,17 +10,34 @@ services:
             - APP_PORT=3000
             - APP_SECRET=3QANyH2zMoHrfxqfRWTLbPM
             - APP_EXPIRES=3600
-            - POSTGRES_HOST=host.docker.internal
+            - POSTGRES_HOST=postgres
             - POSTGRES_PORT=5432
             - DB_TYPE=postgres
             - DB_USERNAME=postgres
             - DB_PASSWORD=password
             - DB_NAME=learning-token
-            - REDIS_HOST=host.docker.internal
+            - REDIS_HOST=redis
             - REDIS_PORT=6379
             - REDIS_TTL=600
         build:
             context: .
             dockerfile: ./Dockerfile
         volumes:
-            - /app/node_modules
+            - .:/app # Mount the current directory to /app in the container
+            - /app/node_modules # Keep node_modules separate
+
+    postgres:
+        image: postgres:latest
+        container_name: postgres
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_DB=learning-token
+        ports:
+            - '5432:5432'
+
+    redis:
+        image: redis:latest
+        container_name: redis
+        ports:
+            - '6379:6379'

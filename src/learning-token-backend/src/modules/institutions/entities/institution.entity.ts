@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer'
-import { IsEmail, IsString } from 'class-validator'
+import { IsArray, IsEmail, IsString } from 'class-validator'
 import {
     BaseEntity,
     Column,
@@ -45,6 +45,10 @@ export class Institution extends BaseEntity {
 
     @Column({ type: 'varchar', length: 50, nullable: true })
     longitude: string
+
+    @Column({ type: 'simple-array', nullable: true })
+    @IsArray()
+    sdkKeys: string[]
 
     @CreateDateColumn()
     createdAt: Date
