@@ -70,7 +70,7 @@ export class AuthController {
             const result = await this.service.login(loginRequestDto)
             if (result) {
                 return {
-                    status: HttpStatus.CREATED,
+                    status: HttpStatus.CREATED, // TODO: should be 200
                     message: 'User has logged in successfully',
                     result: result
                 }
