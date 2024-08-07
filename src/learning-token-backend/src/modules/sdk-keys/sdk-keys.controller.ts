@@ -35,7 +35,6 @@ export class SdkKeysController {
     }
 
     @Post('validate/:id')
-    @UseGuards(JwtAuthGuard)
     validateSdkKeyForInstitution(
         @Param('id') id: string,
         @Body('sdkKey') sdkKey: string
