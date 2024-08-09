@@ -140,42 +140,36 @@ describe('SdkKeysService', () => {
 
     describe('validateSdkKeyForInstitution', () => {
         it('should validate an SDK key for an institution', async () => {
-            const institutionId = 1
             const sdkKey = 'SDK-1234567890-1-abcdefgh'
             const institution = {
-                id: institutionId,
+                id: 1,
                 sdkKeys: [sdkKey]
             } as Institution
 
-            jest.spyOn(institutionRepository, 'findOne').mockResolvedValue(
-                institution
-            )
+            jest.spyOn(
+                institutionRepository,
+                'createQueryBuilder'
+            ).mockReturnValue({
+                where: jest.fn().mockReturnThis(),
+                getOne: jest.fn().mockResolvedValue(institution)
+            } as any)
 
-            const result = await service.validateSdkKeyForInstitution(
-                institutionId,
-                sdkKey
-            )
+            const result = await service.validateSdkKeyForInstitution(sdkKey)
 
-            expect(result).toBe(true)
+            expect(result).toEqual({ isValid: true })
         })
 
-        it('should throw NotFoundException if institution does not exist', async () => {
-            jest.spyOn(institutionRepository, 'findOne').mockResolvedValue(null)
+        it('should throw NotFoundException if SDK key is not valid for any institution', async () => {
+            jest.spyOn(
+                institutionRepository,
+                'createQueryBuilder'
+            ).mockReturnValue({
+                where: jest.fn().mockReturnThis(),
+                getOne: jest.fn().mockResolvedValue(null)
+            } as any)
 
             await expect(
-                service.validateSdkKeyForInstitution(1, 'SDK-123')
-            ).rejects.toThrow(NotFoundException)
-        })
-
-        it('should throw NotFoundException if SDK key is not valid for institution', async () => {
-            const institution = { id: 1, sdkKeys: [] } as Institution
-
-            jest.spyOn(institutionRepository, 'findOne').mockResolvedValue(
-                institution
-            )
-
-            await expect(
-                service.validateSdkKeyForInstitution(1, 'SDK-123')
+                service.validateSdkKeyForInstitution('SDK-123')
             ).rejects.toThrow(NotFoundException)
         })
     })

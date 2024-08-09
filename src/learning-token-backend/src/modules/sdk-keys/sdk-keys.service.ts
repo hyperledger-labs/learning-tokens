@@ -89,26 +89,23 @@ export class SdkKeysService {
      * Validates an SDK key for a specific institution.
      *
      * @author Weber Dubois
-     * @param id The ID of the institution for which to validate the SDK key.
      * @param sdkKey The SDK key to validate.
      * @returns A boolean indicating if the SDK key is valid for the institution.
      */
     async validateSdkKeyForInstitution(
-        id: number,
         sdkKey: string
-    ): Promise<boolean> {
-        const institution = await this.institutionRepository.findOne({
-            where: { id }
-        })
+    ): Promise<{ isValid: boolean }> {
+        const institution = await this.institutionRepository
+            .createQueryBuilder('institution')
+            .where('"institution"."sdkKeys"::jsonb @> :sdkKey::jsonb', {
+                sdkKey: JSON.stringify([sdkKey])
+            })
+            .getOne()
         if (!institution) {
-            throw new NotFoundException(`Institution with ID ${id} not found`)
-        }
-        if (institution.sdkKeys?.includes(sdkKey)) {
-            return true
-        } else {
             throw new NotFoundException(
-                `SDK key ${sdkKey} is not valid for institution ${id}`
+                `SDK key ${sdkKey} is not valid for any institution`
             )
         }
+        return { isValid: true }
     }
 }

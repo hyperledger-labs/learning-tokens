@@ -1,12 +1,5 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    Param,
-    Post,
-    UseGuards
-} from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, UseGuards } from '@nestjs/common'
+
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard'
 import { SdkKeysService } from './sdk-keys.service'
 
@@ -28,17 +21,10 @@ export class SdkKeysController {
     ) {
         return this.sdkKeysService.deleteSdkKeyForInstitution(+id, body.sdkKey)
     }
+
     @Get('all/:id')
     @UseGuards(JwtAuthGuard)
     getAllSdkKeysForInstitution(@Param('id') id: string) {
         return this.sdkKeysService.getAllSdkKeysForInstitution(+id)
-    }
-
-    @Post('validate/:id')
-    validateSdkKeyForInstitution(
-        @Param('id') id: string,
-        @Body('sdkKey') sdkKey: string
-    ) {
-        return this.sdkKeysService.validateSdkKeyForInstitution(+id, sdkKey)
     }
 }

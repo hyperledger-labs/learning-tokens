@@ -16,10 +16,7 @@ describe('SdkKeysController', () => {
         getAllSdkKeysForInstitution: jest.fn((id) => [
             `sdk-key-${id}-1`,
             `sdk-key-${id}-2`
-        ]),
-        validateSdkKeyForInstitution: jest.fn(
-            (id, sdkKey) => sdkKey === `sdk-key-${id}`
-        )
+        ])
     }
 
     const mockJwtAuthGuard = {
@@ -75,15 +72,5 @@ describe('SdkKeysController', () => {
             `sdk-key-${id}-2`
         ])
         expect(service.getAllSdkKeysForInstitution).toHaveBeenCalledWith(+id)
-    })
-
-    it('should validate SDK key for institution', () => {
-        const id = '1'
-        const sdkKey = 'sdk-key-1'
-        expect(controller.validateSdkKeyForInstitution(id, sdkKey)).toBe(true)
-        expect(service.validateSdkKeyForInstitution).toHaveBeenCalledWith(
-            +id,
-            sdkKey
-        )
     })
 })
