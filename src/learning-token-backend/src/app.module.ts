@@ -10,6 +10,7 @@ import { InstitutionsModule } from './modules/institutions/institutions.module'
 import { InstructorsModule } from './modules/instructors/instructors.module'
 import { LearnersModule } from './modules/learners/learners.module'
 import { RoleModule } from './modules/role/role.module'
+import { SdkKeysModule } from './modules/sdk-keys/sdk-keys.module'
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -23,7 +24,8 @@ import { RoleModule } from './modules/role/role.module'
         RoleModule,
         LearnersModule,
         InstructorsModule,
-        InstitutionsModule
+        InstitutionsModule,
+        SdkKeysModule
     ],
     controllers: [AppController],
     providers: [AppService],
