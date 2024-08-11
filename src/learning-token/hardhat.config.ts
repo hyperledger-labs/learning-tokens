@@ -6,10 +6,10 @@
 // };
 
 // export default config;
-
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import dotenv from "dotenv";
+// import * from "@nomiclabs/hardhat-waffle";
 dotenv.config();
 const {
   RPC_URL_BESU,

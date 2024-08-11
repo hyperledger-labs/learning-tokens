@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, UseGuards } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpStatus,
+    NotFoundException,
+    Param,
+    UseGuards
+} from '@nestjs/common'
 
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard'
 import { SdkKeysService } from './sdk-keys.service'
@@ -9,8 +18,32 @@ export class SdkKeysController {
 
     @Get('gen/:id')
     @UseGuards(JwtAuthGuard)
-    generateSdkKeyForInstitution(@Param('id') id: string) {
-        return this.sdkKeysService.generateSdkKeyForInstitution(+id)
+    async generateSdkKeyForInstitution(@Param('id') id: string) {
+        try {
+            return {
+                status: HttpStatus.CREATED,
+                message: 'Key Generated',
+                result: await this.sdkKeysService.generateSdkKeyForInstitution(
+                    +id
+                )
+            }
+        } catch (error) {
+            throw new NotFoundException('Something went wrong')
+        }
+    }
+
+    @Get('get/:id')
+    @UseGuards(JwtAuthGuard)
+    async getSdkKeyForInstitution(@Param('id') id: string) {
+        try {
+            return {
+                status: HttpStatus.OK,
+                message: 'Key Fetched',
+                result: await this.sdkKeysService.getSdkKeyForInstitution(+id)
+            }
+        } catch (error) {
+            throw new NotFoundException('Something went wrong')
+        }
     }
 
     @Delete('/:id')
