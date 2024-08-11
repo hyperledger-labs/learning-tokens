@@ -69,6 +69,12 @@ const mainMenuItems = [
     ],
     icon: BsBoxSeam,
   },
+  {
+    name: "Generate Key",
+    to: "institution-key",
+    requiredPermissions: ["institution"],
+    icon: BsBoxSeam,
+  },
   // {
   //   name: "Excel",
   //   to: "",

@@ -19,23 +19,37 @@ export class SdkKeysService {
      */
     async generateSdkKeyForInstitution(id: number): Promise<string> {
         const institutionExists = await this.institutionRepository.findOne({
-            where: { id }
+            where: { id, status: true }
         })
         if (!institutionExists) {
-            throw new NotFoundException(`Institution with ID ${id} not found`)
+            throw new NotFoundException(`Institution does not exist or activated`)
         }
 
         // Generate a unique SDK key
         const timestamp = Date.now().toString().slice(-10)
         const randomPart = Math.random().toString(36).substring(2, 10)
-        const sdkKey = `SDK-${timestamp}-${id}-${randomPart}`
+        const sdkKey = `LTN-${timestamp}-${id}-${randomPart}`
 
-        const institution = await this.institutionRepository.findOne({
+        await this.institutionRepository.update(id, { sdkKeys: sdkKey })
+        
+        return sdkKey
+    }
+    
+    /**
+     * Gets a unique SDK key for an institution.
+     *
+     * @author Khairul Hasan
+     * @param id The ID of the institution for which to generate the SDK key.
+     * @returns The generated SDK key.
+     */
+    async getSdkKeyForInstitution(id: number): Promise<string> {
+        const institutionExists = await this.institutionRepository.findOne({
             where: { id }
         })
-        const updatedSdkKeys = [sdkKey, ...(institution.sdkKeys || [])]
-        await this.institutionRepository.update(id, { sdkKeys: updatedSdkKeys })
-        return sdkKey
+        if (!institutionExists) {
+            throw new NotFoundException(`Institution with ID ${id} not found`)
+        }
+        return institutionExists.sdkKeys
     }
 
     /**
@@ -61,9 +75,7 @@ export class SdkKeysService {
                 `SDK key ${sdkKey} not found in institution ${id}`
             )
         }
-        const updatedSdkKeys = institution.sdkKeys.filter(
-            (key) => key !== sdkKey
-        )
+        const updatedSdkKeys = null
         await this.institutionRepository.update(id, { sdkKeys: updatedSdkKeys })
         return `SDK key ${sdkKey} successfully removed from institution ${id}`
     }
@@ -75,14 +87,14 @@ export class SdkKeysService {
      * @param id The ID of the institution for which to retrieve SDK keys.
      * @returns An array of SDK keys.
      */
-    async getAllSdkKeysForInstitution(id: number): Promise<string[]> {
+    async getAllSdkKeysForInstitution(id: number): Promise<string> {
         const institution = await this.institutionRepository.findOne({
             where: { id }
         })
         if (!institution) {
             throw new NotFoundException(`Institution with ID ${id} not found`)
         }
-        return institution.sdkKeys || []
+        return institution.sdkKeys
     }
 
     /**
@@ -107,5 +119,13 @@ export class SdkKeysService {
             )
         }
         return { isValid: true }
+    }
+
+
+    async validateSecretKey(secretKey: string): Promise<boolean> {
+        const keyExists = await this.institutionRepository.findOne({
+            where: { sdkKeys: secretKey }
+        })        
+        return !!keyExists
     }
 }

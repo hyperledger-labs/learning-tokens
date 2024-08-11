@@ -7,6 +7,7 @@ import { SdkKeysService } from './sdk-keys.service'
 @Module({
     controllers: [SdkKeysController],
     providers: [SdkKeysService],
-    imports: [TypeOrmModule.forFeature([Institution])]
+    imports: [TypeOrmModule.forFeature([Institution])],
+    exports: [SdkKeysService]
 })
 export class SdkKeysModule {}

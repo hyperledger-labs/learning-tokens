@@ -11,7 +11,6 @@
     "@typechain/hardhat": "^6.1.6",
     "@types/jest": "^29.5.3",
     "@types/mocha": "^10.0.1",
-    "hardhat": "^2.13.0",
     "hardhat-gas-reporter": "^1.0.9",
     "solidity-coverage": "^0.8.5",
     "ts-node": "^10.9.1",
@@ -20,6 +19,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.2",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "hardhat": "2.18.1"
   }
 }
