@@ -11,6 +11,8 @@ import { InstructorsModule } from './modules/instructors/instructors.module'
 import { LearnersModule } from './modules/learners/learners.module'
 import { RoleModule } from './modules/role/role.module'
 import { SdkKeysModule } from './modules/sdk-keys/sdk-keys.module'
+import { PreeventModule } from './modules/preevent/preevent.module';
+import { PosteventModule } from './modules/postevent/postevent.module';
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -25,7 +27,9 @@ import { SdkKeysModule } from './modules/sdk-keys/sdk-keys.module'
         LearnersModule,
         InstructorsModule,
         InstitutionsModule,
-        SdkKeysModule
+        SdkKeysModule,
+        PreeventModule,
+        PosteventModule
     ],
     controllers: [AppController],
     providers: [AppService],
