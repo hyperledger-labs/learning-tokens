@@ -33,7 +33,7 @@ export class PosteventController {
         } catch (error) {
             return {
                 status: HttpStatus.NOT_FOUND,
-                message: 'Something went wrong'
+                message: 'Something went wrong.'
             }
         }
     }
