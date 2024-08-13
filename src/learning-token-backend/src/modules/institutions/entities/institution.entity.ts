@@ -1,11 +1,13 @@
 import { Exclude } from 'class-transformer'
 import { IsArray, IsEmail, IsString } from 'class-validator'
+import { Preevent } from 'src/modules/preevent/entities/preevent.entity'
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm'
@@ -46,9 +48,8 @@ export class Institution extends BaseEntity {
     @Column({ type: 'varchar', length: 50, nullable: true })
     longitude: string
 
-    @Column({ type: 'jsonb', default: [] })
-    @IsArray()
-    sdkKeys: string[]
+    @Column({ type: 'varchar', length: 50, nullable: true, unique: true })
+    sdkKeys: string
 
     @CreateDateColumn()
     createdAt: Date
@@ -58,4 +59,7 @@ export class Institution extends BaseEntity {
 
     @DeleteDateColumn()
     deletedAt: Date
+
+    @OneToMany(() => Preevent, (preevent) => preevent.institution)
+    preevents: Preevent[]
 }

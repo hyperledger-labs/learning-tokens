@@ -12,6 +12,7 @@ import Institution from "../pages/institution";
 import Instructor from "../pages/instructor";
 import MasterLayout from "../pages/layouts/MasterLayout";
 import Learner from "../pages/learner";
+import GenerateKey from "../pages/institution/GenerateKey";
 
 const AllRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const AllRoutes = () => {
           <Route path="/course/list" element={<Course />} />
           <Route path="instructor" element={<Instructor />} />
           <Route path="institution" element={<Institution />} />
+          <Route path="institution-key" element={<GenerateKey />} />
           <Route path="learner" element={<Learner />} />
           <Route path="course/add" element={<CourseNew />} />
           <Route path="course/set-token" element={<SetToken />} />

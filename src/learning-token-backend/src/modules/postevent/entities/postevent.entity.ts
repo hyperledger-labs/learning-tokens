@@ -1,0 +1,27 @@
+import { Preevent } from "src/modules/preevent/entities/preevent.entity"
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+
+@Entity()
+export class Postevent {
+    @PrimaryGeneratedColumn('increment')
+    id: number
+
+    @Column({ type: 'varchar', length: 30, nullable: true })
+    eventId: string
+
+    @Column({ type: 'varchar', length: 30, nullable: true })
+    name: string
+
+    @Column({ type: 'varchar', length: 30, nullable: true })
+    email: string
+    
+    @CreateDateColumn({ type: 'varchar', length: 30, nullable: true })
+    joinTime: Date
+
+    @CreateDateColumn({ type: 'varchar', length: 30, nullable: true })
+    leaveTime: Date
+
+    @ManyToOne(() => Preevent, (preevent) => preevent.postevents)
+    @JoinColumn({ name: 'eventId', referencedColumnName: 'eventId' })
+    preevent: Preevent
+}
