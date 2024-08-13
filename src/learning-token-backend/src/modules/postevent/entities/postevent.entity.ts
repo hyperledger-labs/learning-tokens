@@ -1,39 +1,27 @@
 import { Preevent } from "src/modules/preevent/entities/preevent.entity"
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
 export class Postevent {
     @PrimaryGeneratedColumn('increment')
     id: number
 
-    @Column({ type: 'varchar', length: 30, nullable: true, unique: true })
+    @Column({ type: 'varchar', length: 30, nullable: true })
     eventId: string
 
     @Column({ type: 'varchar', length: 30, nullable: true })
-    eventName: string
-    
-    @Column({ type: 'varchar', length: 30, nullable: true })
-    eventType: string
+    name: string
 
     @Column({ type: 'varchar', length: 30, nullable: true })
-    description: string
+    email: string
     
     @CreateDateColumn({ type: 'varchar', length: 30, nullable: true })
-    eventDate: Date
-    
-    @Column({ type: 'varchar', length: 30, nullable: true })
-    speakerName: string
+    joinTime: Date
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
-    speakerEmail: string
+    @CreateDateColumn({ type: 'varchar', length: 30, nullable: true })
+    leaveTime: Date
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
-    speakerTitle: string
-
-    @Column({ type: 'varchar', length: 30, nullable: true })
-    organization: string
-
-    // @ManyToOne(() => Preevent, (preevent) => preevent.postevents)
-    // @JoinColumn({ name: 'eventId', referencedColumnName: 'eventId' })
-    // preevent: Preevent
+    @ManyToOne(() => Preevent, (preevent) => preevent.postevents)
+    @JoinColumn({ name: 'eventId', referencedColumnName: 'eventId' })
+    preevent: Preevent
 }

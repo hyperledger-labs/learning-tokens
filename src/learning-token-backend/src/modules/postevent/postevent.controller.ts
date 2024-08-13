@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { PosteventService } from './postevent.service';
 import { CreatePosteventDto } from './dto/create-postevent.dto';
 import { UpdatePosteventDto } from './dto/update-postevent.dto';
+import { SecretKeyGuard } from 'src/secret-key/secret-key.guard';
 
 @Controller('postevent')
 export class PosteventController {
   constructor(private readonly posteventService: PosteventService) {}
 
+  @UseGuards(SecretKeyGuard)
   @Post()
   create(@Body() createPosteventDto: CreatePosteventDto) {
     return this.posteventService.create(createPosteventDto);

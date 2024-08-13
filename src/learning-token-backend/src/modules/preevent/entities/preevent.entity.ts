@@ -1,5 +1,6 @@
-import { Institution } from "src/modules/institutions/entities/institution.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Institution } from 'src/modules/institutions/entities/institution.entity';
+import { Postevent } from 'src/modules/postevent/entities/postevent.entity';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Preevent extends BaseEntity {
@@ -35,5 +36,8 @@ export class Preevent extends BaseEntity {
 
     @ManyToOne(() => Institution, (institution) => institution.preevents)
     institution: Institution
+
+    @OneToMany(() => Postevent, (postevents) => postevents.preevent)
+    postevents: Postevent[]
 
 }

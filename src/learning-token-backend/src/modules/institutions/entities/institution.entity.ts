@@ -48,7 +48,7 @@ export class Institution extends BaseEntity {
     @Column({ type: 'varchar', length: 50, nullable: true })
     longitude: string
 
-    @Column({ type: 'varchar', length: 50, nullable: true, unique: true, })
+    @Column({ type: 'varchar', length: 50, nullable: true, unique: true })
     sdkKeys: string
 
     @CreateDateColumn()
