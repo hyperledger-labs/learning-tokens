@@ -30,6 +30,7 @@
         "@nestjs/platform-express": "^9.0.0",
         "@nestjs/typeorm": "^9.0.1",
         "@types/passport-jwt": "^3.0.6",
+        "axios": "^1.7.4",
         "bcrypt": "^5.0.1",
         "bcryptjs": "^2.4.3",
         "cache-manager": "^4.1.0",

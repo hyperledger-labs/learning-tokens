@@ -31,6 +31,7 @@ export class PosteventController {
                 result: result
             }
         } catch (error) {
+            console.log(error);
             return {
                 status: HttpStatus.NOT_FOUND,
                 message: 'Something went wrong.'
