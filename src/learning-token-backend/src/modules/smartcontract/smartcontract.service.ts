@@ -4,6 +4,7 @@ import { UpdateSmartcontractDto } from './dto/update-smartcontract.dto'
 import { ethers } from 'ethers'
 import * as abi from '../../contract-abi/learning-token-abi.json' // Adjust the path as necessary
 import { ConfigService } from '@nestjs/config'
+import { getWallet } from 'src/utils/kaledio'
 
 @Injectable()
 export class SmartcontractService {
@@ -53,6 +54,21 @@ export class SmartcontractService {
             //when we have to call from admin permission
             if (body.isAdmin) {
                 const adminPrivateKey = this.adminPrivateKey
+                const signer = new ethers.Wallet(adminPrivateKey, this.provider)
+                const contract = new ethers.Contract(
+                    contractAddress,
+                    abi,
+                    signer
+                )
+                const result = await contract[body.functionName](...body.params)
+                // Convert BigInt values to strings if needed
+                const processedResult = this.processResult(result)
+                console.log('View Function Result:', processedResult)
+                return processedResult
+            }
+            if (body.isWrite) {
+                const wallet = await getWallet(body.type, body.id)
+                const adminPrivateKey = wallet.privateKey
                 const signer = new ethers.Wallet(adminPrivateKey, this.provider)
                 const contract = new ethers.Contract(
                     contractAddress,
