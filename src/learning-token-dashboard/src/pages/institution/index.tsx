@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Loader, Table, Toggle } from "rsuite";
 import {
   useLazyGetInstitutionQuery,
@@ -7,9 +7,14 @@ import {
 } from "../../store/features/admin/adminApi";
 import usePagination from "../../hooks/usePagination";
 import Pagination from "../../components/Pagination";
+import { LoaderIcon } from "react-hot-toast";
 const { Column, HeaderCell, Cell } = Table;
 
 const Institution: React.FC = () => {
+  const [statusLoading, setStatusLoading] = useState({
+    id: null,
+    loading: false,
+  });
   const [getInstitution, { data, isLoading }] = useLazyGetInstitutionQuery();
   const [updateInstitutionStatus] = useUpdateInstitutionStatusMutation();
   const [smartContractCall] = useSmartContractCallMutation();
@@ -23,6 +28,7 @@ const Institution: React.FC = () => {
   }, [pagination.page, pagination.limit]);
 
   const toggleStatus = async (rowData: any) => {
+    setStatusLoading({ id: rowData.id, loading: true });
     smartContractCall({
       isAdmin: true,
       isView: true,
@@ -36,6 +42,7 @@ const Institution: React.FC = () => {
       ],
     }).then(() => {
       updateInstitutionStatus(rowData);
+      setStatusLoading({ id: null, loading: false });
     });
   };
 
@@ -75,11 +82,15 @@ const Institution: React.FC = () => {
             {(rowData: any) => {
               return (
                 <>
-                  <Toggle
-                    checked={rowData.status}
-                    onClick={() => toggleStatus(rowData)}
-                    disabled={rowData.status}
-                  />
+                  {statusLoading.id === rowData.id && statusLoading.loading ? (
+                    <LoaderIcon />
+                  ) : (
+                    <Toggle
+                      checked={rowData.status}
+                      onClick={() => toggleStatus(rowData)}
+                      disabled={rowData.status}
+                    />
+                  )}
                 </>
               );
             }}

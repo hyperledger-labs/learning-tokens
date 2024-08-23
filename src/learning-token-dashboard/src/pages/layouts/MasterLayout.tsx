@@ -10,7 +10,7 @@ const MasterLayout: FC = () => {
       <ProtectedLayout>
         <Topbar />
         <Sidebar />
-        <div className="ml-[15vw] mt-[7vh] p-3">
+        <div className="ml-[250px] mt-[75px] p-3">
           <Suspense fallback={<div>Loading...</div>}>
             <Outlet />
           </Suspense>
