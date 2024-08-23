@@ -74,6 +74,12 @@ function Dashboard() {
   if (auth.user.type === "learner") {
     return (
       <>
+        <div className="font-bold text-lg">
+          Hello <span className="capitalize">{auth.user.name}</span>
+          <div>
+            Public Address: <span>{auth.user.publicAddress}</span>
+          </div>
+        </div>
         <div className="flex flex-col items-center">
           <h3 className="font-bold">Your Tokens</h3>
           <div className="grid grid-cols-4 gap-2">
