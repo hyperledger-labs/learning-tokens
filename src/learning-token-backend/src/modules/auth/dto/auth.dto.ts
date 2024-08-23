@@ -34,9 +34,9 @@ export class RegisterRequestDto {
     @IsOptional()
     public type: string
 
-    @IsString()
-    @IsNotEmpty()
-    publicAddress: string
+    // @IsString()
+    // @IsNotEmpty()
+    // publicAddress: string
 }
 
 // Validate Request DTO
