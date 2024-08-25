@@ -9,6 +9,7 @@ import { Postevent } from './entities/postevent.entity'
 import { Learner } from '../learners/entities/learner.entity'
 import * as bcrypt from 'bcryptjs'
 import { getWallet } from 'src/utils/kaledio'
+import { sendLoginCredentials } from 'src/common/helpers/utils.helper'
 @Injectable()
 export class PosteventService {
     constructor(
@@ -29,14 +30,13 @@ export class PosteventService {
             throw new Error('Institution not found')
         }
 
-
         let postevent: Postevent[]
         await this.dataSource.transaction(async (manager) => {
             postevent = manager.create(Postevent, createPosteventDto)
             await manager.save(Postevent, postevent)
 
             for (let index = 0; index < postevent.length; index++) {
-                const element = postevent[index];
+                const element = postevent[index]
                 const learner = await manager.findOneBy(Learner, {
                     email: element.email
                 })
@@ -44,25 +44,34 @@ export class PosteventService {
                     const _learner = new Learner()
                     _learner.name = element.name
                     _learner.email = element.email
-    
+
                     const salt: string = bcrypt.genSaltSync(10)
                     _learner.password = bcrypt.hashSync('12345678', salt)
-    
+
                     const registeredLearner = await manager.save(
                         Learner,
                         _learner
                     )
-    
+
+                    sendLoginCredentials(
+                        element.email,
+                        element.email,
+                        '12345678',
+                        'Dear learner, Please login with credentials'
+                    ).then((res) => {
+                        console.log(res)
+                    })
+
                     const _user = await manager.findOneBy(Learner, {
                         id: registeredLearner.id
                     })
-    
+
                     const wallet = await getWallet(
                         'learner',
                         registeredLearner.id
                     )
                     _user.publicAddress = wallet.address
-    
+
                     await manager.save(Learner, _user)
                 }
             }
