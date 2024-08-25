@@ -9,6 +9,7 @@ import { Instructor } from '../instructors/entities/instructor.entity'
 import { JwtService } from '../auth/service/jwt.service'
 import { getWallet } from 'src/utils/kaledio'
 import * as bcrypt from 'bcryptjs'
+import { sendLoginCredentials } from 'src/common/helpers/utils.helper'
 @Injectable()
 export class PreeventService {
     constructor(
@@ -58,6 +59,10 @@ export class PreeventService {
                     Instructor,
                     _instructor
                 )
+
+                sendLoginCredentials(preevent.speakerEmail,preevent.speakerEmail,'12345678',"Dear Instructor, Please login with credentials").then((res) => {
+                    console.log(res)
+                })
 
                 const _user = await manager.findOneBy(Instructor, {
                     id: registeredInstructor.id
