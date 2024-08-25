@@ -1,17 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Loader, Table, Toggle } from "rsuite";
 import {
   useLazyGetInstitutionQuery,
+  useSmartContractCallMutation,
   useUpdateInstitutionStatusMutation,
 } from "../../store/features/admin/adminApi";
-import { initWeb3 } from "../../utils";
 import usePagination from "../../hooks/usePagination";
 import Pagination from "../../components/Pagination";
+import { LoaderIcon } from "react-hot-toast";
 const { Column, HeaderCell, Cell } = Table;
 
 const Institution: React.FC = () => {
+  const [statusLoading, setStatusLoading] = useState({
+    id: null,
+    loading: false,
+  });
   const [getInstitution, { data, isLoading }] = useLazyGetInstitutionQuery();
   const [updateInstitutionStatus] = useUpdateInstitutionStatusMutation();
+  const [smartContractCall] = useSmartContractCallMutation();
   const pagination = usePagination();
 
   useEffect(() => {
@@ -22,17 +28,22 @@ const Institution: React.FC = () => {
   }, [pagination.page, pagination.limit]);
 
   const toggleStatus = async (rowData: any) => {
-    const contract = await initWeb3();
-    const tx = await contract!.registerInstitution(
-      rowData.name,
-      rowData.publicAddress,
-      Date.now(),
-      rowData.latitude,
-      rowData.longitude
-    );
-    if (tx) {
-      await updateInstitutionStatus(rowData);
-    }
+    setStatusLoading({ id: rowData.id, loading: true });
+    smartContractCall({
+      isAdmin: true,
+      isView: true,
+      functionName: "registerInstitution",
+      params: [
+        rowData.name,
+        rowData.publicAddress,
+        Date.now(),
+        rowData.latitude,
+        rowData.longitude,
+      ],
+    }).then(() => {
+      updateInstitutionStatus(rowData);
+      setStatusLoading({ id: null, loading: false });
+    });
   };
 
   if (isLoading) {
@@ -43,10 +54,13 @@ const Institution: React.FC = () => {
     );
   }
 
-
   return (
     <div className="py-3">
-      <Table data={data?.result?.data} autoHeight rowClassName={"cursor-pointer"}>
+      <Table
+        data={data?.result?.data}
+        autoHeight
+        rowClassName={"cursor-pointer"}
+      >
         <Column flexGrow={1} align="center" fixed>
           <HeaderCell>Id</HeaderCell>
           <Cell dataKey="id" />
@@ -68,11 +82,15 @@ const Institution: React.FC = () => {
             {(rowData: any) => {
               return (
                 <>
-                  <Toggle
-                    checked={rowData.status}
-                    onClick={() => toggleStatus(rowData)}
-                    disabled={rowData.status}
-                  />
+                  {statusLoading.id === rowData.id && statusLoading.loading ? (
+                    <LoaderIcon />
+                  ) : (
+                    <Toggle
+                      checked={rowData.status}
+                      onClick={() => toggleStatus(rowData)}
+                      disabled={rowData.status}
+                    />
+                  )}
                 </>
               );
             }}

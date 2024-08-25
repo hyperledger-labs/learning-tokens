@@ -7,6 +7,7 @@ import { Learner } from 'src/modules/learners/entities/learner.entity'
 import { Repository } from 'typeorm'
 import { RegisterRequestDto, ValidateRequestDto } from '../dto/auth.dto'
 import { JwtService } from './jwt.service'
+import { getWallet } from 'src/utils/kaledio'
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,6 @@ export class AuthService {
         name,
         email,
         password,
-        publicAddress,
         type,
         latitude,
         longitude
@@ -40,7 +40,7 @@ export class AuthService {
             const user = new Admin()
             user.name = name
             user.email = email
-            user.publicAddress = publicAddress
+            user.publicAddress = '0xC9ed1AF4ABd6Ea37D0e6920A44901bEAE0d297E1'
             user.password = this.jwtService.encodePassword(password)
             const registeredUser = await this.userRepository.save(user)
             return {
@@ -55,11 +55,16 @@ export class AuthService {
             const user = new Institution()
             user.name = name
             user.email = email
-            user.publicAddress = publicAddress
             user.password = this.jwtService.encodePassword(password)
             user.latitude = latitude
             user.longitude = longitude
             const registeredUser = await this.institutionRepository.save(user)
+            const _user = await this.institutionRepository.findOneBy({
+                id: registeredUser.id
+            })
+            const wallet = await getWallet('institution', registeredUser.id)
+            _user.publicAddress = wallet.address
+            this.institutionRepository.save(_user)
             return {
                 id: registeredUser.id,
                 name: registeredUser.name,
@@ -72,7 +77,7 @@ export class AuthService {
             const user = new Learner()
             user.name = name
             user.email = email
-            user.publicAddress = publicAddress
+            // user.publicAddress = publicAddress
             user.password = this.jwtService.encodePassword(password)
             user.latitude = latitude
             user.longitude = longitude
@@ -89,7 +94,7 @@ export class AuthService {
             const user = new Instructor()
             user.name = name
             user.email = email
-            user.publicAddress = publicAddress
+            // user.publicAddress = publicAddress
             user.password = this.jwtService.encodePassword(password)
             const registeredUser = await this.insturctorRepository.save(user)
             return {

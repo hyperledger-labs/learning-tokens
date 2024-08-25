@@ -14,7 +14,7 @@ const Topbar = () => {
     navigate("/login");
   };
   return (
-    <div className="fixed top-0 right-0 w-[calc(100%-15vw)] bg-white border-b shadow-md shadow-slate-100 px-5 py-[10px] flex z-[20] h-[7vh] items-center justify-end">
+    <div className="fixed top-0 right-0 w-[calc(100%-250px)] bg-white border-b shadow-md shadow-slate-100 px-5 py-[10px] flex z-[20] h-[75px] items-center justify-end">
       <div className="flex items-center gap-3">
         <div className="font-bold">Hello, {auth.user.name}</div>
         <div>|</div>

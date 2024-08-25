@@ -5,6 +5,7 @@ const mainMenuItems = [
     name: "Dashboard",
     to: "/",
     icon: BsGrid,
+    requiredPermissions: ["institution", "instructor", "learner", "admin"],
   },
   {
     name: "Instructor",
