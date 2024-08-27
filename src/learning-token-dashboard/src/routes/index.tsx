@@ -13,6 +13,8 @@ import Instructor from "../pages/instructor";
 import MasterLayout from "../pages/layouts/MasterLayout";
 import Learner from "../pages/learner";
 import GenerateKey from "../pages/institution/GenerateKey";
+import Events from "../pages/events/Events";
+import EventsAdd from "../pages/events/EventsAdd";
 
 const AllRoutes = () => {
   return (
@@ -30,6 +32,8 @@ const AllRoutes = () => {
           <Route path="course/add" element={<CourseNew />} />
           <Route path="course/set-token" element={<SetToken />} />
           <Route path="course/attendance" element={<Attendance />} />
+          <Route path="events/list" element={<Events />} />
+          <Route path="events/:id" element={<EventsAdd />} />
         </Route>
       </Routes>
     </BrowserRouter>

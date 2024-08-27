@@ -36,7 +36,7 @@ const Sidebar = () => {
                 key={mainIndex}
                 to={menu.to}
                 className={({ isActive }: any) =>
-                  `py-3 px-6 rounded-lg hover:text-white hover:bg-[#013A44] ${
+                  `py-3 px-6 rounded-lg hover:text-white hover:bg-[#013A44] bg-gray-200 ${
                     isActive ? "bg-[#013A44] text-white" : "text-gray-600"
                   }`
                 }
