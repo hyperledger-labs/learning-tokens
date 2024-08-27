@@ -56,7 +56,7 @@ const SidebarMenuItem: FC<Props> = ({ className, menuItem }) => {
       ) : (
         <NavLink
           to={menuItem.to || "#"}
-          className={({ isActive }: any) => {            
+          className={({ isActive }: any) => {
             return `${classes} ${
               isActive ? "bg-[#013A44] text-white" : "text-gray-600"
             }`;
