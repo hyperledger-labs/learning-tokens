@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Loader, Table, Toggle } from "rsuite";
+import { Table, Toggle } from "rsuite";
+import ListSkeleton from "../../components/CardSkeleton/listSkeleton";
 import {
   useLazyGetInstitutionQuery,
   useUpdateInstitutionStatusMutation,
@@ -37,12 +38,11 @@ const Institution: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center">
-        <Loader />
+      <div>
+        <ListSkeleton _height={40} />
       </div>
     );
   }
-
 
   return (
     <div className="py-3">
