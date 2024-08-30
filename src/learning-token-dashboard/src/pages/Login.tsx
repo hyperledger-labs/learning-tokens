@@ -1,163 +1,146 @@
-import { Form, Formik, FormikProps } from "formik";
-import { useRef } from "react";
-import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { object, string } from "yup";
-import Button from "../components/Button";
-import SelectInput from "../components/SelectInput";
-import TextInput from "../components/TextInput";
-import { useLoginAdminMutation } from "../store/features/admin/adminApi";
+import toast from "react-hot-toast";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "../components/ui/form";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "../components/ui/select";
+import { Input } from "../components/ui/input";
+
 import { userLoggedIn } from "../store/features/auth/authSlice";
-import { useLoginInstitutionMutation } from "../store/features/institution/institutionApi";
-import { useLoginInstructorMutation } from "../store/features/instructor/instructorApi";
-import { useLoginLearnerMutation } from "../store/features/learner/learnerApi";
+import { useLoginAdminMutation } from "@/store/features/admin/adminApi";
+import { useLoginInstitutionMutation } from "@/store/features/institution/institutionApi";
+import { useLoginInstructorMutation } from "@/store/features/instructor/instructorApi";
+import { useLoginLearnerMutation } from "@/store/features/learner/learnerApi";
+import Button from "@/components/Button";
 
-const initialValues = {
-  email: "",
-  password: "",
-  type: "learner",
-};
-
-const validationSchema = object().shape({
-  email: string()
-    .required("Email is required.")
-    .email("Please enter a valid email address."),
-  password: string()
-    .required("Password is required.")
-    .min(8, "Password must be 8 characters."),
-  type: string()
-    .required("Please select a type")
-    .oneOf(["admin", "institution", "instructor", "learner"]),
+const FormSchema = z.object({
+  email: z.string().email("Please enter a valid email address."),
+  password: z.string().min(8, "Password must be at least 8 characters."),
+  type: z.enum(["admin", "institution", "instructor", "learner"]),
 });
 
 const Login = () => {
-  const formikRef = useRef<FormikProps<any>>(null);
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      type: "learner",
+    },
+  });
+
   const [loginAdmin] = useLoginAdminMutation();
   const [loginInstitution] = useLoginInstitutionMutation();
   const [loginInstructor] = useLoginInstructorMutation();
   const [loginLearner] = useLoginLearnerMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleSubmit = async (values: any) => {
+
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    const loginFunctions = {
+      admin: loginAdmin,
+      institution: loginInstitution,
+      instructor: loginInstructor,
+      learner: loginLearner,
+    };
+
     try {
-      if (values.type === "admin") {
-        loginAdmin({
-          email: values.email,
-          password: values.password,
-        })
-          .unwrap()
-          .then((res: any) => {
-            if (res && res.status === 201) {
-              dispatch(userLoggedIn(res.result));
-              toast.success("Successfully Signed In");
-              navigate("/");
-            }
-          })
-          .catch((e: any) => {
-            console.log(e);
-            toast.error("Something went wrong");
-          });
-      } else if (values.type === "institution") {
-        loginInstitution({
-          email: values.email,
-          password: values.password,
-        })
-          .unwrap()
-          .then((res: any) => {
-            if (res && res.status === 201) {
-              dispatch(userLoggedIn(res.result));
-              toast.success("Successfully Signed In");
-              navigate("/");
-            }
-          })
-          .catch((e: any) => {
-            console.log(e);
-            toast.error("Something went wrong");
-          });
-      } else if (values.type === "instructor") {
-        loginInstructor({
-          email: values.email,
-          password: values.password,
-        })
-          .unwrap()
-          .then((res: any) => {
-            if (res && res.status === 201) {
-              dispatch(userLoggedIn(res.result));
-              toast.success("Successfully Signed In");
-              navigate("/");
-            }
-          })
-          .catch((e: any) => {
-            console.log(e);
-            toast.error("Something went wrong");
-          });
-      } else {
-        loginLearner({
-          email: values.email,
-          password: values.password,
-        })
-          .unwrap()
-          .then((res: any) => {
-            if (res && res.status === 201) {
-              dispatch(userLoggedIn(res.result));
-              toast.success("Successfully Signed In");
-              navigate("/");
-            }
-          })
-          .catch((e: any) => {
-            console.log(e);
-            toast.error("Something went wrong");
-          });
+      const result = await loginFunctions[values.type]({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
+
+      if (result && result.status === 201) {
+        dispatch(userLoggedIn(result.result));
+        toast.success("Successfully Signed In");
+        navigate("/");
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+      toast.error("Something went wrong");
+    }
   };
+
   return (
     <div className="">
       <div className="font-bold text-xl text-center my-3">Learning-Token</div>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        innerRef={formikRef}
-        onSubmit={handleSubmit}
-      >
-        <Form className="flex flex-col items-center justify-between">
-          <TextInput
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-2 justify-between"
+        >
+          <FormField
+            control={form.control}
             name="email"
-            type="email"
-            label="Email"
-            containerStyle={`w-full`}
-            size="small"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} type="email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <TextInput
+          <FormField
+            control={form.control}
             name="password"
-            type="password"
-            label="Password"
-            containerStyle={`w-full`}
-            size="small"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <SelectInput
-            containerStyle={"w-full"}
-            label="Login As"
-            size="small"
+          <FormField
+            control={form.control}
             name="type"
-            options={[
-              { value: "admin", label: "Admin" },
-              { value: "institution", label: "Institution" },
-              { value: "instructor", label: "Instructor" },
-              { value: "learner", label: "Learner" },
-            ]}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Login As</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select user type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="institution">Institution</SelectItem>
+                    <SelectItem value="instructor">Instructor</SelectItem>
+                    <SelectItem value="learner">Learner</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <Button
-            size="small"
-            className="w-full rounded-[5px]"
-            variant="primary"
-            type="submit"
-          >
+          <Button type="submit" className="w-full rounded-[5px]">
             Login
           </Button>
-        </Form>
-      </Formik>
+        </form>
+      </Form>
     </div>
   );
 };

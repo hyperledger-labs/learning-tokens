@@ -9,10 +9,14 @@ import {
 import Login from "@/pages/Login";
 import { Button } from "../ui/button";
 import Register from "@/pages/Register";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +25,13 @@ const Header: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setIsLogin(true);
+      setIsDialogOpen(true);
+    }
+  }, [user]);
 
   return (
     <motion.header
@@ -82,8 +93,8 @@ const Header: React.FC = () => {
           </li>
         </ul>
         <div className="flex space-x-4">
-          <Dialog>
-            <DialogTrigger>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
               <Button
                 variant="outline"
                 className={`pr-0 pl-4 py-2 rounded-full ${
@@ -91,6 +102,7 @@ const Header: React.FC = () => {
                     ? "bg-blue-600 text-white"
                     : "bg-white text-blue-600"
                 } hover:bg-blue-700 hover:text-white transition-colors`}
+                onClick={() => setIsDialogOpen(true)}
               >
                 Sign In
                 <span
