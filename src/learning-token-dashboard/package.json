@@ -10,14 +10,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
     "@metismenu/react": "^0.0.3",
     "@pinata/sdk": "^2.1.0",
+    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-tooltip": "^1.1.2",
     "@reduxjs/toolkit": "^1.9.6",
+    "@types/node": "^22.5.1",
     "axios": "^1.6.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "ethers": "^6.7.1",
     "formik": "^2.4.5",
+    "framer-motion": "^11.3.31",
+    "lucide-react": "^0.436.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.53.0",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "react-redux": "^8.1.2",
@@ -25,8 +36,11 @@
     "react-select": "^5.7.5",
     "rsuite": "^5.40.0",
     "sass": "^1.68.0",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7",
     "xlsx": "^0.18.5",
-    "yup": "^1.3.2"
+    "yup": "^1.3.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
