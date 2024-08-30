@@ -1,4 +1,6 @@
 import React from "react";
+import { Dialog, DialogTrigger, DialogContent } from "../ui/dialog";
+import ContactUs from "@/pages/contactUs";
 
 const Footer: React.FC = () => {
   return (
@@ -16,9 +18,16 @@ const Footer: React.FC = () => {
             <a href="#" className="hover:text-blue-400">
               Terms of Service
             </a>
-            <a href="#" className="hover:text-blue-400">
-              Contact Us
-            </a>
+            <Dialog>
+              <DialogTrigger>
+                <a href="#" className="hover:text-blue-400">
+                  Contact Us
+                </a>
+              </DialogTrigger>
+              <DialogContent className="bg-gray-100">
+                <ContactUs />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         <div className="mt-8 text-center text-sm">

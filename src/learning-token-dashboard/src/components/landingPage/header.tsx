@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import Register from "@/pages/Register";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import ContactUs from "@/pages/contactUs";
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -91,6 +92,23 @@ const Header: React.FC = () => {
               Testimonials
             </a>
           </li>
+          <Dialog>
+            <DialogTrigger>
+              <li>
+                <a
+                  href="#contact"
+                  className={`hover:text-blue-600 ${
+                    isScrolled ? "text-gray-600" : "text-white"
+                  }`}
+                >
+                  Contact Us
+                </a>
+              </li>
+            </DialogTrigger>
+            <DialogContent className="bg-gray-100">
+              <ContactUs />
+            </DialogContent>
+          </Dialog>
         </ul>
         <div className="flex space-x-4">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
