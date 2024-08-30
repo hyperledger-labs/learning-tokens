@@ -46,7 +46,7 @@ const Header: React.FC = () => {
       <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div
           className={`text-2xl font-bold ${
-            isScrolled ? "text-blue-600" : "text-black"
+            isScrolled ? "text-[#013A44]" : "text-black"
           }`}
         >
           Learning Tokens
@@ -55,7 +55,7 @@ const Header: React.FC = () => {
           <li>
             <a
               href="#features"
-              className={`hover:text-blue-600 ${
+              className={`hover:text-[#013A44] ${
                 isScrolled ? "text-gray-600" : "text-black"
               }`}
             >
@@ -65,7 +65,7 @@ const Header: React.FC = () => {
           <li>
             <a
               href="#about"
-              className={`hover:text-blue-600 ${
+              className={`hover:text-[#013A44] ${
                 isScrolled ? "text-gray-600" : "text-black"
               }`}
             >
@@ -75,7 +75,7 @@ const Header: React.FC = () => {
           <li>
             <a
               href="#how-it-works"
-              className={`hover:text-blue-600 ${
+              className={`hover:text-[#013A44] ${
                 isScrolled ? "text-gray-600" : "text-black"
               }`}
             >
@@ -85,7 +85,7 @@ const Header: React.FC = () => {
           <li>
             <a
               href="#testimonials"
-              className={`hover:text-blue-600 ${
+              className={`hover:text-[#013A44] ${
                 isScrolled ? "text-gray-600" : "text-black"
               }`}
             >
@@ -97,7 +97,7 @@ const Header: React.FC = () => {
               <li>
                 <a
                   href="#contact"
-                  className={`hover:text-blue-600 ${
+                  className={`hover:text-[#013A44] ${
                     isScrolled ? "text-gray-600" : "text-white"
                   }`}
                 >
@@ -117,8 +117,8 @@ const Header: React.FC = () => {
                 variant="outline"
                 className={`pr-0 pl-4 py-2 rounded-full ${
                   isScrolled
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-blue-600"
+                    ? "bg-[#013A44] text-white"
+                    : "bg-white text-[#013A44]"
                 } hover:bg-blue-700 hover:text-white transition-colors`}
                 onClick={() => setIsDialogOpen(true)}
               >
@@ -126,8 +126,8 @@ const Header: React.FC = () => {
                 <span
                   className={`pr-4 py-2 rounded-tr-full rounded-br-full ${
                     isScrolled
-                      ? "bg-white text-blue-600 border border-blue-600"
-                      : "bg-blue-600 text-white"
+                      ? "bg-white text-[#013A44] border border-[#013A44]"
+                      : "bg-[#013A44] text-white"
                   } hover:bg-blue-700 hover:text-white transition-colors`}
                 >
                   Up

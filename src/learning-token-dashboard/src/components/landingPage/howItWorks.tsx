@@ -24,7 +24,7 @@ const HowItWorks: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
             >
-              <div className="bg-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">
+              <div className="bg-[#013A44] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">
                 {index + 1}
               </div>
               <h3 className="text-xl font-semibold mb-2">{step.title}</h3>

@@ -21,7 +21,7 @@ const Hero: React.FC = () => {
         Revolutionizing education with blockchain technology
       </motion.p>
       <motion.button
-        className="bg-blue-600 text-white px-6 py-2 rounded-full text-lg hover:bg-blue-700 transition-colors"
+        className="bg-[#013A44] text-white px-6 py-2 rounded-full text-lg hover:bg-blue-700 transition-colors"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
