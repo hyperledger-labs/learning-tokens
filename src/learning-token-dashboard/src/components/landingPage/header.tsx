@@ -27,7 +27,7 @@ const Header: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (user.email) {
       setIsLogin(true);
       setIsDialogOpen(true);
     }

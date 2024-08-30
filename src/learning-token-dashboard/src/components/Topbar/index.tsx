@@ -11,7 +11,7 @@ const Topbar = () => {
   const logout = () => {
     dispatch(userLoggedOut());
     toast.success("Logged Out");
-    navigate("/login");
+    navigate("/landingPage");
   };
   return (
     <div className="fixed top-0 right-0 w-[calc(100%-250px)] bg-white border-b shadow-md shadow-slate-100 px-5 py-[10px] flex z-[20] h-[75px] items-center justify-end">
