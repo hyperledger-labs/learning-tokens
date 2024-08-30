@@ -15,31 +15,30 @@ import Learner from "../pages/learner";
 import GenerateKey from "../pages/institution/GenerateKey";
 import Events from "../pages/events/Events";
 import EventsAdd from "../pages/events/EventsAdd";
-import { EventProvider } from "../contexts/EventContext";
+import { LandingPage } from "../pages/landingPage";
 
 const AllRoutes = () => {
   return (
-    <EventProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<MasterLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="/course/list" element={<Course />} />
-            <Route path="instructor" element={<Instructor />} />
-            <Route path="institution" element={<Institution />} />
-            <Route path="institution-key" element={<GenerateKey />} />
-            <Route path="learner" element={<Learner />} />
-            <Route path="course/add" element={<CourseNew />} />
-            <Route path="course/set-token" element={<SetToken />} />
-            <Route path="course/attendance" element={<Attendance />} />
-            <Route path="events/list" element={<Events />} />
-            <Route path="events/:id" element={<EventsAdd />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </EventProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/landingPage" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<MasterLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="/course/list" element={<Course />} />
+          <Route path="instructor" element={<Instructor />} />
+          <Route path="institution" element={<Institution />} />
+          <Route path="institution-key" element={<GenerateKey />} />
+          <Route path="learner" element={<Learner />} />
+          <Route path="course/add" element={<CourseNew />} />
+          <Route path="course/set-token" element={<SetToken />} />
+          <Route path="course/attendance" element={<Attendance />} />
+          <Route path="events/list" element={<Events />} />
+          <Route path="events/:id" element={<EventsAdd />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
