@@ -32,6 +32,18 @@ const mainMenuItems = [
     icon: BsBoxSeam,
   },
   {
+    name: "Events",
+    to: "",
+    subMenu: [
+      {
+        name: "List",
+        to: "/events/list",
+        requiredPermissions: ["instructor"],
+      },
+    ],
+    icon: BsBoxSeam,
+  },
+  {
     name: "Learner",
     to: "",
     subMenu: [
