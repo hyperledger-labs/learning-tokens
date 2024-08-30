@@ -52,4 +52,13 @@ export class SmartcontractController {
         )
         return result
     }
+
+    @Post('token-distributions')
+    async distributeToken(@Body() body: any) {
+        const result = await this.smartcontractService.callContractFunction(
+            body.functionName,
+            body
+        )
+        return result
+    }
 }

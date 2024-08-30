@@ -39,8 +39,8 @@ export class PreeventController {
                 result: result
             }
         } catch (error) {
-            console.log(error);
-            
+            console.log(error)
+
             return {
                 status: HttpStatus.NOT_FOUND,
                 message: 'Something went wrong'
@@ -48,6 +48,7 @@ export class PreeventController {
         }
     }
 
+    //find all event lists
     @Get()
     findAll() {
         return this.preeventService.findAll()

@@ -95,6 +95,7 @@ export class SmartcontractService {
             return err
         }
     }
+
     processResult(result: any): any {
         if (typeof result === 'bigint') {
             return result.toString()

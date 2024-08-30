@@ -1,21 +1,21 @@
-import { IsString } from "class-validator";
+import { IsString } from 'class-validator'
 
 export class CreatePreeventDto {
     @IsString()
-    eventId: string
+    meetingEventId: string
 
     @IsString()
     eventName: string
-    
+
     @IsString()
     eventType: string
 
     @IsString()
     description: string
-    
+
     @IsString()
     eventDate: Date
-    
+
     @IsString()
     speakerName: string
 

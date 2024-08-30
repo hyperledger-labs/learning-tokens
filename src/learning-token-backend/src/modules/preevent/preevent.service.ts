@@ -10,6 +10,7 @@ import { JwtService } from '../auth/service/jwt.service'
 import { getWallet } from 'src/utils/kaledio'
 import * as bcrypt from 'bcryptjs'
 import { sendLoginCredentials } from 'src/common/helpers/utils.helper'
+import { OnlineEvent } from '../event/entities/event.entity'
 @Injectable()
 export class PreeventService {
     constructor(
@@ -25,7 +26,6 @@ export class PreeventService {
     ) {}
 
     async create(createPreeventDto: CreatePreeventDto, secretKey) {
-
         const institution = await this.institutionRepository.findOne({
             where: { sdkKeys: secretKey }
         })
@@ -36,13 +36,16 @@ export class PreeventService {
 
         let preevent: Preevent
         await this.dataSource.transaction(async (manager) => {
+            const onlineEvent = new OnlineEvent()
+
             // Create Preevent
             preevent = manager.create(Preevent, {
                 ...createPreeventDto,
-                institution
+                institution,
+                onlineEvent
             })
-            await manager.save(Preevent, preevent)
 
+            await manager.save(Preevent, preevent)
             const instructor = await manager.findOneBy(Instructor, {
                 email: preevent.speakerEmail
             })
@@ -60,7 +63,12 @@ export class PreeventService {
                     _instructor
                 )
 
-                sendLoginCredentials(preevent.speakerEmail,preevent.speakerEmail,'12345678',"Dear Instructor, Please login with credentials").then((res) => {
+                sendLoginCredentials(
+                    preevent.speakerEmail,
+                    preevent.speakerEmail,
+                    '12345678',
+                    'Dear Instructor, Please login with credentials'
+                ).then((res) => {
                     console.log(res)
                 })
 
@@ -81,8 +89,11 @@ export class PreeventService {
         return preevent
     }
 
-    findAll() {
-        return `This action returns all preevent`
+    async findAll() {
+        const preEventData = await this.preeventRepository.find({
+            relations: ['onlineEvent', 'onlineEvent.scoringGuide']
+        })
+        return preEventData
     }
 
     findOne(id: number) {
