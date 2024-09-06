@@ -8,6 +8,12 @@ export class CreatePreeventDto {
     eventName: string
 
     @IsString()
+    organiserName: string
+
+    @IsString()
+    organiserEmail: string
+
+    @IsString()
     eventType: string
 
     @IsString()

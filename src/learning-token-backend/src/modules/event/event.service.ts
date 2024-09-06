@@ -6,7 +6,7 @@ import { Repository } from 'typeorm'
 import { ScoringGuide } from './entities/scoring-guide.entity'
 import { CreateEventDto } from './dto/create-scoring-guide.dto'
 import { join } from 'path'
-import { writeFileSync } from 'fs'
+import { stat, writeFileSync } from 'fs'
 import { PDFDocument } from 'pdf-lib'
 import axios from 'axios'
 import { PinataSDK } from 'pinata'
@@ -64,10 +64,11 @@ export class EventService {
                     await this.scoringGuideRepository.update(
                         createdScoringGuide.id,
                         {
-                            ipfsUrl: ipfsUrl.IpfsHash
+                            ipfsHash: ipfsUrl.IpfsHash,
+                            status: true
                         }
                     )
-                if (scoringGuideCreated) {
+                if (scoringGuideCreated.affected > 0) {
                     isPreEventExists.onlineEvent.scoringGuide =
                         createdScoringGuide
                     //update the prevent table's online event's scoring guide with isEventExist

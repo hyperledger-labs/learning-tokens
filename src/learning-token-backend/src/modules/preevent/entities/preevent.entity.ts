@@ -1,5 +1,6 @@
 import { OnlineEvent } from 'src/modules/event/entities/event.entity'
 import { Institution } from 'src/modules/institutions/entities/institution.entity'
+import { Instructor } from 'src/modules/instructors/entities/instructor.entity'
 import { Learner } from 'src/modules/learners/entities/learner.entity'
 import { Postevent } from 'src/modules/postevent/entities/postevent.entity'
 import {
@@ -57,6 +58,9 @@ export class Preevent extends BaseEntity {
 
     @OneToMany(() => Postevent, (postevents) => postevents.preevent)
     postevents: Postevent[]
+
+    @ManyToOne(() => Instructor, (instructor) => instructor.preevent)
+    instructor: Instructor
 
     @CreateDateColumn()
     createdAt: Date

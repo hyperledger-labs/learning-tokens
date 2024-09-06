@@ -12,7 +12,7 @@ import {
 import { PosteventService } from './postevent.service'
 import { CreatePosteventDto } from './dto/create-postevent.dto'
 import { UpdatePosteventDto } from './dto/update-postevent.dto'
-import { SecretKeyGuard } from 'src/secret-key/secret-key.guard'
+import { SecretKeyGuard } from '../secret-key/secret-key.guard'
 
 @Controller('postevent')
 export class PosteventController {
@@ -31,7 +31,7 @@ export class PosteventController {
                 result: result
             }
         } catch (error) {
-            console.log(error);
+            console.log(error)
             return {
                 status: HttpStatus.NOT_FOUND,
                 message: 'Something went wrong.'

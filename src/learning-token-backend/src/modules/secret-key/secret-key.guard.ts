@@ -1,8 +1,4 @@
-import {
-    CanActivate,
-    ExecutionContext,
-    Injectable,
-} from '@nestjs/common'
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { SdkKeysService } from 'src/modules/sdk-keys/sdk-keys.service'
 
 @Injectable()
@@ -11,7 +7,7 @@ export class SecretKeyGuard implements CanActivate {
     async canActivate(context: ExecutionContext) {
         const request: Request = context.switchToHttp().getRequest()
         const secretKey = request.headers['secretkey']
-        
+
         if (!secretKey) {
             return false
         }
