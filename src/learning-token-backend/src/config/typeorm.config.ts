@@ -19,11 +19,12 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
             database: configService.get('DB_NAME', 'nestjs-starter-kit'),
             entities: [__dirname + '/../**/*.entity.{js,ts}'],
             migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
+
             extra: {
                 charset: 'utf8mb4_unicode_ci'
             },
-            synchronize: true,
-            logging: false
+            synchronize: true
+            // logging: true
         }
     }
 }

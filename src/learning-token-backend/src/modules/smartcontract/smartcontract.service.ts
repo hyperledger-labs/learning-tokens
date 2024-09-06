@@ -1,16 +1,28 @@
 import { Injectable } from '@nestjs/common'
-import { CreateSmartcontractDto } from './dto/create-smartcontract.dto'
+import { CreateCourseDto } from './dto/create-course.dto'
 import { UpdateSmartcontractDto } from './dto/update-smartcontract.dto'
 import { ethers } from 'ethers'
 import * as abi from '../../contract-abi/learning-token-abi.json' // Adjust the path as necessary
 import { ConfigService } from '@nestjs/config'
 import { getWallet } from 'src/utils/kaledio'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Postevent } from '../postevent/entities/postevent.entity'
+import { In, Repository } from 'typeorm'
+import { Preevent } from '../preevent/entities/preevent.entity'
+import { Learner } from '../learners/entities/learner.entity'
+import { getIPFSFULLURL } from 'src/common/helpers/utils.helper'
+import { CreateSmartcontractDto } from './dto/create-smartcontract.dto'
+import { DistributeTokenDto } from './dto/distrbute-token.dto'
 
 @Injectable()
 export class SmartcontractService {
     private readonly provider: ethers.JsonRpcProvider
     private readonly contractAddress: string
     private readonly adminPrivateKey: string
+    @InjectRepository(Preevent)
+    private preEventRepository: Repository<Preevent>
+    @InjectRepository(Learner)
+    private learnerRepository: Repository<Learner>
 
     constructor(private readonly configService: ConfigService) {
         // Initialize the provider and contract address using ConfigService
@@ -95,6 +107,218 @@ export class SmartcontractService {
             return err
         }
     }
+
+    async createCourse(
+        req: any,
+        createCourseDto: CreateCourseDto
+    ): Promise<any> {
+        try {
+            // Fetch pre-event and related post-events and scoring guide
+            const courseEvent = await this.preEventRepository.findOne({
+                where: {
+                    meetingEventId: createCourseDto.preEventId
+                },
+                relations: [
+                    'postevents',
+                    'onlineEvent.scoringGuide',
+                    'institution'
+                ]
+            })
+
+            // Accumulate all the email addresses of the attendees
+            const attendees = courseEvent.postevents.map(
+                (postevent: Postevent) => postevent.email
+            )
+
+            // Find all the learner IDs with similar email addresses
+            const learnerPublicKey = await this.learnerRepository.find({
+                where: {
+                    email: In(attendees)
+                },
+                select: ['publicAddress']
+            })
+            const learnerAddress = learnerPublicKey.map(
+                (learner) => learner.publicAddress
+            )
+
+            // Retrieve course details
+            const _institutionAddress = courseEvent.institution.publicAddress
+            const _courseName = createCourseDto.courseName
+            const _scoringGuideGradingPolicyBookURL = getIPFSFULLURL(
+                courseEvent.onlineEvent.scoringGuide.ipfsHash
+            )
+
+            // Get the current timestamp for _createdAt
+            const createdAt = Math.floor(Date.now() / 1000)
+
+            // Define the contract address and create a signer
+            const contractAddress = this.contractAddress
+            const wallet = await getWallet(req.users.role.name, req.user.id)
+            const signer = new ethers.Wallet(wallet.privateKey, this.provider)
+            const contract = new ethers.Contract(contractAddress, abi, signer)
+
+            // Call to create course function with fixed parameters
+            const result = await contract.createCourse(
+                _institutionAddress,
+                _courseName,
+                createdAt,
+                learnerAddress,
+                _scoringGuideGradingPolicyBookURL
+            )
+            // Convert BigInt values to strings if needed
+            const processedResult = this.processResult(result)
+
+            //update the courseName of scoring Guide in the database
+            courseEvent.onlineEvent.scoringGuide.courseName = _courseName
+
+            //maybe need to listen the event and update the course id
+            courseEvent.onlineEvent.scoringGuide.courseId =
+                processedResult.courseId
+            courseEvent.onlineEvent.courseCreateStatus = true
+            await this.preEventRepository.save(courseEvent)
+            return processedResult
+        } catch (err) {
+            console.log(err)
+            return err
+        }
+    }
+
+    async distributeToken(
+        req: any,
+        distrbute: DistributeTokenDto
+    ): Promise<any> {
+        try {
+            // Fetch pre-event and related post-events and scoring guide
+            const eventDataForTokenDistribution =
+                await this.preEventRepository.findOne({
+                    where: {
+                        meetingEventId: distrbute.preEventId
+                    },
+                    relations: ['postevents', 'onlineEvent.scoringGuide']
+                })
+
+            // Accumulate all the email addresses of the attendees
+            const attendees = eventDataForTokenDistribution.postevents.map(
+                (postevent: Postevent) => postevent.email
+            )
+
+            // Find all the learner IDs with similar email addresses
+            const learnerEntities = await this.learnerRepository.find({
+                where: {
+                    email: In(attendees)
+                },
+                select: ['id']
+            })
+            const learnerIds = learnerEntities.map((learner) => learner.id)
+
+            // Retrieve course details
+            const courseId =
+                eventDataForTokenDistribution.onlineEvent.scoringGuide.courseId
+            const fieldOfKnowledge =
+                eventDataForTokenDistribution.onlineEvent.scoringGuide
+                    .fieldOfKnowledge
+            const taxonomyOfSkill =
+                eventDataForTokenDistribution.onlineEvent.scoringGuide
+                    .taxonomyOfSkill
+
+            // Get the current timestamp for _createdAt
+            const createdAt = Math.floor(Date.now() / 1000)
+
+            // Define the contract address and create a signer
+            const contractAddress = this.contractAddress
+            const wallet = await getWallet(req.user.role.name, req.user.id)
+            const signer = new ethers.Wallet(wallet.privateKey, this.provider)
+            const contract = new ethers.Contract(contractAddress, abi, signer)
+
+            let result: any
+            // Call the batchMintAttendanceToken function with fixed parameters
+            if (distrbute.functionName === 'batchMintAttendanceToken') {
+                const amount = new Array(learnerIds.length).fill(
+                    eventDataForTokenDistribution.onlineEvent.scoringGuide
+                        .attendanceToken
+                )
+                result = await contract.batchMintAttendanceToken(
+                    learnerIds,
+                    amount,
+                    courseId,
+                    createdAt,
+                    fieldOfKnowledge,
+                    taxonomyOfSkill
+                )
+                eventDataForTokenDistribution.onlineEvent.attendanceTokenMintStatus =
+                    true
+                await this.preEventRepository.save(
+                    eventDataForTokenDistribution
+                )
+            }
+            if (distrbute.functionName === 'batchMintScoreToken') {
+                const amount = new Array(learnerIds.length).fill(
+                    eventDataForTokenDistribution.onlineEvent.scoringGuide
+                        .scoreTokenAmount
+                )
+                result = await contract.batchMintScoreToken(
+                    learnerIds,
+                    amount,
+                    courseId,
+                    createdAt,
+                    fieldOfKnowledge,
+                    taxonomyOfSkill
+                )
+                eventDataForTokenDistribution.onlineEvent.scoreTokenMintStatus =
+                    true
+                await this.preEventRepository.save(
+                    eventDataForTokenDistribution
+                )
+            }
+            if (distrbute.functionName === 'batchMintHelpingToken') {
+                const amount = new Array(learnerIds.length).fill(
+                    eventDataForTokenDistribution.onlineEvent.scoringGuide
+                        .helpTokenAmount
+                )
+                result = await contract.batchMintHelpingToken(
+                    learnerIds,
+                    amount,
+                    courseId,
+                    createdAt,
+                    fieldOfKnowledge,
+                    taxonomyOfSkill
+                )
+                eventDataForTokenDistribution.onlineEvent.helpTokenMintStatus =
+                    true
+                await this.preEventRepository.save(
+                    eventDataForTokenDistribution
+                )
+            }
+
+            if (distrbute.functionName === 'batchMintInstructorScoreToken') {
+                const amount = new Array(learnerIds.length).fill(
+                    eventDataForTokenDistribution.onlineEvent.scoringGuide
+                        .instructorScoreToken
+                )
+                result = await contract.batchMintInstructorScoreToken(
+                    learnerIds,
+                    amount,
+                    courseId,
+                    createdAt,
+                    fieldOfKnowledge
+                )
+                //update status of scoring guide token distributed
+                eventDataForTokenDistribution.onlineEvent.scoreTokenMintStatus =
+                    true
+                await this.preEventRepository.save(
+                    eventDataForTokenDistribution
+                )
+            }
+            // Convert BigInt values to strings if needed
+            const processedResult = this.processResult(result)
+            console.log('View Function Result:', processedResult)
+            return processedResult
+        } catch (err) {
+            console.log(err)
+            return err
+        }
+    }
+
     processResult(result: any): any {
         if (typeof result === 'bigint') {
             return result.toString()

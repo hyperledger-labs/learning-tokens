@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { CreatePosteventDto } from './dto/create-postevent.dto'
 import { UpdatePosteventDto } from './dto/update-postevent.dto'
-import { InjectRepository } from '@nestjs/typeorm'
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm'
 import { Preevent } from '../preevent/entities/preevent.entity'
 import { Institution } from '../institutions/entities/institution.entity'
-import { DataSource, Repository } from 'typeorm'
+import { DataSource, EntityManager, Repository } from 'typeorm'
 import { Postevent } from './entities/postevent.entity'
 import { Learner } from '../learners/entities/learner.entity'
 import * as bcrypt from 'bcryptjs'
@@ -19,17 +19,22 @@ export class PosteventService {
         private readonly posteventRepository: Repository<Postevent>,
         @InjectRepository(Learner)
         private readonly learnerRepository: Repository<Learner>,
-        private readonly dataSource: DataSource
+        private readonly dataSource: DataSource,
+        @InjectEntityManager()
+        private readonly entityManager: EntityManager
     ) {}
     async create(createPosteventDto: CreatePosteventDto[]) {
         const event = await this.preeventRepository.findOne({
-            where: { eventId: createPosteventDto[0].eventId }
+            where: { meetingEventId: createPosteventDto[0].meetingEventId }
         })
-
         if (!event) {
             throw new Error('Institution not found')
         }
 
+        //every post event will have the same preevent
+        createPosteventDto.forEach((element) => {
+            element.preevent = event
+        })
         let postevent: Postevent[]
         await this.dataSource.transaction(async (manager) => {
             postevent = manager.create(Postevent, createPosteventDto)

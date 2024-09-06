@@ -11,7 +11,7 @@ import {
 import { CreateInstitutionDto } from './dto/create-institution.dto'
 import { UpdateInstitutionDto } from './dto/update-institution.dto'
 import { InstitutionsService } from './institutions.service'
-import { SecretKeyGuard } from 'src/secret-key/secret-key.guard'
+import { SecretKeyGuard } from '../secret-key/secret-key.guard'
 
 @Controller('institutions')
 export class InstitutionsController {
@@ -26,14 +26,14 @@ export class InstitutionsController {
     findAll() {
         return this.institutionsService.findAll()
     }
-    
+
     @UseGuards(SecretKeyGuard)
     @Get('test')
     async testingSdk() {
         try {
-            return {result: await this.institutionsService.findAll()}
+            return { result: await this.institutionsService.findAll() }
         } catch (error) {
-            return {error: error.message}
+            return { error: error.message }
         }
     }
 

@@ -6,20 +6,22 @@ import {
     Patch,
     Param,
     Delete,
-    Query
+    Query,
+    UseGuards,
+    Req
 } from '@nestjs/common'
 import { SmartcontractService } from './smartcontract.service'
-import { CreateSmartcontractDto } from './dto/create-smartcontract.dto'
+import { CreateCourseDto } from './dto/create-course.dto'
 import { UpdateSmartcontractDto } from './dto/update-smartcontract.dto'
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard'
+import { Allow } from 'class-validator'
+import { AllowUserTypes } from 'src/common/decorators/roles.decorator'
+import { RoleEnum } from '../admins/enums/user.enum'
+import { DistributeTokenDto } from './dto/distrbute-token.dto'
 
 @Controller('smartcontract')
 export class SmartcontractController {
     constructor(private readonly smartcontractService: SmartcontractService) {}
-
-    @Post()
-    create(@Body() createSmartcontractDto: CreateSmartcontractDto) {
-        return this.smartcontractService.create(createSmartcontractDto)
-    }
 
     @Get()
     findAll() {
@@ -49,6 +51,33 @@ export class SmartcontractController {
         const result = await this.smartcontractService.callContractFunction(
             body.functionName,
             body
+        )
+        return result
+    }
+
+    @Post('token-distributions')
+    @AllowUserTypes(RoleEnum.INSTRUCTOR)
+    async distributeToken(
+        @Req() req: Request,
+        @Body() distributeToken: DistributeTokenDto
+    ) {
+        const result = await this.smartcontractService.distributeToken(
+            req,
+            distributeToken
+        )
+        return result
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @AllowUserTypes(RoleEnum.INSTRUCTOR)
+    @Post('create-course')
+    async createCourse(
+        @Req() req: Request,
+        @Body() createCourseDto: CreateCourseDto
+    ) {
+        const result = await this.smartcontractService.createCourse(
+            req,
+            createCourseDto
         )
         return result
     }

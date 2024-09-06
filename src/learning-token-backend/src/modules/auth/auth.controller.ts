@@ -45,7 +45,6 @@ export class AuthController {
     @Post('admin-login')
     private async login(@Body() loginRequestDto: LoginRequestDto) {
         try {
-            loginRequestDto.type = 'Admin'
             const result = await this.service.login(loginRequestDto)
             if (result) {
                 return {
