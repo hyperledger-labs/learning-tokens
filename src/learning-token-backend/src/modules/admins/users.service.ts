@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Admin } from 'src/modules/admins/entities/user.entity'
 import { Repository } from 'typeorm'
 import { Institution } from '../institutions/entities/institution.entity'
 import { Instructor } from '../instructors/entities/instructor.entity'
 import { Learner } from '../learners/entities/learner.entity'
+import { User } from './entities/user.entity'
 
 @Injectable()
 export class AdminService {
     constructor(
-        @InjectRepository(Admin)
-        private readonly adminRepository: Repository<Admin>,
+        @InjectRepository(User)
+        private readonly adminRepository: Repository<User>,
         @InjectRepository(Institution)
         private readonly institutionRepository: Repository<Institution>,
         @InjectRepository(Instructor)

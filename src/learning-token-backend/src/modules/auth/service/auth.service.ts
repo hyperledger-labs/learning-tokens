@@ -1,19 +1,23 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Admin } from 'src/modules/admins/entities/user.entity'
 import { Institution } from 'src/modules/institutions/entities/institution.entity'
 import { Instructor } from 'src/modules/instructors/entities/instructor.entity'
 import { Learner } from 'src/modules/learners/entities/learner.entity'
 import { Repository } from 'typeorm'
-import { RegisterRequestDto, ValidateRequestDto } from '../dto/auth.dto'
+import {
+    LoginRequestDto,
+    RegisterRequestDto,
+    ValidateRequestDto
+} from '../dto/auth.dto'
 import { JwtService } from './jwt.service'
 import { getWallet } from 'src/utils/kaledio'
+import { User } from 'src/modules/admins/entities/user.entity'
 
 @Injectable()
 export class AuthService {
     constructor(
-        @InjectRepository(Admin)
-        private readonly userRepository: Repository<Admin>,
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
         @InjectRepository(Institution)
         private readonly institutionRepository: Repository<Institution>,
         @InjectRepository(Learner)
@@ -37,7 +41,7 @@ export class AuthService {
     }: any) {
         console.log(type)
         if (type == 'Admin') {
-            const user = new Admin()
+            const user = new User()
             user.name = name
             user.email = email
             user.publicAddress = '0xC9ed1AF4ABd6Ea37D0e6920A44901bEAE0d297E1'
@@ -111,141 +115,41 @@ export class AuthService {
     /**
      * AUTHENTICATING A USER
      */
-    public async login({ email, password, type }) {
-        console.log('type', type)
-        if (type == 'Admin') {
-            const user: Admin = await this.userRepository.findOne({
-                where: { email }
-            })
+    public async login(loginRequestDto: LoginRequestDto) {
+        const user = await this.userRepository.findOne({
+            where: { email: loginRequestDto.email },
+            relations: ['role']
+        })
 
-            if (!user) {
-                // IF USER NOT FOUND
-                return
-            }
+        if (!user) {
+            // IF USER NOT FOUND
+            return
+        }
 
-            const isPasswordValid: boolean = this.jwtService.isPasswordValid(
-                password,
-                user.password
-            )
+        const isPasswordValid: boolean = this.jwtService.isPasswordValid(
+            loginRequestDto.password,
+            user.password
+        )
 
-            if (!isPasswordValid) {
-                // IF PASSWORD DOES NOT MATCH
-                return
-            }
+        if (!isPasswordValid) {
+            // IF PASSWORD DOES NOT MATCH
+            return
+        }
 
-            const token: string = this.jwtService.generateToken(user, 'Admin')
+        const token: string = this.jwtService.generateToken(
+            user,
+            user.role.name
+        )
 
-            return {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                publicAddress: user.publicAddress,
-                token: token,
-                type: 'admin',
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt
-            }
-        } else if (type == 'Institution') {
-            const user: Institution = await this.institutionRepository.findOne({
-                where: { email }
-            })
-
-            if (!user) {
-                // IF USER NOT FOUND
-                return
-            }
-
-            const isPasswordValid: boolean = this.jwtService.isPasswordValid(
-                password,
-                user.password
-            )
-
-            if (!isPasswordValid) {
-                // IF PASSWORD DOES NOT MATCH
-                return
-            }
-
-            const token: string = this.jwtService.generateToken(
-                user,
-                'Institution'
-            )
-
-            return {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                publicAddress: user.publicAddress,
-                token: token,
-                type: 'institution',
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt
-            }
-        } else if (type == 'Learner') {
-            const user: Learner = await this.learnerRepository.findOne({
-                where: { email }
-            })
-
-            if (!user) {
-                // IF USER NOT FOUND
-                return
-            }
-
-            const isPasswordValid: boolean = this.jwtService.isPasswordValid(
-                password,
-                user.password
-            )
-
-            if (!isPasswordValid) {
-                // IF PASSWORD DOES NOT MATCH
-                return
-            }
-
-            const token: string = this.jwtService.generateToken(user, 'Learner')
-
-            return {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                publicAddress: user.publicAddress,
-                token: token,
-                type: 'learner',
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt
-            }
-        } else if (type == 'Instructor') {
-            const user: Instructor = await this.insturctorRepository.findOne({
-                where: { email }
-            })
-
-            if (!user) {
-                // IF USER NOT FOUND
-                return
-            }
-
-            const isPasswordValid: boolean = this.jwtService.isPasswordValid(
-                password,
-                user.password
-            )
-
-            if (!isPasswordValid) {
-                // IF PASSWORD DOES NOT MATCH
-                return
-            }
-
-            const token: string = this.jwtService.generateToken(
-                user,
-                'Instructor'
-            )
-            return {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                publicAddress: user.publicAddress,
-                token: token,
-                type: 'instructor',
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt
-            }
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            publicAddress: user.publicAddress,
+            token: token,
+            role: user.role,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt
         }
     }
 

@@ -35,7 +35,6 @@ export class PosteventService {
         createPosteventDto.forEach((element) => {
             element.preevent = event
         })
-
         let postevent: Postevent[]
         await this.dataSource.transaction(async (manager) => {
             postevent = manager.create(Postevent, createPosteventDto)

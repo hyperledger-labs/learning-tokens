@@ -16,16 +16,38 @@ export class ScoringGuide extends BaseEntity {
     id: number
 
     @Column({ type: 'varchar', length: 255, nullable: true })
+    courseId: string
+
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    courseName: string
+
+    @Column({ type: 'varchar', length: 255, nullable: true })
     fieldOfKnowledge: string
 
     @Column({ type: 'varchar', length: 255, nullable: true })
     taxonomyOfSkill: string
 
+    @Column({ type: 'int', nullable: false })
+    attendanceToken: number
+
+    @Column({ type: 'int', nullable: false })
+    scoreTokenAmount: number
+
+    @Column({ type: 'int', nullable: false })
+    helpTokenAmount: number
+
+    @Column({ type: 'int', nullable: false })
+    instructorScoreToken: number
+
     @Column({ type: 'varchar', length: 255, nullable: true })
-    ipfsUrl: string
+    ipfsHash: string
 
     @Column({ type: 'bool', default: true })
     status: boolean
+
+    //simple json column to hold all dynamic value of the scoring guide
+    @Column({ type: 'simple-json', nullable: true })
+    scoringGuide: JSON
 
     @CreateDateColumn()
     createdAt: Date

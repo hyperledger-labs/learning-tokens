@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator'
+import { IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class CreateScoringGuideDTO {
     @IsString()
@@ -12,7 +12,19 @@ export class CreateScoringGuideDTO {
     @IsString()
     taxonomyOfSkill: string
 
+    @IsNumber()
+    attendanceToken: number
+
+    @IsNumber()
+    scoreTokenAmount: number
+
+    @IsNumber()
+    helpTokenAmount: number
+
+    @IsNumber()
+    instructorScoreToken: number
+
     @IsOptional()
     @IsString()
-    ipfsUrl: string
+    ipfsHash: string
 }

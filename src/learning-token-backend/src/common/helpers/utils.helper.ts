@@ -60,3 +60,7 @@ Learning Token
         throw new Error('Failed to send email')
     }
 }
+
+export const getIPFSFULLURL = (IPFSHASH: string) => {
+    return process.env.IPFS_BASE_URL + '/' + IPFSHASH
+}

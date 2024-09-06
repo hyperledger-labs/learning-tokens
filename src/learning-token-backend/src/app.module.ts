@@ -15,6 +15,7 @@ import { PreeventModule } from './modules/preevent/preevent.module'
 import { PosteventModule } from './modules/postevent/postevent.module'
 import { SmartcontractModule } from './modules/smartcontract/smartcontract.module'
 import { EventModule } from './modules/event/event.module'
+import { SeederModule } from './modules/role/seeder/seeder.module'
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -33,7 +34,8 @@ import { EventModule } from './modules/event/event.module'
         PreeventModule,
         PosteventModule,
         SmartcontractModule,
-        EventModule
+        EventModule,
+        SeederModule
     ],
     controllers: [AppController],
     providers: [AppService],

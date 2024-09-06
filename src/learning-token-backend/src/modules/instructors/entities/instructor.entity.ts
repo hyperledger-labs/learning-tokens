@@ -1,11 +1,13 @@
 import { Exclude } from 'class-transformer'
 import { IsEmail, IsString } from 'class-validator'
+import { Preevent } from 'src/modules/preevent/entities/preevent.entity'
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm'
@@ -39,6 +41,9 @@ export class Instructor extends BaseEntity {
 
     @Column({ type: 'varchar', length: 50, nullable: true, unique: true })
     publicAddress: string
+
+    @OneToMany(() => Preevent, (preevent) => preevent.instructor)
+    preevent: Preevent[]
 
     @CreateDateColumn()
     createdAt: Date
