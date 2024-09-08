@@ -215,8 +215,6 @@ const Register = () => {
                   <SelectContent>
                     <SelectItem value="admin">Admin</SelectItem>
                     <SelectItem value="institution">Institution</SelectItem>
-                    <SelectItem value="instructor">Instructor</SelectItem>
-                    <SelectItem value="learner">Learner</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -264,3 +262,6 @@ const Register = () => {
 };
 
 export default Register;
+/*
+logitude and latitude are optional for institution only
+*/
