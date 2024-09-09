@@ -1,5 +1,5 @@
 import "../../../node_modules/metismenujs/scss/metismenujs.scss";
-import mainMenuItems from "../../config/menu";
+import mainMenuItems, { MenuItem } from "../../config/menu";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import AccordionItem from "../Accordion";
@@ -27,10 +27,10 @@ const Sidebar = () => {
         Learning Token
       </div>
       <div className="flex flex-col gap-2 mt-4 w-full overflow-y-auto">
-        {mainMenuItems.map((menu: any, mainIndex: number) => {
+        {mainMenuItems.map((menu: MenuItem, mainIndex: number) => {
           if (
             !menu.subMenu &&
-            menu.requiredPermissions.includes(auth.user.role)
+            menu?.requiredPermissions?.includes(auth.user.type || "")
           ) {
             return (
               <NavLink
@@ -48,11 +48,11 @@ const Sidebar = () => {
           }
 
           const hasMenuPermission = menu.subMenu
-            .map((i: any) => i.requiredPermissions)
+            ?.map((i: any) => i.requiredPermissions)
             .flat();
 
           const hasSubPermission = [auth.user.type].some((i) =>
-            hasMenuPermission.includes(i)
+            hasMenuPermission?.includes(i)
           );
 
           return (
@@ -64,7 +64,7 @@ const Sidebar = () => {
                 key={mainIndex}
               >
                 <div className="ml-8 mt-2">
-                  {menu.subMenu.map((item: any, index: number) => {
+                  {menu?.subMenu?.map((item: any, index: number) => {
                     const show = item.requiredPermissions.includes(
                       auth.user.type
                     );
@@ -79,9 +79,7 @@ const Sidebar = () => {
                             to={item.to}
                             className={({ isActive }: any) =>
                               `py-3 px-6 rounded-lg hover:text-white hover:bg-[#013A44] w-full ${
-                                isActive
-                                  ? "bg-[#013A44] text-white"
-                                  : "text-gray-600"
+                                isActive ? "bg-[#013A44] text-white" : ""
                               }`
                             }
                           >
