@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Dashboard } from "../pages";
 
 import Login from "../pages/Login";
@@ -13,11 +13,16 @@ import Instructor from "../pages/instructor";
 import MasterLayout from "../pages/layouts/MasterLayout";
 import Learner from "../pages/learner";
 import GenerateKey from "../pages/institution/GenerateKey";
+import Events from "../pages/events/Events";
+import EventsAdd from "../pages/events/EventsAdd";
+import { LandingPage } from "../pages/landingPage";
 
 const AllRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Navigate to="/landingPage" />} />
+        <Route path="/landingPage" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<MasterLayout />}>
@@ -30,6 +35,8 @@ const AllRoutes = () => {
           <Route path="course/add" element={<CourseNew />} />
           <Route path="course/set-token" element={<SetToken />} />
           <Route path="course/attendance" element={<Attendance />} />
+          <Route path="events/list" element={<Events />} />
+          <Route path="events/:id" element={<EventsAdd />} />
         </Route>
       </Routes>
     </BrowserRouter>

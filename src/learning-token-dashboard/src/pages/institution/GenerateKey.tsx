@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { BsFillCheckCircleFill } from "react-icons/bs";
-import { GoCopy } from "react-icons/go";
+
 import { MdCancel } from "react-icons/md";
 import {
   useLazyGenerateSdkKeyInstitutionQuery,
   useLazyGetSdkKeyInstitutionQuery,
 } from "../../store/features/institution/institutionApi";
-import toast from "react-hot-toast";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Copy } from "lucide-react";
+import toast from "react-hot-toast";
+import { copyCode } from "@/lib/utils";
 
 const GenerateKey = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -43,21 +47,6 @@ const GenerateKey = () => {
     } catch (error) {}
   };
 
-  const copyCode = () => {
-    const el = document.createElement("input");
-    el.value = copy;
-    el.setAttribute("readonly", "");
-    el.style.position = "absolute";
-    el.style.left = "-9999px";
-    document.body.appendChild(el);
-    el.select();
-    try {
-      document.execCommand("copy");
-      toast.success("Copied!");
-    } catch (err) {}
-    document.body.removeChild(el);
-  };
-
   return (
     <div className="bg-white p-5 border border-slate-200/60 shadow-md shadow-slate-200/30 rounded-lg">
       <h2 className="text-slate-900 font-semibold text-xl mb-3 dark:text-gray-400">
@@ -89,28 +78,26 @@ const GenerateKey = () => {
       )}
 
       <div className="flex items-center gap-4 mt-4">
-        <div className="w-[700px] p-4 rounded bg-slate-100">
-          <div className="flex items-center justify-between">
-            <input
+        <div className="w-[700px] p-4 rounded ">
+          <div className="flex items-center justify-between gap-2">
+            <Input
               className="w-full cursor-default bg-transparent outline-none"
               type="text"
               value={copy}
               readOnly
             />
-            <div
-              className="p-2 group border rounded border-slate-400 cursor-pointer hover:border-slate-300"
-              onClick={copyCode}
-            >
-              <GoCopy className="group-hover:text-slate-400" />
-            </div>
+            <Copy
+              onClick={() => copyCode(copy)}
+              className="group-hover:text-slate-400"
+            />
           </div>
         </div>
-        <div
+        <Button
           className="bg-[#013A44] text-white p-5 cursor-pointer rounded"
           onClick={generate}
         >
           {isLoading ? "Generating" : "Generate"} API key
-        </div>
+        </Button>
       </div>
     </div>
   );

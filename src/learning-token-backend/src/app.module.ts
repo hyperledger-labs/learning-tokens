@@ -13,6 +13,7 @@ import { RoleModule } from './modules/role/role.module'
 import { SdkKeysModule } from './modules/sdk-keys/sdk-keys.module'
 import { PreeventModule } from './modules/preevent/preevent.module';
 import { PosteventModule } from './modules/postevent/postevent.module';
+import { SmartcontractModule } from './modules/smartcontract/smartcontract.module'
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -29,7 +30,8 @@ import { PosteventModule } from './modules/postevent/postevent.module';
         InstitutionsModule,
         SdkKeysModule,
         PreeventModule,
-        PosteventModule
+        PosteventModule,
+        SmartcontractModule
     ],
     controllers: [AppController],
     providers: [AppService],

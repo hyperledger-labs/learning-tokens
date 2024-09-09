@@ -4,16 +4,22 @@ import { UpdatePosteventDto } from './dto/update-postevent.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Preevent } from '../preevent/entities/preevent.entity'
 import { Institution } from '../institutions/entities/institution.entity'
-import { Repository } from 'typeorm'
+import { DataSource, Repository } from 'typeorm'
 import { Postevent } from './entities/postevent.entity'
-
+import { Learner } from '../learners/entities/learner.entity'
+import * as bcrypt from 'bcryptjs'
+import { getWallet } from 'src/utils/kaledio'
+import { sendLoginCredentials } from 'src/common/helpers/utils.helper'
 @Injectable()
 export class PosteventService {
     constructor(
         @InjectRepository(Preevent)
         private readonly preeventRepository: Repository<Preevent>,
         @InjectRepository(Postevent)
-        private readonly posteventRepository: Repository<Postevent>
+        private readonly posteventRepository: Repository<Postevent>,
+        @InjectRepository(Learner)
+        private readonly learnerRepository: Repository<Learner>,
+        private readonly dataSource: DataSource
     ) {}
     async create(createPosteventDto: CreatePosteventDto[]) {
         const event = await this.preeventRepository.findOne({
@@ -24,12 +30,54 @@ export class PosteventService {
             throw new Error('Institution not found')
         }
 
-        
-        const postevent = this.posteventRepository.create(createPosteventDto)
+        let postevent: Postevent[]
+        await this.dataSource.transaction(async (manager) => {
+            postevent = manager.create(Postevent, createPosteventDto)
+            await manager.save(Postevent, postevent)
 
-        const saved = await this.posteventRepository.save(postevent);
+            for (let index = 0; index < postevent.length; index++) {
+                const element = postevent[index]
+                const learner = await manager.findOneBy(Learner, {
+                    email: element.email
+                })
+                if (!learner) {
+                    const _learner = new Learner()
+                    _learner.name = element.name
+                    _learner.email = element.email
 
-        return saved
+                    const salt: string = bcrypt.genSaltSync(10)
+                    _learner.password = bcrypt.hashSync('12345678', salt)
+
+                    const registeredLearner = await manager.save(
+                        Learner,
+                        _learner
+                    )
+
+                    sendLoginCredentials(
+                        element.email,
+                        element.email,
+                        '12345678',
+                        'Dear learner, Please login with credentials'
+                    ).then((res) => {
+                        console.log(res)
+                    })
+
+                    const _user = await manager.findOneBy(Learner, {
+                        id: registeredLearner.id
+                    })
+
+                    const wallet = await getWallet(
+                        'learner',
+                        registeredLearner.id
+                    )
+                    _user.publicAddress = wallet.address
+
+                    await manager.save(Learner, _user)
+                }
+            }
+        })
+
+        return postevent
     }
 
     findAll() {

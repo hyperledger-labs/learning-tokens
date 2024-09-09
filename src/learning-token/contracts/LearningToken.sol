@@ -7,6 +7,11 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 // import "@openzeppelin/contracts/access/AccessControl.sol";
 // import "hardhat/console.sol";
 
+//version select for remix ide deplyment
+// import "@openzeppelin/contracts@v4.8/token/ERC1155/ERC1155.sol";
+// import "@openzeppelin/contracts@v4.8/access/Ownable.sol";
+// import "@openzeppelin/contracts@v4.8/utils/Counters.sol";
+
 
 contract LearningToken is ERC1155, Ownable{
     //define all the event here∏

@@ -34,9 +34,9 @@ export class RegisterRequestDto {
     @IsOptional()
     public type: string
 
-    @IsString()
-    @IsNotEmpty()
-    publicAddress: string
+    // @IsString()
+    // @IsNotEmpty()
+    // publicAddress: string
 }
 
 // Validate Request DTO
@@ -61,9 +61,9 @@ export class RegisterInstitutionDTO {
     @IsOptional()
     public type: string // TODO: should be enum
 
-    @IsString()
-    @IsNotEmpty()
-    publicAddress: string
+    // @IsString()
+    // @IsNotEmpty()
+    // publicAddress: string
 
     @IsString()
     @IsNotEmpty()

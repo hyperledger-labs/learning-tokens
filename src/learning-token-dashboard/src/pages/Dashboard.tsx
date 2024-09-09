@@ -21,18 +21,17 @@ function Dashboard() {
   // const [balance, setBalance] = useState<any>(null);
   // const [courseIdOptions, setCourseIdOptions] = useState([]);
 
-  const [tokens, setTokens] = useState([])
-
+  const [tokens, setTokens] = useState([]);
 
   const getLearnerTokenMetadata = async () => {
-    const contract = await initWeb3Method()
-    const tx = await contract!.getLearnerTokenMetadata(auth.user.publicAddress)
-  
-    let temp: any = [];
-    for (let key in tx) {
+    const contract = await initWeb3Method();
+    const tx = await contract!.getLearnerTokenMetadata(auth.user.publicAddress);
+
+    const temp: any = [];
+    for (const key in tx) {
       if (tx.hasOwnProperty(key)) {
-        if (Array.isArray(tx[key])) {          
-          let obj: any = {};
+        if (Array.isArray(tx[key])) {
+          const obj: any = {};
           tx[key].forEach((item: any, index: number) => {
             if (index === 0) {
               obj["institutionId"] = Number(item);
@@ -50,48 +49,46 @@ function Dashboard() {
               obj["courseId"] = Number(item);
             }
             if (index === 5) {
-              obj["fieldOfKnowledge"] = (item);
+              obj["fieldOfKnowledge"] = item;
             }
             if (index === 6) {
-              obj["skill"] = (item);
+              obj["skill"] = item;
             }
-          
           });
           temp.push(obj);
-        } 
+        }
       }
     }
 
     if (temp.length > 0) {
-      setTokens(temp)
+      setTokens(temp);
     }
-  } 
+  };
 
   useEffect(() => {
     if (auth.user.type === "learner") {
-      getLearnerTokenMetadata()
+      getLearnerTokenMetadata();
     }
   }, []);
-
-
-  
-
 
   if (auth.user.type === "learner") {
     return (
       <>
+        <div className="font-bold text-lg">
+          Hello, <span className="capitalize">{auth.user.name}</span>
+          <div>
+            Public Address: <span>{auth.user.publicAddress}</span>
+          </div>
+        </div>
         <div className="flex flex-col items-center">
           <h3 className="font-bold">Your Tokens</h3>
           <div className="grid grid-cols-4 gap-2">
-            {
-              tokens.length > 0 && tokens.map((token:any,index:number) => {
-                return <Token key={index} item={token}/>
-              })
-            }
+            {tokens.length > 0 &&
+              tokens.map((token: any, index: number) => {
+                return <Token key={index} item={token} />;
+              })}
           </div>
-
         </div>
-
 
         {/* <div className="flex flex-col items-center justify-center w-full">
           <h3>
@@ -122,7 +119,6 @@ function Dashboard() {
             </Form>
           </Formik>
         </div> */}
-    
       </>
     );
   }
@@ -130,7 +126,10 @@ function Dashboard() {
   return (
     <>
       <div className="font-bold text-lg">
-        Hello <span className="capitalize">{auth.user.name}</span>
+        Hello, <span className="capitalize">{auth.user.name}</span>
+        <div>
+          Public Address: <span>{auth.user.publicAddress}</span>
+        </div>
       </div>
     </>
   );

@@ -6,10 +6,11 @@ import { Preevent } from '../preevent/entities/preevent.entity';
 import { Institution } from '../institutions/entities/institution.entity';
 import { SdkKeysModule } from '../sdk-keys/sdk-keys.module';
 import { Postevent } from './entities/postevent.entity';
+import { Learner } from '../learners/entities/learner.entity';
 
 @Module({
   controllers: [PosteventController],
   providers: [PosteventService],
-  imports: [TypeOrmModule.forFeature([Preevent, Institution, Postevent]),SdkKeysModule]
+  imports: [TypeOrmModule.forFeature([Preevent, Institution, Postevent, Learner]),SdkKeysModule]
 })
 export class PosteventModule {}

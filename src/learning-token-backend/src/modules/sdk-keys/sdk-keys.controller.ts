@@ -28,6 +28,7 @@ export class SdkKeysController {
                 )
             }
         } catch (error) {
+            console.log(error);
             throw new NotFoundException('Something went wrong')
         }
     }
