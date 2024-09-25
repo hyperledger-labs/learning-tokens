@@ -1,5 +1,5 @@
 import "../../../node_modules/metismenujs/scss/metismenujs.scss";
-import mainMenuItems from "../../config/menu";
+import mainMenuItems, { MenuItem } from "../../config/menu";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import AccordionItem from "../Accordion";
@@ -21,84 +21,79 @@ const Sidebar = () => {
   const auth = useSelector((state: RootState) => state.auth);
 
   return (
-    <div className="bg-white h-screen fixed z-20 left-0 top-0 bottom-0 w-[250px] border-r flex flex-col items-center">
-      <div className="font-bold p-3 text-lg flex items-center justify-center">
+    <div className="bg-gradient-to-b from-[#013A44] to-[#025E6E] h-screen fixed z-20 left-0 top-0 bottom-0 w-[250px] shadow-lg flex flex-col">
+      <div className="font-bold p-4 text-xl h-[8vh] flex items-center justify-center text-white border-b border-[#ffffff33]">
+        <img src="/path-to-your-logo.svg" alt="Logo" className="h-8 mr-2" />
         Learning Token
       </div>
-      <div className="flex flex-col gap-4 mt-3 w-max">
-        {mainMenuItems.map((menu: any, mainIndex: number) => {
+      <div className="flex flex-col gap-2 mt-4 w-full overflow-y-auto">
+        {mainMenuItems.map((menu: MenuItem, mainIndex: number) => {
           if (
             !menu.subMenu &&
-            menu.requiredPermissions.includes(auth.user.type)
+            menu?.requiredPermissions?.includes(auth.user.type || "")
           ) {
             return (
               <NavLink
                 key={mainIndex}
                 to={menu.to}
                 className={({ isActive }: any) =>
-                  `py-3 px-6 rounded-lg hover:text-white hover:bg-[#013A44] bg-gray-200 ${
-                    isActive ? "bg-[#013A44] text-white" : "text-gray-600"
+                  `py-3 px-6 rounded-md hover:bg-[#ffffff22] transition-colors duration-200 ${
+                    isActive ? "bg-[#ffffff33] text-white" : "text-gray-200"
                   }`
                 }
               >
                 {menu.name}
               </NavLink>
             );
-          } else if (menu.subMenu) {
-            const hasMenuPermission = menu.subMenu
-              .map((i: any) => i.requiredPermissions)
-              .flat();
-
-            const hasSubPermission = [auth.user.type].some((i) =>
-              hasMenuPermission.includes(i)
-            );
-
-            return (
-              hasSubPermission && (
-                <AccordionItem
-                  active={active}
-                  handleToggle={handleToggle}
-                  data={{ id: mainIndex, name: menu.name }}
-                  key={mainIndex}
-                >
-                  <div className="ml-8 mt-2">
-                    {menu.subMenu.map((item: any, index: number) => {
-                      const show = item.requiredPermissions.includes(
-                        auth.user.type
-                      );
-                      return (
-                        show && (
-                          <div
-                            className="flex items-center justify-end my-2"
-                            key={index}
-                          >
-                            <NavLink
-                              key={index}
-                              to={item.to}
-                              className={({ isActive }: any) =>
-                                `py-3 px-6 rounded-lg hover:text-white hover:bg-[#013A44] w-full ${
-                                  isActive
-                                    ? "bg-[#013A44] text-white"
-                                    : "text-gray-600"
-                                }`
-                              }
-                            >
-                              {item.name}
-                            </NavLink>
-                          </div>
-                        )
-                      );
-                    })}
-                  </div>
-                </AccordionItem>
-              )
-            );
-          } else {
-            return null;
           }
-        })}
 
-        <div></div>
+          const hasMenuPermission = menu.subMenu
+            ?.map((i: any) => i.requiredPermissions)
+            .flat();
+
+          const hasSubPermission = [auth.user.type].some((i) =>
+            hasMenuPermission?.includes(i)
+          );
+
+          return (
+            hasSubPermission && (
+              <AccordionItem
+                active={active}
+                handleToggle={handleToggle}
+                data={{ id: mainIndex, name: menu.name }}
+                key={mainIndex}
+              >
+                <div className="ml-8 mt-2">
+                  {menu?.subMenu?.map((item: any, index: number) => {
+                    const show = item.requiredPermissions.includes(
+                      auth.user.type
+                    );
+                    return (
+                      show && (
+                        <div
+                          className="flex items-center justify-end my-2"
+                          key={index}
+                        >
+                          <NavLink
+                            key={index}
+                            to={item.to}
+                            className={({ isActive }: any) =>
+                              `py-3 px-6 rounded-lg hover:text-white hover:bg-[#013A44] w-full ${
+                                isActive ? "bg-[#013A44] text-white" : ""
+                              }`
+                            }
+                          >
+                            {item.name}
+                          </NavLink>
+                        </div>
+                      )
+                    );
+                  })}
+                </div>
+              </AccordionItem>
+            )
+          );
+        })}
       </div>
     </div>
   );
