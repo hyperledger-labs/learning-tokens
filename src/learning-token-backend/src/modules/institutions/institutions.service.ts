@@ -32,8 +32,8 @@ export class InstitutionsService {
      *
      * @returns A message indicating the action performed.
      */
-    findAll() {
-        return `This action returns all institutions`
+    async findAll() {
+        return await this.institutionRepository.find()
     }
 
     /**
