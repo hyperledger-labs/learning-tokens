@@ -12,6 +12,7 @@ import {
 import { JwtService } from './jwt.service'
 import { getWallet } from 'src/utils/kaledio'
 import { User } from 'src/modules/admins/entities/user.entity'
+import { Role } from 'src/modules/role/entities/role.entity'
 
 @Injectable()
 export class AuthService {
@@ -25,7 +26,9 @@ export class AuthService {
         @InjectRepository(Instructor)
         private readonly insturctorRepository: Repository<Instructor>,
         @Inject(JwtService)
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        @InjectRepository(Role)
+        private readonly roleRepository: Repository<Role>
     ) {}
 
     /**
@@ -62,12 +65,20 @@ export class AuthService {
             user.password = this.jwtService.encodePassword(password)
             user.latitude = latitude
             user.longitude = longitude
+
+            const role = await this.roleRepository.findOne({
+                where: {
+                    name: 'institution'
+                }
+            })
+
             const registeredUser = await this.institutionRepository.save(user)
             const _user = await this.institutionRepository.findOneBy({
                 id: registeredUser.id
             })
             const wallet = await getWallet('institution', registeredUser.id)
             _user.publicAddress = wallet.address
+            _user.role = role
             this.institutionRepository.save(_user)
             return {
                 id: registeredUser.id,
@@ -112,15 +123,11 @@ export class AuthService {
         }
     }
 
-    /**
-     * AUTHENTICATING A USER
-     */
-    public async login(loginRequestDto: LoginRequestDto) {
+    public async adminLogin(loginRequestDto: LoginRequestDto) {
         const user = await this.userRepository.findOne({
             where: { email: loginRequestDto.email },
             relations: ['role']
         })
-
         if (!user) {
             // IF USER NOT FOUND
             return
@@ -136,10 +143,7 @@ export class AuthService {
             return
         }
 
-        const token: string = this.jwtService.generateToken(
-            user,
-            user.role.name
-        )
+        const token: string = this.jwtService.generateToken(user, 'admin')
 
         return {
             id: user.id,
@@ -147,9 +151,46 @@ export class AuthService {
             email: user.email,
             publicAddress: user.publicAddress,
             token: token,
-            role: user.role,
             createdAt: user.createdAt,
-            updatedAt: user.updatedAt
+            updatedAt: user.updatedAt,
+            role: user.role
+        }
+    }
+
+    /**
+     * AUTHENTICATING A USER
+     */
+    public async login(loginRequestDto: LoginRequestDto) {
+        const user = await this.institutionRepository.findOne({
+            where: { email: loginRequestDto.email },
+            relations: ['role']
+        })
+        if (!user) {
+            // IF USER NOT FOUND
+            return
+        }
+
+        const isPasswordValid: boolean = this.jwtService.isPasswordValid(
+            loginRequestDto.password,
+            user.password
+        )
+
+        if (!isPasswordValid) {
+            // IF PASSWORD DOES NOT MATCH
+            return
+        }
+
+        const token: string = this.jwtService.generateToken(user, 'institution')
+
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            publicAddress: user.publicAddress,
+            token: token,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            role: user.role
         }
     }
 
@@ -184,6 +225,6 @@ export class AuthService {
      * REFRESHING TOKEN FOR AN EXISTING USER
      */
     public refreshToken(loggedInUser: any) {
-        return this.jwtService.generateToken(loggedInUser, 'type')
+        return this.jwtService.generateToken(loggedInUser, 'institution')
     }
 }

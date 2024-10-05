@@ -55,6 +55,14 @@ export class SmartcontractController {
         return result
     }
 
+    @Post('register-institution')
+    async registerInstitution(@Body() body: any) {
+        const result = await this.smartcontractService.onboardingInstitution(
+            body
+        )
+        return result
+    }
+
     @Post('token-distributions')
     @AllowUserTypes(RoleEnum.INSTRUCTOR)
     async distributeToken(
