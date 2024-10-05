@@ -64,6 +64,7 @@ export class AuthController {
     private async institution_login(
         @Body() loginRequestDto: InstitutionLoginRequestDto
     ) {
+        console.log('here')
         try {
             loginRequestDto.type = 'Institution'
             const result = await this.service.login(loginRequestDto)
