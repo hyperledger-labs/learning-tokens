@@ -64,7 +64,7 @@ export class SmartcontractService {
             console.log(chainId) // 42
             const contractAddress = this.contractAddress
             //when we have to call from admin permission
-            if (body.isAdmin) {
+            if (body.isAdmin && body.isWrite) {
                 const adminPrivateKey = this.adminPrivateKey
                 const signer = new ethers.Wallet(adminPrivateKey, this.provider)
                 const contract = new ethers.Contract(
