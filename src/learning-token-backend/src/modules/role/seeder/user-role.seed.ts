@@ -6,6 +6,8 @@ import { Repository } from 'typeorm'
 import { User } from 'src/modules/admins/entities/user.entity'
 import { RoleEnum } from 'src/modules/admins/enums/user.enum'
 import { use } from 'passport'
+import * as dotenv from 'dotenv'
+dotenv.config()
 @Injectable()
 export class UserSeed implements OnModuleInit {
     constructor(
@@ -44,7 +46,7 @@ export class UserSeed implements OnModuleInit {
             if (isRoleExist) {
                 return
             } else {
-                newRole.save()
+                await this.roleRepository.save(newRole)
             }
         })
         const adminRole = await this.roleRepository.findOne({
@@ -60,10 +62,11 @@ export class UserSeed implements OnModuleInit {
             } else {
                 const user = new User()
                 user.name = 'Admin'
+                user.publicAddress = process.env.ADMIN_PUBLIC_KEY
                 user.email = 'admin@gmail.com'
                 user.password = hashedPassword
                 user.role = adminRole
-                await user.save()
+                await this.userRepository.save(user)
             }
         }
     }

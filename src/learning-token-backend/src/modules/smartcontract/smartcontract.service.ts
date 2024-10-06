@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { CreateCourseDto } from './dto/create-course.dto'
 import { UpdateSmartcontractDto } from './dto/update-smartcontract.dto'
 import { ethers } from 'ethers'
@@ -13,6 +13,7 @@ import { Learner } from '../learners/entities/learner.entity'
 import { getIPFSFULLURL } from 'src/common/helpers/utils.helper'
 import { CreateSmartcontractDto } from './dto/create-smartcontract.dto'
 import { DistributeTokenDto } from './dto/distrbute-token.dto'
+import { Institution } from '../institutions/entities/institution.entity'
 
 @Injectable()
 export class SmartcontractService {
@@ -23,6 +24,8 @@ export class SmartcontractService {
     private preEventRepository: Repository<Preevent>
     @InjectRepository(Learner)
     private learnerRepository: Repository<Learner>
+    @InjectRepository(Institution)
+    private institutionRepository: Repository<Institution>
 
     constructor(private readonly configService: ConfigService) {
         // Initialize the provider and contract address using ConfigService
@@ -57,6 +60,36 @@ export class SmartcontractService {
     remove(id: number) {
         return `This action removes a #${id} smartcontract`
     }
+
+    async onboardingInstitution(body): Promise<any> {
+        try {
+            const adminPrivateKey = this.adminPrivateKey
+            const contractAddress = this.contractAddress
+
+            const { chainId } = await this.provider.getNetwork()
+            console.log(chainId) // 42
+
+            const signer = new ethers.Wallet(adminPrivateKey, this.provider)
+            const contract = new ethers.Contract(contractAddress, abi, signer)
+            const result = await contract[body.functionName](...body.params)
+            // Convert BigInt values to strings if needed
+            const processedResult = this.processResult(result)
+            console.log('View Function Result:', processedResult)
+            if (processedResult) {
+                await this.institutionRepository.update(body.institutionId, {
+                    status: true
+                })
+            }
+            return {
+                message: 'Institution onboarded successfully',
+                result: processedResult
+            }
+        } catch (err) {
+            console.log('err', err)
+            throw new BadRequestException('error in onboarding institution')
+        }
+    }
+
     async callContractFunction(functionName: string, body?: any): Promise<any> {
         try {
             // Create a contract instance
@@ -64,7 +97,7 @@ export class SmartcontractService {
             console.log(chainId) // 42
             const contractAddress = this.contractAddress
             //when we have to call from admin permission
-            if (body.isAdmin) {
+            if (body.isAdmin && body.isWrite) {
                 const adminPrivateKey = this.adminPrivateKey
                 const signer = new ethers.Wallet(adminPrivateKey, this.provider)
                 const contract = new ethers.Contract(
@@ -75,7 +108,6 @@ export class SmartcontractService {
                 const result = await contract[body.functionName](...body.params)
                 // Convert BigInt values to strings if needed
                 const processedResult = this.processResult(result)
-                console.log('View Function Result:', processedResult)
                 return processedResult
             }
             if (body.isWrite) {
@@ -90,7 +122,6 @@ export class SmartcontractService {
                 const result = await contract[body.functionName](...body.params)
                 // Convert BigInt values to strings if needed
                 const processedResult = this.processResult(result)
-                console.log('View Function Result:', processedResult)
                 return processedResult
             }
             if (body.isView) {

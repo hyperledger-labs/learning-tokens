@@ -8,6 +8,6 @@ import { SdkKeysModule } from '../sdk-keys/sdk-keys.module'
 @Module({
     controllers: [InstitutionsController],
     providers: [InstitutionsService],
-    imports: [TypeOrmModule.forFeature([Institution]),SdkKeysModule]
+    imports: [TypeOrmModule.forFeature([Institution]), SdkKeysModule]
 })
 export class InstitutionsModule {}

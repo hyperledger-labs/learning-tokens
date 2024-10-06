@@ -45,7 +45,7 @@ export class AuthController {
     @Post('admin-login')
     private async login(@Body() loginRequestDto: LoginRequestDto) {
         try {
-            const result = await this.service.login(loginRequestDto)
+            const result = await this.service.adminLogin(loginRequestDto)
             if (result) {
                 return {
                     status: HttpStatus.CREATED,
