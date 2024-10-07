@@ -153,7 +153,7 @@ export class AuthService {
             token: token,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
-            role: user.role
+            role: user.role.name
         }
     }
 
@@ -190,7 +190,7 @@ export class AuthService {
             token: token,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
-            role: user.role
+            role: user.role.name
         }
     }
 
