@@ -20,7 +20,7 @@ export class PosteventController {
 
     @UseGuards(SecretKeyGuard)
     @Post()
-    async create(@Body() createPosteventDto: CreatePosteventDto[]) {
+    async create(@Body() createPosteventDto: CreatePosteventDto) {
         try {
             const result = await this.posteventService.create(
                 createPosteventDto

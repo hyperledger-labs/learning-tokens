@@ -40,40 +40,36 @@ export class EventService {
     async createScoringGuide(createScoringGuideDTO: CreateScoringGuideDTO) {
         try {
             const isPreEventExists = await this.preEventRepository.findOne({
-                where: { meetingEventId: createScoringGuideDTO.meetingEventId }
+                where: { id: createScoringGuideDTO.preEventId },
+                relations: ['onlineEvent.scoringGuide']
             })
             //every scoring guide should have an isPreEventExists
             if (!isPreEventExists) {
                 throw new BadRequestException('Event does not exist')
             }
-            const scoringGuide = this.scoringGuideRepository.create(
-                createScoringGuideDTO
-            )
+            // const scoringGuide = this.scoringGuideRepository.create(
+            //     createScoringGuideDTO
+            // )
 
-            const createdScoringGuide = await this.scoringGuideRepository.save(
-                scoringGuide
-            )
+            // const createdScoringGuide = await this.scoringGuideRepository.save(
+            //     scoringGuide
+            // )
 
-            if (createdScoringGuide) {
+            if (isPreEventExists?.onlineEvent?.scoringGuide) {
                 const blob = await this.generatePdf({
                     ...createScoringGuideDTO
                 })
                 const ipfsUrl = await this.uploadToPinata(blob)
                 //update the scoring guide with the ipfs url
-                const scoringGuideCreated =
-                    await this.scoringGuideRepository.update(
-                        createdScoringGuide.id,
-                        {
-                            ipfsHash: ipfsUrl.IpfsHash,
-                            status: true
-                        }
-                    )
-                if (scoringGuideCreated.affected > 0) {
-                    isPreEventExists.onlineEvent.scoringGuide =
-                        createdScoringGuide
-                    //update the prevent table's online event's scoring guide with isEventExist
-                    return await this.preEventRepository.save(isPreEventExists)
-                }
+
+                await this.scoringGuideRepository.update(
+                    isPreEventExists.onlineEvent.scoringGuide.id,
+                    {
+                        ipfsHash: ipfsUrl.IpfsHash,
+                        status: true
+                    }
+                )
+                return
             } else {
                 throw new BadRequestException('Scoring guide not created')
             }
