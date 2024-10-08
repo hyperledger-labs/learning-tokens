@@ -14,6 +14,7 @@ import * as dotenv from 'dotenv'
 import { OnlineEvent } from './entities/event.entity'
 import * as fs from 'fs' // If you are working with files from the filesystem
 import { Preevent } from '../preevent/entities/preevent.entity'
+import { Instructor } from '../instructors/entities/instructor.entity'
 dotenv.config()
 
 @Injectable()
@@ -42,7 +43,7 @@ export class EventService {
         try {
             const isPreEventExists = await this.preEventRepository.findOne({
                 where: { id: createScoringGuideDTO.preEventId },
-                relations: ['onlineEvent.scoringGuide']
+                relations: ['onlineEvent.scoringGuide', 'instructor']
             })
             //every scoring guide should have an isPreEventExists
             if (!isPreEventExists) {
@@ -57,9 +58,10 @@ export class EventService {
             // )
 
             if (isPreEventExists?.onlineEvent?.scoringGuide) {
-                const ipfsUrl = await this.uploadToPinata({
-                    ...createScoringGuideDTO
-                })
+                const ipfsUrl = await this.uploadToPinata(
+                    createScoringGuideDTO,
+                    isPreEventExists.instructor
+                )
                 await this.scoringGuideRepository.update(
                     isPreEventExists.onlineEvent.scoringGuide.id,
                     {
@@ -95,19 +97,27 @@ export class EventService {
         return `This action removes a #${id} event`
     }
 
-    async uploadToPinata(scoringGuide: any): Promise<any> {
+    async uploadToPinata(
+        scoringGuide: CreateScoringGuideDTO,
+        instructorData: Instructor
+    ): Promise<any> {
         try {
             const pinata = new PinataSDK({
                 pinataJwt: process.env.PINATA_JWT
             })
             const upload = await pinata.upload.json({
-                id: 2,
-                name: 'Bob Smith',
-                email: 'bob.smith@example.com',
-                age: 34,
-                isActive: false,
-                roles: ['user']
+                eventId: scoringGuide.preEventId,
+                meetingEventId: scoringGuide.meetingEventId,
+                instructorName: instructorData.name,
+                instructorEmail: instructorData.email,
+                fieldOfKnowledge: scoringGuide.fieldOfKnowledge,
+                taxonomyOfSkill: scoringGuide.taxonomyOfSkill,
+                attendanceTokenPerLesson: scoringGuide.attendanceToken,
+                scoringTokenPerLesson: scoringGuide.scoreTokenAmount,
+                helpTokenPerLesson: scoringGuide.helpTokenAmount,
+                instructorScoreTokenPerLesson: scoringGuide.instructorScoreToken
             })
+            return upload
             return upload
         } catch (error) {
             console.log(error)
