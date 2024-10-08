@@ -28,14 +28,6 @@ export const adminApi = apiSlice
         }),
         invalidatesTags: ["AdminAuth"],
       }),
-      smartContractCallRegisterActor: builder.mutation<any, any>({
-        query: (body) => ({
-          url: "/smartcontract/register-actor", //to activate institution, instructor, learner
-          method: "POST",
-          body,
-        }),
-        invalidatesTags: ["AdminAuth"],
-      }),
       getInstitution: builder.query<
         any,
         { page?: number; limit?: number } | void
@@ -87,7 +79,6 @@ export const adminApi = apiSlice
 
 export const {
   useSmartContractCallMutation,
-  useSmartContractCallRegisterActorMutation,
   useLoginAdminMutation,
   useRegisterAdminMutation,
   useGetInstitutionQuery,

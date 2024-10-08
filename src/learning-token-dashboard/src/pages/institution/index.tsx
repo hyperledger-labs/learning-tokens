@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Loader, Table, Toggle } from "rsuite";
 import {
   useLazyGetInstitutionQuery,
-  useSmartContractCallRegisterActorMutation,
+  useSmartContractCallMutation,
+  useSmartContractCallRegisterInstitutionMutation,
   useUpdateInstitutionStatusMutation,
 } from "../../store/features/admin/adminApi";
 import usePagination from "../../hooks/usePagination";
@@ -19,7 +20,8 @@ const Institution: React.FC = () => {
   });
   const [getInstitution, { data, isLoading }] = useLazyGetInstitutionQuery();
   const [updateInstitutionStatus] = useUpdateInstitutionStatusMutation();
-  const [smartContractCallRegisterActor] = useSmartContractCallRegisterActorMutation();
+  const [smartContractCall] = useSmartContractCallMutation();
+  const [smartContractCallRegisterInstitution] = useSmartContractCallRegisterInstitutionMutation();
   const pagination = usePagination();
 
   useEffect(() => {
@@ -34,11 +36,9 @@ const Institution: React.FC = () => {
   
     try {
       // Await the smart contract call
-      await smartContractCallRegisterActor({
-        isAdmin: true,
-        role: RoleEnum.ADMIN,
-        id: 0, //HD Wallet accountIndex of Admin - default to 0
-        functionName: SmartcontractFunctionsEnum.REGISTER_INSTITUTION,
+      await smartContractCallRegisterInstitution({
+        institutionId: rowData.id,
+        functionName: "registerInstitution",
         params: [
           rowData.name,
           rowData.publicAddress,
