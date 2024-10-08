@@ -1,8 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { CreatePreeventDto } from './dto/create-preevent.dto'
 import { UpdatePreeventDto } from './dto/update-preevent.dto'
-import { InjectRepository } from '@nestjs/typeorm'
-import { DataSource, FindOptionsOrder, Repository } from 'typeorm'
+import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm'
+import {
+    DataSource,
+    EntityManager,
+    FindOptionsOrder,
+    Repository
+} from 'typeorm'
 import { Preevent } from './entities/preevent.entity'
 import { Institution } from '../institutions/entities/institution.entity'
 import { Instructor } from '../instructors/entities/instructor.entity'
@@ -12,6 +17,7 @@ import * as bcrypt from 'bcryptjs'
 import { sendLoginCredentials } from 'src/common/helpers/utils.helper'
 import { OnlineEvent } from '../event/entities/event.entity'
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate'
+import { ScoringGuide } from '../event/entities/scoring-guide.entity'
 @Injectable()
 export class PreeventService {
     constructor(
@@ -23,7 +29,9 @@ export class PreeventService {
         private readonly instructorRepository: Repository<Instructor>,
         @InjectRepository(JwtService)
         private readonly jwtService: JwtService,
-        private readonly dataSource: DataSource
+        private readonly dataSource: DataSource,
+        @InjectEntityManager()
+        private readonly entityManager: EntityManager
     ) {}
 
     async create(createPreeventDto: CreatePreeventDto, secretKey) {
@@ -34,46 +42,47 @@ export class PreeventService {
         if (!institution) {
             throw new Error('Institution not found')
         }
-
-        let preevent: Preevent
-        await this.dataSource.transaction(async (manager) => {
-            const onlineEvent = new OnlineEvent()
-
+        let preEventData = new Preevent()
+        await this.entityManager.transaction(async () => {
+            const scoringGuide = new ScoringGuide()
+            const savedScoringGuide = await this.entityManager.save(
+                scoringGuide
+            )
+            const onlineEvent = new OnlineEvent({}, savedScoringGuide)
+            const savedEvent = await this.entityManager.save(onlineEvent)
             // Create Preevent
-            preevent = manager.create(Preevent, {
+            preEventData = this.preeventRepository.create({
                 ...createPreeventDto,
-                institution,
-                onlineEvent
+                onlineEvent: savedEvent,
+                institution: institution
             })
 
-            await manager.save(Preevent, preevent)
-            const instructor = await manager.findOneBy(Instructor, {
-                email: createPreeventDto.organiserEmail
+            await this.preeventRepository.save(preEventData)
+            const instructor = await this.instructorRepository.findOneBy({
+                email: createPreeventDto.organizerEmail
             })
 
             if (!instructor) {
                 const _instructor = new Instructor()
-                _instructor.name = createPreeventDto.organiserName
-                _instructor.email = createPreeventDto.organiserEmail
+                _instructor.name = createPreeventDto.organizerName
+                _instructor.email = createPreeventDto.organizerEmail
 
                 const salt: string = bcrypt.genSaltSync(10)
                 _instructor.password = bcrypt.hashSync('12345678', salt)
 
-                const registeredInstructor = await manager.save(
-                    Instructor,
-                    _instructor
-                )
+                const registeredInstructor =
+                    await this.instructorRepository.save(_instructor)
 
-                sendLoginCredentials(
-                    createPreeventDto.speakerEmail,
-                    createPreeventDto.speakerEmail,
-                    '12345678',
-                    'Dear Instructor, Please login with credentials'
-                ).then((res) => {
-                    console.log(res)
-                })
+                // await sendLoginCredentials(
+                //     createPreeventDto.organizerEmail,
+                //     createPreeventDto.organizerName,
+                //     '12345678',
+                //     'Dear Instructor, Please login with credentials'
+                // ).then((res) => {
+                //     console.log(res)
+                // })
 
-                const _user = await manager.findOneBy(Instructor, {
+                const _user = await this.instructorRepository.findOneBy({
                     id: registeredInstructor.id
                 })
 
@@ -83,11 +92,14 @@ export class PreeventService {
                 )
                 _user.publicAddress = wallet.address
 
-                await manager.save(Instructor, _user)
+                await this.instructorRepository.save(_user)
+                await this.preeventRepository.update(preEventData.id, {
+                    instructor: _user
+                })
             }
         })
 
-        return preevent
+        return preEventData
     }
 
     async findAllPreventDataForInstructor(

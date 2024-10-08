@@ -1,8 +1,8 @@
 import { IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class CreateScoringGuideDTO {
-    @IsString()
-    meetingEventId: string
+    @IsNumber()
+    preEventId: number
 
     @IsOptional()
     @IsString()

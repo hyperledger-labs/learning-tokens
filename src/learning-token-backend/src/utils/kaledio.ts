@@ -24,6 +24,5 @@ export const getWallet = async (type: string, id: number) => {
     }
 
     const result = await axios.get(url)
-
     return result.data
 }
