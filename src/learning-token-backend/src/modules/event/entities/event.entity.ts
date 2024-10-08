@@ -48,4 +48,10 @@ export class OnlineEvent extends BaseEntity {
 
     @DeleteDateColumn()
     deletedAt: Date
+
+    constructor(partial: Partial<OnlineEvent>, scoringGuide: ScoringGuide) {
+        super()
+        this.scoringGuide = scoringGuide
+        Object.assign(this, partial)
+    }
 }

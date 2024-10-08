@@ -147,7 +147,7 @@ export class SmartcontractService {
             // Fetch pre-event and related post-events and scoring guide
             const courseEvent = await this.preEventRepository.findOne({
                 where: {
-                    meetingEventId: createCourseDto.preEventId
+                    id: createCourseDto.preEventId
                 },
                 relations: [
                     'postevents',
