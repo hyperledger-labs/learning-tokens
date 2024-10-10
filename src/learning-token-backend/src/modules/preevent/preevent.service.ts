@@ -73,15 +73,12 @@ export class PreeventService {
                 const registeredInstructor =
                     await this.instructorRepository.save(_instructor)
 
-                // await sendLoginCredentials(
-                //     createPreeventDto.organizerEmail,
-                //     createPreeventDto.organizerName,
-                //     '12345678',
-                //     'Dear Instructor, Please login with credentials'
-                // ).then((res) => {
-                //     console.log(res)
-                // })
-
+                await sendLoginCredentials(
+                    createPreeventDto.organizerEmail,
+                    createPreeventDto.organizerName,
+                    '12345678',
+                    'Dear Instructor, Please login with credentials'
+                )
                 const _user = await this.instructorRepository.findOneBy({
                     id: registeredInstructor.id
                 })
