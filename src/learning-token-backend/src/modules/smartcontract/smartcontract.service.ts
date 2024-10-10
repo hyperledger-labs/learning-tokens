@@ -14,12 +14,17 @@ import { getIPFSFULLURL } from 'src/common/helpers/utils.helper'
 import { CreateSmartcontractDto } from './dto/create-smartcontract.dto'
 import { DistributeTokenDto } from './dto/distrbute-token.dto'
 import { Institution } from '../institutions/entities/institution.entity'
+import { SmartcontractFunctionsEnum } from 'src/modules/smartcontract/enums/smartcontract-functions.enum'
 
 @Injectable()
 export class SmartcontractService {
     private readonly provider: ethers.JsonRpcProvider
     private readonly contractAddress: string
     private readonly adminPrivateKey: string
+    private readonly adminWalletId: string
+    private readonly institutionWalletId: string
+    private readonly instructorWalletId: string
+    private readonly learnerWalletId: string
     @InjectRepository(Preevent)
     private preEventRepository: Repository<Preevent>
     @InjectRepository(Learner)
@@ -28,17 +33,12 @@ export class SmartcontractService {
     private institutionRepository: Repository<Institution>
 
     constructor(private readonly configService: ConfigService) {
-        // Initialize the provider and contract address using ConfigService
-        const rpcUrl = this.configService.get<string>(
-            'JSON_RPC_URL',
-            'http://localhost:8545'
-        )
-        this.provider = new ethers.JsonRpcProvider(rpcUrl)
-
-        this.contractAddress =
-            this.configService.get<string>('CONTRACT_ADDRESS')
-        this.adminPrivateKey =
-            this.configService.get<string>('ADMIN_PRIVATE_KEY')
+        this.contractAddress = this.configService.get<string>('CONTRACT_ADDRESS')
+        this.adminPrivateKey = this.configService.get<string>('ADMIN_PRIVATE_KEY')
+        this.adminWalletId = this.configService.get<string>('ADMIN_HD_WALLET_ID')
+        this.institutionWalletId = this.configService.get<string>('INSTITUTION_HD_WALLET_ID')
+        this.instructorWalletId = this.configService.get<string>('INSTRUCTOR_HD_WALLET_ID')
+        this.learnerWalletId = this.configService.get<string>('LEARNER_HD_WALLET_ID')
     }
 
     create(createSmartcontractDto: CreateSmartcontractDto) {
@@ -61,27 +61,44 @@ export class SmartcontractService {
         return `This action removes a #${id} smartcontract`
     }
 
-    async onboardingInstitution(body): Promise<any> {
+    async onboardingActor(body): Promise<any> {
         try {
-            const adminPrivateKey = this.adminPrivateKey
+            const wallet = await getWallet(body.role, body.id)
+            const actorPrivateKey = wallet.privateKey
             const contractAddress = this.contractAddress
+            let rpcUrl = this.configService.get<string>('JSON_RPC_URL', 'http://localhost:8545')
+            let messageResponse = ''
 
-            const { chainId } = await this.provider.getNetwork()
+            if(!body.isAdmin) {
+                rpcUrl = this.configService.get<string>('KALEIDO_HD_WALLET_RPC_URL', 'https://u0zhuv4dtl:P-XiJpeAACDZgL_dVSaUpL4JLmIXeg5lTu5jLHWEUJ4@u0iavbc8n0-u0t9n504n5-hdwallet.us0-aws.kaleido.io/')
+            }
+            
+            const provider = new ethers.JsonRpcProvider(rpcUrl);
+
+            const { chainId } = await provider.getNetwork()
             console.log(chainId) // 42
 
-            const signer = new ethers.Wallet(adminPrivateKey, this.provider)
+            const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
             const result = await contract[body.functionName](...body.params)
             // Convert BigInt values to strings if needed
             const processedResult = this.processResult(result)
             console.log('View Function Result:', processedResult)
+            
             if (processedResult) {
-                await this.institutionRepository.update(body.institutionId, {
-                    status: true
-                })
+                switch (body.functionName) {
+                    case body.functionName === SmartcontractFunctionsEnum.REGISTER_INSTITUTION:
+                        await this.institutionRepository.update(body.institutionId, {
+                            status: true
+                        })
+                        messageResponse = 'Institution onboarded successfully'
+                        
+                    default:
+                        break;
+                }
             }
             return {
-                message: 'Institution onboarded successfully',
+                message: messageResponse,
                 result: processedResult
             }
         } catch (err) {

@@ -3,13 +3,15 @@ import { Loader, Table, Toggle } from "rsuite";
 import {
   useLazyGetInstitutionQuery,
   useSmartContractCallMutation,
-  useSmartContractCallRegisterInstitutionMutation,
+  useSmartContractCallRegisterActorMutation,
   useUpdateInstitutionStatusMutation,
 } from "../../store/features/admin/adminApi";
 import usePagination from "../../hooks/usePagination";
 import Pagination from "../../components/Pagination";
 import { LoaderIcon } from "react-hot-toast";
 const { Column, HeaderCell, Cell } = Table;
+import { RoleEnum } from "../../enums/roles.enum";
+import { SmartcontractFunctionsEnum } from "../../enums/smartcontract-functions.enum";
 
 const Institution: React.FC = () => {
   const [statusLoading, setStatusLoading] = useState({
@@ -19,7 +21,7 @@ const Institution: React.FC = () => {
   const [getInstitution, { data, isLoading }] = useLazyGetInstitutionQuery();
   const [updateInstitutionStatus] = useUpdateInstitutionStatusMutation();
   const [smartContractCall] = useSmartContractCallMutation();
-  const [smartContractCallRegisterInstitution] = useSmartContractCallRegisterInstitutionMutation();
+  const [smartContractCallRegisterActor] = useSmartContractCallRegisterActorMutation();
   const pagination = usePagination();
 
   useEffect(() => {
@@ -34,9 +36,11 @@ const Institution: React.FC = () => {
   
     try {
       // Await the smart contract call
-      await smartContractCallRegisterInstitution({
-        institutionId: rowData.id,
-        functionName: "registerInstitution",
+      await smartContractCallRegisterActor({
+        isAdmin: true,
+        role: RoleEnum.ADMIN,
+        id: 0, //HD Wallet accountIndex of Admin - default to 0
+        functionName: SmartcontractFunctionsEnum.REGISTER_INSTITUTION,
         params: [
           rowData.name,
           rowData.publicAddress,
