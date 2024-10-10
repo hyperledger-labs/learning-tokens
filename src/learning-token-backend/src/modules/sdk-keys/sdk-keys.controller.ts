@@ -17,7 +17,7 @@ export class SdkKeysController {
     constructor(private readonly sdkKeysService: SdkKeysService) {}
 
     @Get('gen/:id')
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     async generateSdkKeyForInstitution(@Param('id') id: string) {
         try {
             return {
@@ -34,7 +34,7 @@ export class SdkKeysController {
     }
 
     @Get('get/:id')
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     async getSdkKeyForInstitution(@Param('id') id: string) {
         try {
             return {
