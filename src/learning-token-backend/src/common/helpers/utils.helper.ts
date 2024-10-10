@@ -53,11 +53,9 @@ Learning Token
     }
 
     try {
-        const info = await smtpTransport.sendMail(mailOptions)
-        console.log('Email sent successfully:', info.response)
+        await smtpTransport.sendMail(mailOptions)
     } catch (error) {
-        console.log('Error sending email:', error)
-        throw new Error('Failed to send email')
+        console.log(error)
     }
 }
 
