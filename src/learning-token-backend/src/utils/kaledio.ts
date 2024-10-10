@@ -2,9 +2,8 @@ import axios from 'axios'
 import * as dotenv from 'dotenv'
 dotenv.config()
 const kaledio =
-    process.env.KALEIDO_HD_WALLET_RPC_URL +
-    'api/v1/wallets/:walletId/accounts/:accountIndex'
-// ;('https://u0k1dk029t:hU5ERoJz_xLvmQzr8h1jmLr6a3Afn4Oa6T4NHjKJ2ro@u0jtyl6s8p-u0gt6e2xu2-hdwallet.us0-aws.kaleido.io/api/v1/wallets/:walletId/accounts/:accountIndex')
+    process.env.KALEIDO_HD_WALLET_RPC_URL + '/api/v1/wallets/:type/accounts/:id'
+// ;('https://u0k1dk029t:hU5ERoJz_xLvmQzr8h1jmLr6a3Afn4Oa6T4NHjKJ2ro@u0jtyl6s8p-u0gt6e2xu2-hdwallet.us0-aws.kaleido.io/api/v1/wallets/:type/accounts/:id')
 export const getWallet = async (type: string, id: number) => {
     try {
         let url = ''
