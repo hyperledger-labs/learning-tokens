@@ -47,7 +47,7 @@ export class AuthService {
             const user = new User()
             user.name = name
             user.email = email
-            user.publicAddress = '0xC9ed1AF4ABd6Ea37D0e6920A44901bEAE0d297E1'
+            user.publicAddress = '0xaAB3e8fC97dB7202AE0BC5f1622447ba3dd58ad9'
             user.password = this.jwtService.encodePassword(password)
             const registeredUser = await this.userRepository.save(user)
             return {
