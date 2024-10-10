@@ -22,7 +22,7 @@ export class Preevent extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
     id: number
 
-    @Column({ type: 'varchar', length: 30, nullable: false, unique: true }) //will be unique
+    @Column({ type: 'varchar', length: 30, nullable: false }) //will be unique
     meetingEventId: string
 
     @OneToOne(() => OnlineEvent)

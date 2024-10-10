@@ -12,6 +12,7 @@ import axios from 'axios'
 import { PinataSDK } from 'pinata'
 import * as dotenv from 'dotenv'
 import { OnlineEvent } from './entities/event.entity'
+import * as fs from 'fs' // If you are working with files from the filesystem
 import { Preevent } from '../preevent/entities/preevent.entity'
 dotenv.config()
 
@@ -56,12 +57,9 @@ export class EventService {
             // )
 
             if (isPreEventExists?.onlineEvent?.scoringGuide) {
-                const blob = await this.generatePdf({
+                const ipfsUrl = await this.uploadToPinata({
                     ...createScoringGuideDTO
                 })
-                const ipfsUrl = await this.uploadToPinata(blob)
-                //update the scoring guide with the ipfs url
-
                 await this.scoringGuideRepository.update(
                     isPreEventExists.onlineEvent.scoringGuide.id,
                     {
@@ -97,39 +95,19 @@ export class EventService {
         return `This action removes a #${id} event`
     }
 
-    async generatePdf(payload: any): Promise<Buffer> {
-        const pdfDoc = await PDFDocument.create()
-        const page = pdfDoc.addPage()
-        page.drawText('Hello, World!', { x: 50, y: 700 })
-
-        const pdfBytes = await pdfDoc.save()
-        return Buffer.from(pdfBytes)
-    }
-
-    // async generatePdf(payload: any): Promise<Buffer> {
-    //     const pdfDoc = await PDFDocument.create()
-    //     const page = pdfDoc.addPage()
-    //     page.drawText('Hello, World!', { x: 50, y: 700 })
-
-    //     const pdfBytes = await pdfDoc.save()
-    //     const pdfBuffer = Buffer.from(pdfBytes)
-
-    //     // Dump the PDF locally for testing purposes
-    //     const filePath = join('document.pdf')
-    //     writeFileSync(filePath, pdfBuffer)
-
-    //     return pdfBuffer
-    // }
-
-    async uploadToPinata(pdfBuffer: any): Promise<any> {
+    async uploadToPinata(scoringGuide: any): Promise<any> {
         try {
             const pinata = new PinataSDK({
                 pinataJwt: process.env.PINATA_JWT
             })
-            const file = new File([pdfBuffer], 'scoringGuide.pdf', {
-                type: 'text/plain'
+            const upload = await pinata.upload.json({
+                id: 2,
+                name: 'Bob Smith',
+                email: 'bob.smith@example.com',
+                age: 34,
+                isActive: false,
+                roles: ['user']
             })
-            const upload = await pinata.upload.file(file)
             return upload
         } catch (error) {
             console.log(error)
