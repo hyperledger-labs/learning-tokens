@@ -9,8 +9,11 @@ import {
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    ManyToOne
 } from 'typeorm'
+import { Role } from 'src/modules/role/entities/role.entity'
+
 @Entity()
 export class Instructor extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
@@ -53,4 +56,10 @@ export class Instructor extends BaseEntity {
 
     @DeleteDateColumn()
     deletedAt: Date
+
+    @ManyToOne(() => Role)
+    role: Role
+
+    @Column({ type: 'int', nullable: false })
+    roleId: number;
 }

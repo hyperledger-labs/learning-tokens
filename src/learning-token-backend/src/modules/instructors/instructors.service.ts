@@ -18,6 +18,7 @@ export class InstructorsService {
   onboardingInstructor(createInstructorDto: CreateInstructorDto) {
     try {
       createInstructorDto.password = this.jwtService.encodePassword(createInstructorDto.password)
+      createInstructorDto.roleId = 2; // default to instructor
       const instructor = this.instructorRepository.create(createInstructorDto);
       return this.instructorRepository.save(instructor);
     } catch (error) {

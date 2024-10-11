@@ -65,6 +65,9 @@ export class Institution extends BaseEntity {
     @DeleteDateColumn()
     deletedAt: Date
 
+    @Column({ type: 'int', nullable: false })
+    roleId: number;
+
     @OneToMany(() => Preevent, (preevent) => preevent.institution)
     preevents: Preevent[]
 }

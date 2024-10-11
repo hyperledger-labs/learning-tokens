@@ -65,6 +65,7 @@ export class AuthService {
             user.password = this.jwtService.encodePassword(password)
             user.latitude = latitude
             user.longitude = longitude
+            user.roleId = 4 // default to institution
 
             const role = await this.roleRepository.findOne({
                 where: {
@@ -179,8 +180,9 @@ export class AuthService {
             // IF PASSWORD DOES NOT MATCH
             return
         }
-
-        const token: string = this.jwtService.generateToken(user, 'institution')
+        console.log(`User login: ${user.email} ${user.password} ${user.role.name}`);
+        
+        const token: string = this.jwtService.generateToken(user, user.role.name)
 
         return {
             id: user.id,
