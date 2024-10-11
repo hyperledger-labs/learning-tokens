@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, IsUrl, IsBoolean } from 'class-validator'
+import { IsEmail, IsOptional, IsString, IsUrl, IsBoolean, IsNumber } from 'class-validator'
 
 export class CreateInstructorDto {
     @IsString()
@@ -23,6 +23,10 @@ export class CreateInstructorDto {
     @IsString()
     @IsOptional()
     publicAddress: string
+
+    @IsNumber()
+    @IsOptional()
+    roleId: number
 
     constructor(partial: Partial<CreateInstructorDto>) {
         Object.assign(this, partial)
