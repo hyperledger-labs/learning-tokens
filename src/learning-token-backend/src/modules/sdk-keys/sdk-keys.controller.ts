@@ -28,13 +28,13 @@ export class SdkKeysController {
                 )
             }
         } catch (error) {
-            console.log(error);
+            console.log(error)
             throw new NotFoundException('Something went wrong')
         }
     }
 
     @Get('get/:id')
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     async getSdkKeyForInstitution(@Param('id') id: string) {
         try {
             return {

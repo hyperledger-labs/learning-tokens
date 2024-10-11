@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { CreateCourseDto } from './dto/create-course.dto'
 import { UpdateSmartcontractDto } from './dto/update-smartcontract.dto'
 import { ethers } from 'ethers'
@@ -13,29 +13,37 @@ import { Learner } from '../learners/entities/learner.entity'
 import { getIPFSFULLURL } from 'src/common/helpers/utils.helper'
 import { CreateSmartcontractDto } from './dto/create-smartcontract.dto'
 import { DistributeTokenDto } from './dto/distrbute-token.dto'
+import { Institution } from '../institutions/entities/institution.entity'
+import { SmartcontractFunctionsEnum } from 'src/modules/smartcontract/enums/smartcontract-functions.enum'
+import { Instructor } from '../instructors/entities/instructor.entity'
+import { InstructorsService } from '../instructors/instructors.service'
+import { CreateInstructorDto } from '../instructors/dto/create-instructor.dto'
 
 @Injectable()
 export class SmartcontractService {
     private readonly provider: ethers.JsonRpcProvider
     private readonly contractAddress: string
     private readonly adminPrivateKey: string
+    private readonly adminWalletId: string
+    private readonly institutionWalletId: string
+    private readonly instructorWalletId: string
+    private readonly learnerWalletId: string
     @InjectRepository(Preevent)
     private preEventRepository: Repository<Preevent>
     @InjectRepository(Learner)
     private learnerRepository: Repository<Learner>
+    @InjectRepository(Institution)
+    private institutionRepository: Repository<Institution>
+    @InjectRepository(Instructor)
+    private instructorRepository: Repository<Instructor>
 
     constructor(private readonly configService: ConfigService) {
-        // Initialize the provider and contract address using ConfigService
-        const rpcUrl = this.configService.get<string>(
-            'JSON_RPC_URL',
-            'http://localhost:8545'
-        )
-        this.provider = new ethers.JsonRpcProvider(rpcUrl)
-
-        this.contractAddress =
-            this.configService.get<string>('CONTRACT_ADDRESS')
-        this.adminPrivateKey =
-            this.configService.get<string>('ADMIN_PRIVATE_KEY')
+        this.contractAddress = this.configService.get<string>('CONTRACT_ADDRESS')
+        this.adminPrivateKey = this.configService.get<string>('ADMIN_PRIVATE_KEY')
+        this.adminWalletId = this.configService.get<string>('ADMIN_HD_WALLET_ID')
+        this.institutionWalletId = this.configService.get<string>('INSTITUTION_HD_WALLET_ID')
+        this.instructorWalletId = this.configService.get<string>('INSTRUCTOR_HD_WALLET_ID')
+        this.learnerWalletId = this.configService.get<string>('LEARNER_HD_WALLET_ID')
     }
 
     create(createSmartcontractDto: CreateSmartcontractDto) {
@@ -57,6 +65,57 @@ export class SmartcontractService {
     remove(id: number) {
         return `This action removes a #${id} smartcontract`
     }
+
+    async onboardingActor(body): Promise<any> {
+        try {
+            console.log(`onboardingActor ${body.role} with ID ${body.id}`);
+            const wallet = await getWallet(body.role, body.id)
+            const actorPrivateKey = wallet.privateKey
+            const contractAddress = this.contractAddress
+            let rpcUrl = this.configService.get<string>('JSON_RPC_URL', 'http://localhost:8545')
+            let messageResponse = ''
+
+            if(!body.isAdmin) {
+                rpcUrl = this.configService.get<string>('KALEIDO_HD_WALLET_RPC_URL', 'https://u0zhuv4dtl:P-XiJpeAACDZgL_dVSaUpL4JLmIXeg5lTu5jLHWEUJ4@u0iavbc8n0-u0t9n504n5-hdwallet.us0-aws.kaleido.io/')
+            }
+            console.log(`rpcUrl: ${rpcUrl}`)    ;
+            
+            const provider = new ethers.JsonRpcProvider(rpcUrl);
+
+            const { chainId } = await provider.getNetwork();
+            console.log(`chainId: ${chainId}`)
+
+            const signer = new ethers.Wallet(actorPrivateKey, provider)
+            const contract = new ethers.Contract(contractAddress, abi, signer)
+            const result = await contract[body.functionName](...body.params)
+            // Convert BigInt values to strings if needed
+            const processedResult = this.processResult(result)
+            console.log('View Function Result:', processedResult)
+            
+            if (processedResult) {
+                switch (body.functionName) {
+                    case body.functionName === SmartcontractFunctionsEnum.REGISTER_INSTITUTION:
+                        await this.institutionRepository.update(body.id, { status: true })
+                        messageResponse = 'Institution onboarded successfully'
+                    
+                    case body.functionName === SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR:
+                        await this.instructorRepository.update(body.id, { status: true, publicAddress: wallet.publicAddress })
+                        messageResponse = 'Instructor onboarded successfully' ;   
+                        
+                    default:
+                        break;
+                }
+            }
+            return {
+                message: messageResponse,
+                result: processedResult
+            }
+        } catch (err) {
+            console.log('err', err)
+            throw new BadRequestException('error in onboarding institution')
+        }
+    }
+
     async callContractFunction(functionName: string, body?: any): Promise<any> {
         try {
             // Create a contract instance
@@ -64,7 +123,7 @@ export class SmartcontractService {
             console.log(chainId) // 42
             const contractAddress = this.contractAddress
             //when we have to call from admin permission
-            if (body.isAdmin) {
+            if (body.isAdmin && body.isWrite) {
                 const adminPrivateKey = this.adminPrivateKey
                 const signer = new ethers.Wallet(adminPrivateKey, this.provider)
                 const contract = new ethers.Contract(
@@ -75,7 +134,6 @@ export class SmartcontractService {
                 const result = await contract[body.functionName](...body.params)
                 // Convert BigInt values to strings if needed
                 const processedResult = this.processResult(result)
-                console.log('View Function Result:', processedResult)
                 return processedResult
             }
             if (body.isWrite) {
@@ -90,7 +148,6 @@ export class SmartcontractService {
                 const result = await contract[body.functionName](...body.params)
                 // Convert BigInt values to strings if needed
                 const processedResult = this.processResult(result)
-                console.log('View Function Result:', processedResult)
                 return processedResult
             }
             if (body.isView) {
