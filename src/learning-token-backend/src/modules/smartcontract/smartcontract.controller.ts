@@ -23,7 +23,7 @@ import { DistributeTokenDto } from './dto/distrbute-token.dto'
 
 @Controller('smartcontract')
 export class SmartcontractController {
-    constructor(private readonly smartcontractService: SmartcontractService) {}
+    constructor(private readonly smartcontractService: SmartcontractService) { }
 
     @Get()
     findAll() {
