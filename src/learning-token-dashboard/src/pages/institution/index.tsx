@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Loader, Table, Toggle } from "rsuite";
 import {
   useLazyGetInstitutionQuery,
-  useSmartContractCallMutation,
   useSmartContractCallRegisterActorMutation,
   useUpdateInstitutionStatusMutation,
 } from "../../store/features/admin/adminApi";
@@ -20,7 +19,6 @@ const Institution: React.FC = () => {
   });
   const [getInstitution, { data, isLoading }] = useLazyGetInstitutionQuery();
   const [updateInstitutionStatus] = useUpdateInstitutionStatusMutation();
-  const [smartContractCall] = useSmartContractCallMutation();
   const [smartContractCallRegisterActor] = useSmartContractCallRegisterActorMutation();
   const pagination = usePagination();
 

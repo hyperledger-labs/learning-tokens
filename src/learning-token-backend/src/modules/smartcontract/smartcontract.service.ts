@@ -15,6 +15,9 @@ import { CreateSmartcontractDto } from './dto/create-smartcontract.dto'
 import { DistributeTokenDto } from './dto/distrbute-token.dto'
 import { Institution } from '../institutions/entities/institution.entity'
 import { SmartcontractFunctionsEnum } from 'src/modules/smartcontract/enums/smartcontract-functions.enum'
+import { Instructor } from '../instructors/entities/instructor.entity'
+import { InstructorsService } from '../instructors/instructors.service'
+import { CreateInstructorDto } from '../instructors/dto/create-instructor.dto'
 
 @Injectable()
 export class SmartcontractService {
@@ -31,6 +34,8 @@ export class SmartcontractService {
     private learnerRepository: Repository<Learner>
     @InjectRepository(Institution)
     private institutionRepository: Repository<Institution>
+    @InjectRepository(Instructor)
+    private instructorRepository: Repository<Instructor>
 
     constructor(private readonly configService: ConfigService) {
         this.contractAddress = this.configService.get<string>('CONTRACT_ADDRESS')
@@ -63,6 +68,7 @@ export class SmartcontractService {
 
     async onboardingActor(body): Promise<any> {
         try {
+            console.log(`onboardingActor ${body.role} with ID ${body.id}`);
             const wallet = await getWallet(body.role, body.id)
             const actorPrivateKey = wallet.privateKey
             const contractAddress = this.contractAddress
@@ -72,11 +78,12 @@ export class SmartcontractService {
             if(!body.isAdmin) {
                 rpcUrl = this.configService.get<string>('KALEIDO_HD_WALLET_RPC_URL', 'https://u0zhuv4dtl:P-XiJpeAACDZgL_dVSaUpL4JLmIXeg5lTu5jLHWEUJ4@u0iavbc8n0-u0t9n504n5-hdwallet.us0-aws.kaleido.io/')
             }
+            console.log(`rpcUrl: ${rpcUrl}`)    ;
             
             const provider = new ethers.JsonRpcProvider(rpcUrl);
 
-            const { chainId } = await provider.getNetwork()
-            console.log(chainId) // 42
+            const { chainId } = await provider.getNetwork();
+            console.log(`chainId: ${chainId}`)
 
             const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
@@ -88,10 +95,12 @@ export class SmartcontractService {
             if (processedResult) {
                 switch (body.functionName) {
                     case body.functionName === SmartcontractFunctionsEnum.REGISTER_INSTITUTION:
-                        await this.institutionRepository.update(body.institutionId, {
-                            status: true
-                        })
+                        await this.institutionRepository.update(body.id, { status: true })
                         messageResponse = 'Institution onboarded successfully'
+                    
+                    case body.functionName === SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR:
+                        await this.instructorRepository.update(body.id, { status: true, publicAddress: wallet.publicAddress })
+                        messageResponse = 'Instructor onboarded successfully' ;   
                         
                     default:
                         break;
