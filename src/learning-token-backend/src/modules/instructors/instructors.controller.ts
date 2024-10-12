@@ -12,6 +12,11 @@ export class InstructorsController {
     return this.instructorsService.create(createInstructorDto);
   }
 
+  @Post('register-instructor')
+  registerInstructor(@Body() createInstructorDto: CreateInstructorDto) {
+    return this.instructorsService.onboardingInstructor(createInstructorDto);
+  }
+
   @Get()
   findAll() {
     return this.instructorsService.findAll();

@@ -19,7 +19,7 @@ const Sidebar = () => {
   };
 
   const auth = useSelector((state: RootState) => state.auth);
-
+  
   return (
     <div className="bg-white h-screen fixed z-20 left-0 top-0 bottom-0 w-[250px] border-r flex flex-col items-center">
       <div className="font-bold p-3 text-lg flex items-center justify-center">
@@ -29,7 +29,7 @@ const Sidebar = () => {
         {mainMenuItems.map((menu: any, mainIndex: number) => {
           if (
             !menu.subMenu &&
-            menu.requiredPermissions.includes(auth.user.type)
+            menu.requiredPermissions.includes(auth.user.role)
           ) {
             return (
               <NavLink
@@ -49,7 +49,7 @@ const Sidebar = () => {
               .map((i: any) => i.requiredPermissions)
               .flat();
 
-            const hasSubPermission = [auth.user.type].some((i) =>
+            const hasSubPermission = [auth.user.role].some((i) =>
               hasMenuPermission.includes(i)
             );
 
@@ -64,7 +64,7 @@ const Sidebar = () => {
                   <div className="ml-8 mt-2">
                     {menu.subMenu.map((item: any, index: number) => {
                       const show = item.requiredPermissions.includes(
-                        auth.user.type
+                        auth.user.role
                       );
                       return (
                         show && (

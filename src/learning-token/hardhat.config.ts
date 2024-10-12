@@ -22,8 +22,9 @@ const {
   POLYGON_PRIV_KEY,
   KALEIDO_RPC_URL,
   KALEIDO_CHAIN_ID,
-  KALEDIO_PRIV_KEY,
+  KALEIDO_PRIV_KEY,
 }: any = process.env;
+
 const config: HardhatUserConfig = {
   networks: {
     // localhost: {
@@ -52,10 +53,10 @@ const config: HardhatUserConfig = {
     //   // gasPrice: 80000000, // adjust as necessary
     //   // gas: 124500 // adjust as necessary
     // },
-    kaledio: {
+    kaleido: {
       url: KALEIDO_RPC_URL,
-      chainId: 41300,
-      accounts: [KALEDIO_PRIV_KEY],
+      chainId: 1513174332,
+      accounts: [KALEIDO_PRIV_KEY],
       // gasPrice: 80000000, // adjust as necessary
       // gas: 124500 // adjust as necessary
     },
