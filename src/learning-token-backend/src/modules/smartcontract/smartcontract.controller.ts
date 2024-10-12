@@ -55,9 +55,9 @@ export class SmartcontractController {
         return result
     }
 
-    @Post('register-institution')
+    @Post('register-actor')
     async registerInstitution(@Body() body: any) {
-        const result = await this.smartcontractService.onboardingInstitution(
+        const result = await this.smartcontractService.onboardingActor(
             body
         )
         return result

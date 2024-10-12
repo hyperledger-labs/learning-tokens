@@ -47,7 +47,7 @@ export class AuthService {
             const user = new User()
             user.name = name
             user.email = email
-            user.publicAddress = '0xC9ed1AF4ABd6Ea37D0e6920A44901bEAE0d297E1'
+            user.publicAddress = '0xaAB3e8fC97dB7202AE0BC5f1622447ba3dd58ad9'
             user.password = this.jwtService.encodePassword(password)
             const registeredUser = await this.userRepository.save(user)
             return {
@@ -65,6 +65,7 @@ export class AuthService {
             user.password = this.jwtService.encodePassword(password)
             user.latitude = latitude
             user.longitude = longitude
+            user.roleId = 4 // default to institution
 
             const role = await this.roleRepository.findOne({
                 where: {
@@ -153,7 +154,7 @@ export class AuthService {
             token: token,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
-            role: user.role
+            role: user.role.name
         }
     }
 
@@ -179,8 +180,9 @@ export class AuthService {
             // IF PASSWORD DOES NOT MATCH
             return
         }
-
-        const token: string = this.jwtService.generateToken(user, 'institution')
+        console.log(`User login: ${user.email} ${user.password} ${user.role.name}`);
+        
+        const token: string = this.jwtService.generateToken(user, user.role.name)
 
         return {
             id: user.id,
@@ -190,7 +192,7 @@ export class AuthService {
             token: token,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
-            role: user.role
+            role: user.role.name
         }
     }
 

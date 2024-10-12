@@ -24,7 +24,6 @@ import {
   useLoginLearnerMutation,
   useRegisterLearnerMutation,
 } from "../store/features/learner/learnerApi";
-import { initWeb3 } from "../utils";
 
 const initialValues = {
   name: "",
@@ -66,10 +65,6 @@ const Login = () => {
   const [loginAdmin] = useLoginAdminMutation();
   const [registerInstitution] = useRegisterInstitutionMutation();
   const [loginInstitution] = useLoginInstitutionMutation();
-  const [registerInstructor] = useRegisterInstructorMutation();
-  const [loginInstructor] = useLoginInstructorMutation();
-  const [registerLearner] = useRegisterLearnerMutation();
-  const [loginLearner] = useLoginLearnerMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSubmit = async (values: any) => {
@@ -130,71 +125,6 @@ const Login = () => {
                 });
             }
           });
-      } else if (values.type === "instructor") {
-        //web3 call
-        const contract = await initWeb3();
-        const tx = await contract!.registerInstructor(values.name, Date.now());
-        if (tx) {
-          registerInstructor({
-            name: values.name,
-            email: values.email,
-            password: values.password,
-            publicAddress: values.publicAddress,
-          })
-            .unwrap()
-            .then(async (result: any) => {
-              if (result && result.status === 201) {
-                loginInstructor({
-                  email: values.email,
-                  password: values.password,
-                })
-                  .unwrap()
-                  .then((res: any) => {
-                    if (res && res.status === 201) {
-                      dispatch(userLoggedIn(res.result));
-                      toast.success("Successfully Signed In");
-                      navigate("/");
-                    }
-                  });
-              }
-            });
-        }
-      } else {
-        //web3 call
-        const contract = await initWeb3();
-        const tx = await contract!.registerLearner(
-          values.name,
-          Date.now(),
-          values.latitude,
-          values.longitude
-        );
-        if (tx) {
-          registerLearner({
-            name: values.name,
-            email: values.email,
-            password: values.password,
-            publicAddress: values.publicAddress,
-            latitude: values.latitude,
-            longitude: values.longitude,
-          })
-            .unwrap()
-            .then(async (result: any) => {
-              if (result && result.status === 201) {
-                loginLearner({
-                  email: values.email,
-                  password: values.password,
-                })
-                  .unwrap()
-                  .then((res: any) => {
-                    if (res && res.status === 201) {
-                      dispatch(userLoggedIn(res.result));
-                      toast.success("Successfully Signed In");
-                      navigate("/");
-                    }
-                  });
-              }
-            });
-        }
       }
     } catch (e) {
       console.log(e);
@@ -268,24 +198,24 @@ const Login = () => {
                 />
                 {(values.type === "learner" ||
                   values.type === "institution") && (
-                  <TextInput
-                    name="latitude"
-                    type="text"
-                    label="Latitude"
-                    containerStyle={`w-full`}
-                    size="small"
-                  />
-                )}
+                    <TextInput
+                      name="latitude"
+                      type="text"
+                      label="Latitude"
+                      containerStyle={`w-full`}
+                      size="small"
+                    />
+                  )}
                 {(values.type === "learner" ||
                   values.type === "institution") && (
-                  <TextInput
-                    name="longitude"
-                    type="text"
-                    label="Longitude"
-                    containerStyle={`w-full`}
-                    size="small"
-                  />
-                )}
+                    <TextInput
+                      name="longitude"
+                      type="text"
+                      label="Longitude"
+                      containerStyle={`w-full`}
+                      size="small"
+                    />
+                  )}
 
                 <Button
                   size="small"

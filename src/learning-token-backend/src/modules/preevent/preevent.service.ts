@@ -28,6 +28,8 @@ export class PreeventService {
         @InjectRepository(Instructor)
         private readonly instructorRepository: Repository<Instructor>,
         @InjectRepository(JwtService)
+        @InjectRepository(OnlineEvent)
+        private readonly onlineEventRepository: Repository<OnlineEvent>,
         private readonly jwtService: JwtService,
         private readonly dataSource: DataSource,
         @InjectEntityManager()
@@ -93,6 +95,9 @@ export class PreeventService {
                 await this.preeventRepository.update(preEventData.id, {
                     instructor: _user
                 })
+                await this.onlineEventRepository.update(savedEvent.id, {
+                    Instructor: _user
+                })
             }
         })
 
@@ -115,7 +120,7 @@ export class PreeventService {
             [orderBy]: desc ? 'DESC' : 'ASC'
         }
 
-        return paginate<Preevent>(this.preeventRepository, options, {
+        return await paginate<Preevent>(this.preeventRepository, options, {
             where: { id: req.user.id },
             relations: ['onlineEvent', 'onlineEvent.scoringGuide'],
             order: orderByCondition
