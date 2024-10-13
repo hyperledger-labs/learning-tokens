@@ -37,17 +37,17 @@ export class JwtService {
                 where: { id: decoded.id },
                 relations: ['role']
             })
-        } else if (decoded.type == 'Institution') {
+        } else if (decoded.type == 'institution') {
             user = await this.institutionRepository.findOne({
                 where: { id: decoded.id },
                 relations: ['role']
             })
-        } else if (decoded.type == 'Instructor') {
+        } else if (decoded.type == 'instructor') {
             user = await this.instructorRepository.findOne({
                 where: { id: decoded.id },
                 relations: ['role']
             })
-        } else if (decoded.type == 'Learner') {
+        } else if (decoded.type == 'learner') {
             user = await this.learnerRepository.findOne({
                 where: { id: decoded.id },
                 relations: ['role']

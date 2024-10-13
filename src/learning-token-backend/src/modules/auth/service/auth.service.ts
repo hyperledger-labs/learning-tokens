@@ -78,8 +78,9 @@ export class AuthService {
                 id: registeredUser.id
             })
             const wallet = await getWallet('institution', registeredUser.id)
-            _user.publicAddress = wallet.address
+            if (wallet) _user.publicAddress = wallet.address
             _user.role = role
+            console.log('_user', _user)
             this.institutionRepository.save(_user)
             return {
                 id: registeredUser.id,
@@ -180,9 +181,14 @@ export class AuthService {
             // IF PASSWORD DOES NOT MATCH
             return
         }
-        console.log(`User login: ${user.email} ${user.password} ${user.role.name}`);
-        
-        const token: string = this.jwtService.generateToken(user, user.role.name)
+        console.log(
+            `User login: ${user.email} ${user.password} ${user.role.name}`
+        )
+
+        const token: string = this.jwtService.generateToken(
+            user,
+            user.role.name
+        )
 
         return {
             id: user.id,
