@@ -18,6 +18,7 @@ import { sendLoginCredentials } from 'src/common/helpers/utils.helper'
 import { OnlineEvent } from '../event/entities/event.entity'
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate'
 import { ScoringGuide } from '../event/entities/scoring-guide.entity'
+import { Role } from '../role/entities/role.entity'
 @Injectable()
 export class PreeventService {
     constructor(
@@ -28,19 +29,21 @@ export class PreeventService {
         @InjectRepository(Instructor)
         private readonly instructorRepository: Repository<Instructor>,
         @InjectRepository(JwtService)
-        @InjectRepository(OnlineEvent)
-        private readonly onlineEventRepository: Repository<OnlineEvent>,
         private readonly jwtService: JwtService,
         private readonly dataSource: DataSource,
+        @InjectRepository(OnlineEvent)
+        private readonly onlineEventRepository: Repository<OnlineEvent>,
         @InjectEntityManager()
-        private readonly entityManager: EntityManager
+        private readonly entityManager: EntityManager,
+        @InjectRepository(Role)
+        private readonly roleRepository: Repository<Role>
     ) {}
 
     async create(createPreeventDto: CreatePreeventDto, secretKey) {
         const institution = await this.institutionRepository.findOne({
             where: { sdkKeys: secretKey }
         })
-
+        console.log(institution)
         if (!institution) {
             throw new Error('Institution not found')
         }
@@ -60,14 +63,24 @@ export class PreeventService {
             })
 
             await this.preeventRepository.save(preEventData)
-            const instructor = await this.instructorRepository.findOneBy({
-                email: createPreeventDto.organizerEmail
+            const instructor = await this.instructorRepository.findOne({
+                where: {
+                    email: createPreeventDto.organizerEmail
+                }
             })
 
             if (!instructor) {
+                const role = await this.roleRepository.findOne({
+                    where: {
+                        name: 'instructor'
+                    }
+                })
+                console.log('roleee===', role)
                 const _instructor = new Instructor()
                 _instructor.name = createPreeventDto.organizerName
                 _instructor.email = createPreeventDto.organizerEmail
+                _instructor.role = role
+                _instructor.roleId = role.id
 
                 const salt: string = bcrypt.genSaltSync(10)
                 _instructor.password = bcrypt.hashSync('12345678', salt)
@@ -85,11 +98,13 @@ export class PreeventService {
                     id: registeredInstructor.id
                 })
 
+                _user.role = role
+                _user.roleId = role.id
                 const wallet = await getWallet(
                     'instructor',
                     registeredInstructor.id
                 )
-                _user.publicAddress = wallet.address
+                if (wallet) _user.publicAddress = wallet.address
 
                 await this.instructorRepository.save(_user)
                 await this.preeventRepository.update(preEventData.id, {
@@ -105,7 +120,7 @@ export class PreeventService {
     }
 
     async findAllPreventDataForInstructor(
-        req: any,
+        reqUser: any,
         options: IPaginationOptions,
         search: string,
         orderBy: string,
@@ -119,9 +134,8 @@ export class PreeventService {
         const orderByCondition: FindOptionsOrder<Preevent> = {
             [orderBy]: desc ? 'DESC' : 'ASC'
         }
-
         return await paginate<Preevent>(this.preeventRepository, options, {
-            where: { id: req.user.id },
+            where: { id: reqUser.id },
             relations: ['onlineEvent', 'onlineEvent.scoringGuide'],
             order: orderByCondition
         })
