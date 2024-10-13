@@ -10,8 +10,17 @@ import { Institution } from '../institutions/entities/institution.entity'
 import { Instructor } from '../instructors/entities/instructor.entity'
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Preevent, Learner, Institution, Instructor, Postevent])],
+    imports: [
+        TypeOrmModule.forFeature([
+            Preevent,
+            Learner,
+            Institution,
+            Instructor,
+            Postevent
+        ])
+    ],
     controllers: [SmartcontractController],
-    providers: [SmartcontractService, ConfigService]
+    providers: [SmartcontractService, ConfigService],
+    exports: [SmartcontractService]
 })
 export class SmartcontractModule {}
