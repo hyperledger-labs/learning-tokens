@@ -19,6 +19,8 @@ import { OnlineEvent } from '../event/entities/event.entity'
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate'
 import { ScoringGuide } from '../event/entities/scoring-guide.entity'
 import { Role } from '../role/entities/role.entity'
+import { SmartcontractService } from '../smartcontract/smartcontract.service'
+import { SmartcontractFunctionsEnum } from '../smartcontract/enums/smartcontract-functions.enum'
 @Injectable()
 export class PreeventService {
     constructor(
@@ -36,14 +38,14 @@ export class PreeventService {
         @InjectEntityManager()
         private readonly entityManager: EntityManager,
         @InjectRepository(Role)
-        private readonly roleRepository: Repository<Role>
+        private readonly roleRepository: Repository<Role>,
+        private readonly smartContractService: SmartcontractService
     ) {}
 
     async create(createPreeventDto: CreatePreeventDto, secretKey) {
         const institution = await this.institutionRepository.findOne({
             where: { sdkKeys: secretKey }
         })
-        console.log(institution)
         if (!institution) {
             throw new Error('Institution not found')
         }
@@ -68,14 +70,25 @@ export class PreeventService {
                     email: createPreeventDto.organizerEmail
                 }
             })
+            const createdAt = Math.floor(Date.now() / 1000)
+            if (instructor) {
+                const body = {
+                    isAdmin: true,
+                    role: 'institution',
+                    id: institution.id,
+                    functionName:
+                        SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
+                    params: [instructor.publicAddress, createdAt]
+                }
 
+                await this.smartContractService.onboardingActor(body)
+            }
             if (!instructor) {
                 const role = await this.roleRepository.findOne({
                     where: {
                         name: 'instructor'
                     }
                 })
-                console.log('roleee===', role)
                 const _instructor = new Instructor()
                 _instructor.name = createPreeventDto.organizerName
                 _instructor.email = createPreeventDto.organizerEmail
@@ -85,8 +98,9 @@ export class PreeventService {
                 const salt: string = bcrypt.genSaltSync(10)
                 _instructor.password = bcrypt.hashSync('12345678', salt)
 
-                const registeredInstructor =
-                    await this.instructorRepository.save(_instructor)
+                let registeredInstructor = await this.instructorRepository.save(
+                    _instructor
+                )
 
                 await sendLoginCredentials(
                     createPreeventDto.organizerEmail,
@@ -106,9 +120,14 @@ export class PreeventService {
                 )
                 if (wallet) _user.publicAddress = wallet.address
 
-                await this.instructorRepository.save(_user)
+                registeredInstructor = await this.instructorRepository.save(
+                    _user
+                )
                 await this.preeventRepository.update(preEventData.id, {
                     instructor: _user
+                })
+                await this.onlineEventRepository.update(savedEvent.id, {
+                    Instructor: _user
                 })
             }
         })

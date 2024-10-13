@@ -55,11 +55,18 @@ export class SmartcontractController {
         return result
     }
 
+    @Get('course-learner-list')
+    async getCourseLearnerList(@Body() body: any) {
+        const result =
+            await this.smartcontractService.findCourseLearnerAddressAndName(
+                body
+            )
+        return result
+    }
+
     @Post('register-actor')
     async registerInstitution(@Body() body: any) {
-        const result = await this.smartcontractService.onboardingActor(
-            body
-        )
+        const result = await this.smartcontractService.onboardingActor(body)
         return result
     }
 

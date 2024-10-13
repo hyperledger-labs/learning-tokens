@@ -38,12 +38,21 @@ export class SmartcontractService {
     private instructorRepository: Repository<Instructor>
 
     constructor(private readonly configService: ConfigService) {
-        this.contractAddress = this.configService.get<string>('CONTRACT_ADDRESS')
-        this.adminPrivateKey = this.configService.get<string>('ADMIN_PRIVATE_KEY')
-        this.adminWalletId = this.configService.get<string>('ADMIN_HD_WALLET_ID')
-        this.institutionWalletId = this.configService.get<string>('INSTITUTION_HD_WALLET_ID')
-        this.instructorWalletId = this.configService.get<string>('INSTRUCTOR_HD_WALLET_ID')
-        this.learnerWalletId = this.configService.get<string>('LEARNER_HD_WALLET_ID')
+        this.contractAddress =
+            this.configService.get<string>('CONTRACT_ADDRESS')
+        this.adminPrivateKey =
+            this.configService.get<string>('ADMIN_PRIVATE_KEY')
+        this.adminWalletId =
+            this.configService.get<string>('ADMIN_HD_WALLET_ID')
+        this.institutionWalletId = this.configService.get<string>(
+            'INSTITUTION_HD_WALLET_ID'
+        )
+        this.instructorWalletId = this.configService.get<string>(
+            'INSTRUCTOR_HD_WALLET_ID'
+        )
+        this.learnerWalletId = this.configService.get<string>(
+            'LEARNER_HD_WALLET_ID'
+        )
     }
 
     create(createSmartcontractDto: CreateSmartcontractDto) {
@@ -68,21 +77,26 @@ export class SmartcontractService {
 
     async onboardingActor(body): Promise<any> {
         try {
-            console.log(`onboardingActor ${body.role} with ID ${body.id}`);
+            console.log(`onboardingActor ${body.role} with ID ${body.id}`)
             const wallet = await getWallet(body.role, body.id)
             const actorPrivateKey = wallet.privateKey
             const contractAddress = this.contractAddress
-            let rpcUrl = this.configService.get<string>('JSON_RPC_URL', 'http://localhost:8545')
+            let rpcUrl = this.configService.get<string>(
+                'JSON_RPC_URL',
+                'http://localhost:8545'
+            )
             let messageResponse = ''
-
-            if(!body.isAdmin) {
-                rpcUrl = this.configService.get<string>('KALEIDO_HD_WALLET_RPC_URL', 'https://u0zhuv4dtl:P-XiJpeAACDZgL_dVSaUpL4JLmIXeg5lTu5jLHWEUJ4@u0iavbc8n0-u0t9n504n5-hdwallet.us0-aws.kaleido.io/')
+            if (!body.isAdmin) {
+                rpcUrl = this.configService.get<string>(
+                    'KALEIDO_HD_WALLET_RPC_URL',
+                    'https://u0zhuv4dtl:P-XiJpeAACDZgL_dVSaUpL4JLmIXeg5lTu5jLHWEUJ4@u0iavbc8n0-u0t9n504n5-hdwallet.us0-aws.kaleido.io/'
+                )
             }
-            console.log(`rpcUrl: ${rpcUrl}`)    ;
-            
-            const provider = new ethers.JsonRpcProvider(rpcUrl);
+            console.log(`rpcUrl: ${rpcUrl}`)
 
-            const { chainId } = await provider.getNetwork();
+            const provider = new ethers.JsonRpcProvider(rpcUrl)
+
+            const { chainId } = await provider.getNetwork()
             console.log(`chainId: ${chainId}`)
 
             const signer = new ethers.Wallet(actorPrivateKey, provider)
@@ -91,19 +105,29 @@ export class SmartcontractService {
             // Convert BigInt values to strings if needed
             const processedResult = this.processResult(result)
             console.log('View Function Result:', processedResult)
-            
+
             if (processedResult) {
                 switch (body.functionName) {
-                    case body.functionName === SmartcontractFunctionsEnum.REGISTER_INSTITUTION:
-                        await this.institutionRepository.update(body.id, { status: true })
+                    case body.functionName ===
+                        SmartcontractFunctionsEnum.REGISTER_INSTITUTION:
+                        await this.institutionRepository.update(body.id, {
+                            status: true
+                        })
                         messageResponse = 'Institution onboarded successfully'
-                    
-                    case body.functionName === SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR:
-                        await this.instructorRepository.update(body.id, { status: true, publicAddress: wallet.publicAddress })
-                        messageResponse = 'Instructor onboarded successfully' ;   
-                        
+
+                    case body.functionName ===
+                        SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR:
+                        await this.instructorRepository.update(body.id, {
+                            status: true,
+                            publicAddress: wallet.publicAddress
+                        })
+                        messageResponse = 'Instructor onboarded successfully'
+                    case body.functionName ===
+                        SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION:
+                        messageResponse =
+                            'Instructor added to institution successfully'
                     default:
-                        break;
+                        break
                 }
             }
             return {
@@ -162,6 +186,34 @@ export class SmartcontractService {
         } catch (err) {
             console.log(err)
             return err
+        }
+    }
+
+    async findCourseLearnerAddressAndName(body): Promise<any> {
+        try {
+            // Set default values for page and limit if not provided
+            const currentPage = body.page > 0 ? body.page : 1 // Ensure page is at least 1
+            const itemsPerPage = body.limit > 0 ? body.limit : 10 // Default to 10 items if not provided
+
+            // Calculate the skip value based on the page and limit
+            const skip = (currentPage - 1) * itemsPerPage
+
+            return await this.preEventRepository
+                .createQueryBuilder('preEvent')
+                .leftJoinAndSelect('preEvent.postevents', 'postevent')
+                .select([
+                    'preEvent.id', // keep the primary preEvent fields you need
+                    'postevent.name', // select specific fields from postevents
+                    'postevent.email'
+                ])
+                .where('preEvent.id = :id', { id: body.preEventId })
+                .skip(skip)
+                .take(itemsPerPage)
+                .getOne()
+        } catch (err) {
+            throw new BadRequestException(
+                'error in fetching course learner list'
+            )
         }
     }
 
