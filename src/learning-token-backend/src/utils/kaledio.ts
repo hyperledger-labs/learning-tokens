@@ -33,11 +33,6 @@ export const getWallet = async (type: string, id: number) => {
                 .replace(':accountIndex', id.toString())
         }
 
-<<<<<<< HEAD
-    const result = await axios.get(url)
-
-    return result.data
-=======
         const result = await axios.get(url)
         console.log('Kaleido HD Wallet result', result.data)
 
@@ -46,5 +41,4 @@ export const getWallet = async (type: string, id: number) => {
         console.log(err, err)
         return
     }
->>>>>>> 087e550 (minor bug fixed)
 }
