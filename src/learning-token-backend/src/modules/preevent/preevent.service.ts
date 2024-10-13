@@ -129,6 +129,16 @@ export class PreeventService {
                 await this.onlineEventRepository.update(savedEvent.id, {
                     Instructor: _user
                 })
+
+                const body = {
+                    isAdmin: true,
+                    role: 'institution',
+                    id: institution.id,
+                    functionName:
+                        SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
+                    params: [registeredInstructor.publicAddress, createdAt]
+                }
+                await this.smartContractService.onboardingActor(body)
             }
         })
 
@@ -150,14 +160,8 @@ export class PreeventService {
         const orderByCondition: FindOptionsOrder<Preevent> = {
             [orderBy]: desc ? 'DESC' : 'ASC'
         }
-<<<<<<< HEAD
-
-        return paginate<Preevent>(this.preeventRepository, options, {
-            where: { id: req.user.id },
-=======
         return await paginate<Preevent>(this.preeventRepository, options, {
             where: { id: reqUser.id },
->>>>>>> 087e550 (minor bug fixed)
             relations: ['onlineEvent', 'onlineEvent.scoringGuide'],
             order: orderByCondition
         })

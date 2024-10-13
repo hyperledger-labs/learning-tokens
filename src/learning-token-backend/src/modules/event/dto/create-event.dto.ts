@@ -4,6 +4,9 @@ export class CreateScoringGuideDTO {
     @IsNumber()
     preEventId: number
 
+    @IsString()
+    meetingEventId: string
+
     @IsOptional()
     @IsString()
     fieldOfKnowledge: string
