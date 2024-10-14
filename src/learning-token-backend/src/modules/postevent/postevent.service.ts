@@ -62,14 +62,14 @@ export class PosteventService {
                         _learner
                     )
 
-                    // sendLoginCredentials(
-                    //     element.email,
-                    //     element.email,
-                    //     '12345678',
-                    //     'Dear learner, Please login with credentials'
-                    // ).then((res) => {
-                    //     console.log(res)
-                    // })
+                    sendLoginCredentials(
+                        element.email,
+                        element.email,
+                        '12345678',
+                        'Dear learner, Please login with credentials'
+                    ).then((res) => {
+                        console.log(res)
+                    })
 
                     const _user = await this.learnerRepository.findOneBy({
                         id: registeredLearner.id
