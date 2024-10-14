@@ -27,22 +27,22 @@ export class ScoringGuide extends BaseEntity {
     @Column({ type: 'varchar', length: 255, nullable: true })
     taxonomyOfSkill: string
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: true })
     attendanceToken: number
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: true })
     scoreTokenAmount: number
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: true })
     helpTokenAmount: number
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: true })
     instructorScoreToken: number
 
     @Column({ type: 'varchar', length: 255, nullable: true })
     ipfsHash: string
 
-    @Column({ type: 'bool', default: true })
+    @Column({ type: 'bool', default: false })
     status: boolean
 
     //simple json column to hold all dynamic value of the scoring guide

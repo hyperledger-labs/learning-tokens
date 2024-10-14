@@ -23,28 +23,33 @@ export class PosteventService {
         @InjectEntityManager()
         private readonly entityManager: EntityManager
     ) {}
-    async create(createPosteventDto: CreatePosteventDto[]) {
+    async create(createPosteventDto: CreatePosteventDto) {
         const event = await this.preeventRepository.findOne({
-            where: { meetingEventId: createPosteventDto[0].meetingEventId }
+            where: { meetingEventId: createPosteventDto.meetingEventId }
         })
         if (!event) {
             throw new Error('Institution not found')
         }
 
         //every post event will have the same preevent
-        createPosteventDto.forEach((element) => {
-            element.preevent = event
-        })
-        let postevent: Postevent[]
-        await this.dataSource.transaction(async (manager) => {
-            postevent = manager.create(Postevent, createPosteventDto)
-            await manager.save(Postevent, postevent)
 
-            for (let index = 0; index < postevent.length; index++) {
-                const element = postevent[index]
-                const learner = await manager.findOneBy(Learner, {
+        await this.entityManager.transaction(async () => {
+            // await this.posteventRepository.save(postevent)
+
+            for (
+                let index = 0;
+                index < createPosteventDto.attendees.length;
+                index++
+            ) {
+                const element = createPosteventDto.attendees[index]
+                const learner = await this.learnerRepository.findOneBy({
                     email: element.email
                 })
+                const postevent = this.posteventRepository.create({
+                    ...element,
+                    preevent: event
+                })
+                await this.posteventRepository.save(postevent)
                 if (!learner) {
                     const _learner = new Learner()
                     _learner.name = element.name
@@ -53,8 +58,7 @@ export class PosteventService {
                     const salt: string = bcrypt.genSaltSync(10)
                     _learner.password = bcrypt.hashSync('12345678', salt)
 
-                    const registeredLearner = await manager.save(
-                        Learner,
+                    const registeredLearner = await this.learnerRepository.save(
                         _learner
                     )
 
@@ -67,7 +71,7 @@ export class PosteventService {
                         console.log(res)
                     })
 
-                    const _user = await manager.findOneBy(Learner, {
+                    const _user = await this.learnerRepository.findOneBy({
                         id: registeredLearner.id
                     })
 
@@ -77,12 +81,11 @@ export class PosteventService {
                     )
                     _user.publicAddress = wallet.address
 
-                    await manager.save(Learner, _user)
+                    await this.learnerRepository.save(_user)
                 }
             }
         })
-
-        return postevent
+        return
     }
 
     findAll() {

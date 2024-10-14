@@ -4,4 +4,3 @@ export enum RoleEnum {
     INSTRUCTOR = 'instructor',
     LEARNER = 'learner'
 }
-

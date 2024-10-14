@@ -22,35 +22,38 @@ export class Preevent extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
     id: number
 
-    @Column({ type: 'varchar', length: 30, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 30, nullable: false }) //will be unique
     meetingEventId: string
 
     @OneToOne(() => OnlineEvent)
     @JoinColumn()
     onlineEvent: OnlineEvent
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
+    @Column({ type: 'varchar', length: 225, nullable: true })
     eventName: string
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
+    @Column({ type: 'varchar', length: 225, nullable: true })
     eventType: string
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
+    @Column({ type: 'varchar', length: 225, nullable: true })
     description: string
 
-    @CreateDateColumn({ type: 'varchar', length: 30, nullable: true })
+    @CreateDateColumn({ type: 'varchar', length: 225, nullable: true })
     eventDate: Date
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
-    speakerName: string
+    @Column({ type: 'varchar' })
+    organizerName: string
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
-    speakerEmail: string
+    @Column({ type: 'varchar' })
+    organizerEmail: string
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
-    speakerTitle: string
+    @Column({ type: 'simple-array' })
+    speakersName: string[]
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
+    @Column({ type: 'simple-array' })
+    speakersEmail: string[]
+
+    @Column({ type: 'varchar', length: 225, nullable: true })
     organization: string
 
     @ManyToOne(() => Institution, (institution) => institution.preevents)

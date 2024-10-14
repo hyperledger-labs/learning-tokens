@@ -8,9 +8,11 @@ import {
     BaseEntity,
     OneToOne,
     JoinColumn,
-    DeleteDateColumn
+    DeleteDateColumn,
+    ManyToOne
 } from 'typeorm'
 import { ScoringGuide } from './scoring-guide.entity'
+import { Instructor } from 'src/modules/instructors/entities/instructor.entity'
 
 @Entity()
 export class OnlineEvent extends BaseEntity {
@@ -20,6 +22,9 @@ export class OnlineEvent extends BaseEntity {
     // @OneToOne(() => Preevent)
     // @JoinColumn()
     // preevent: Preevent
+
+    @ManyToOne(() => Instructor)
+    instructor: Instructor
 
     @OneToOne(() => ScoringGuide)
     @JoinColumn()
@@ -48,4 +53,10 @@ export class OnlineEvent extends BaseEntity {
 
     @DeleteDateColumn()
     deletedAt: Date
+
+    constructor(partial: Partial<OnlineEvent>, scoringGuide: ScoringGuide) {
+        super()
+        this.scoringGuide = scoringGuide
+        Object.assign(this, partial)
+    }
 }
