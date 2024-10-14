@@ -1,4 +1,11 @@
-import { IsEmail, IsOptional, IsString, IsUrl, IsBoolean, IsNumber } from 'class-validator'
+import {
+    IsEmail,
+    IsOptional,
+    IsString,
+    IsUrl,
+    IsBoolean,
+    IsNumber
+} from 'class-validator'
 
 export class CreateInstructorDto {
     @IsString()

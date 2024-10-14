@@ -21,7 +21,8 @@ const Institution: React.FC = () => {
   const [getInstitution, { data, isLoading }] = useLazyGetInstitutionQuery();
   const [updateInstitutionStatus] = useUpdateInstitutionStatusMutation();
   const [smartContractCall] = useSmartContractCallMutation();
-  const [smartContractCallRegisterInstitution] = useSmartContractCallRegisterInstitutionMutation();
+  const [smartContractCallRegisterInstitution] =
+    useSmartContractCallRegisterInstitutionMutation();
   const pagination = usePagination();
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const Institution: React.FC = () => {
 
   const toggleStatus = async (rowData: any) => {
     setStatusLoading({ id: rowData.id, loading: true });
-  
+
     try {
       // Await the smart contract call
       await smartContractCallRegisterInstitution({
@@ -47,9 +48,11 @@ const Institution: React.FC = () => {
           rowData.longitude,
         ],
       });
-  
+
       // Update the institution status
-      const updatedInstitution = await updateInstitutionStatus(rowData).unwrap();
+      const updatedInstitution = await updateInstitutionStatus(
+        rowData
+      ).unwrap();
       console.log(`Institution updated: ${JSON.stringify(updatedInstitution)}`);
     } catch (error) {
       console.error(`Error updating institution status: ${error}`);
