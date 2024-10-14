@@ -1,11 +1,13 @@
 import { Exclude } from 'class-transformer'
 import { IsEmail, IsString } from 'class-validator'
+import { Role } from 'src/modules/role/entities/role.entity'
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm'
@@ -20,7 +22,7 @@ export class Learner extends BaseEntity {
     @Column({
         type: 'varchar',
         length: 50,
-        unique: true,
+        unique: false,
         nullable: false
     })
     @IsEmail()
@@ -45,6 +47,9 @@ export class Learner extends BaseEntity {
 
     @Column({ type: 'varchar', length: 50, nullable: true })
     longitude: string
+
+    @ManyToOne(() => Role)
+    role: Role
 
     @CreateDateColumn()
     createdAt: Date

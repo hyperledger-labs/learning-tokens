@@ -10,13 +10,15 @@ import {
     DeleteDateColumn
 } from 'typeorm'
 
+// make an enum
+
 @Entity()
 export class ScoringGuide extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
     id: number
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
-    courseId: string
+    @Column({ type: 'int', nullable: true })
+    courseId: number
 
     @Column({ type: 'varchar', length: 255, nullable: true })
     courseName: string
@@ -27,23 +29,20 @@ export class ScoringGuide extends BaseEntity {
     @Column({ type: 'varchar', length: 255, nullable: true })
     taxonomyOfSkill: string
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: true })
     attendanceToken: number
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: true })
     scoreTokenAmount: number
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: true })
     helpTokenAmount: number
 
-    @Column({ type: 'int', nullable: false })
+    @Column({ type: 'int', nullable: true })
     instructorScoreToken: number
 
     @Column({ type: 'varchar', length: 255, nullable: true })
     ipfsHash: string
-
-    @Column({ type: 'bool', default: true })
-    status: boolean
 
     //simple json column to hold all dynamic value of the scoring guide
     @Column({ type: 'simple-json', nullable: true })

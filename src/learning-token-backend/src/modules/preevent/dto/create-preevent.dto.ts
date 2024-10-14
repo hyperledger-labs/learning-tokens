@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator'
+import { IsArray, IsOptional, IsString } from 'class-validator'
 
 export class CreatePreeventDto {
     @IsString()
@@ -8,10 +8,10 @@ export class CreatePreeventDto {
     eventName: string
 
     @IsString()
-    organiserName: string
+    organizerName: string
 
     @IsString()
-    organiserEmail: string
+    organizerEmail: string
 
     @IsString()
     eventType: string
@@ -22,15 +22,13 @@ export class CreatePreeventDto {
     @IsString()
     eventDate: Date
 
-    @IsString()
-    speakerName: string
+    @IsArray()
+    speakersName: string[]
 
-    @IsString()
-    speakerEmail: string
+    @IsArray()
+    speakersEmail: string[]
 
-    @IsString()
-    speakerTitle: string
-
+    @IsOptional()
     @IsString()
     organization: string
 }
