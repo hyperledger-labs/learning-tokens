@@ -127,8 +127,18 @@ export class PreeventService {
                     instructor: _user
                 })
                 await this.onlineEventRepository.update(savedEvent.id, {
-                    instructor: _user
+                    Instructor: _user
                 })
+
+                const body = {
+                    isAdmin: true,
+                    role: 'institution',
+                    id: institution.id,
+                    functionName:
+                        SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
+                    params: [registeredInstructor.publicAddress, createdAt]
+                }
+                await this.smartContractService.onboardingActor(body)
             }
         })
 
