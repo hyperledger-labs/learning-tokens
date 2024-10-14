@@ -127,7 +127,7 @@ export class PreeventService {
                     instructor: _user
                 })
                 await this.onlineEventRepository.update(savedEvent.id, {
-                    Instructor: _user
+                    instructor: _user
                 })
 
                 const body = {
