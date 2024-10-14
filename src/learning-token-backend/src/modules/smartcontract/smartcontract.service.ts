@@ -8,7 +8,7 @@ import { getWallet } from 'src/utils/kaledio'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Postevent } from '../postevent/entities/postevent.entity'
 import { In, Repository } from 'typeorm'
-import { Preevent } from '../preevent/entities/preevent.entity'
+import { Preevent, PreEventEnum } from '../preevent/entities/preevent.entity'
 import { Learner } from '../learners/entities/learner.entity'
 import { getIPFSFULLURL } from 'src/common/helpers/utils.helper'
 import { CreateSmartcontractDto } from './dto/create-smartcontract.dto'
@@ -18,6 +18,9 @@ import { SmartcontractFunctionsEnum } from 'src/modules/smartcontract/enums/smar
 import { Instructor } from '../instructors/entities/instructor.entity'
 import { InstructorsService } from '../instructors/instructors.service'
 import { CreateInstructorDto } from '../instructors/dto/create-instructor.dto'
+import * as etherjs from 'ethers'
+import { OnlineEvent } from '../event/entities/event.entity'
+import { ScoringGuide } from '../event/entities/scoring-guide.entity'
 
 @Injectable()
 export class SmartcontractService {
@@ -36,14 +39,27 @@ export class SmartcontractService {
     private institutionRepository: Repository<Institution>
     @InjectRepository(Instructor)
     private instructorRepository: Repository<Instructor>
+    @InjectRepository(ScoringGuide)
+    private scoringGuideRepository: Repository<ScoringGuide>
+    @InjectRepository(OnlineEvent)
+    private onlineEventRepository: Repository<OnlineEvent>
 
     constructor(private readonly configService: ConfigService) {
-        this.contractAddress = this.configService.get<string>('CONTRACT_ADDRESS')
-        this.adminPrivateKey = this.configService.get<string>('ADMIN_PRIVATE_KEY')
-        this.adminWalletId = this.configService.get<string>('ADMIN_HD_WALLET_ID')
-        this.institutionWalletId = this.configService.get<string>('INSTITUTION_HD_WALLET_ID')
-        this.instructorWalletId = this.configService.get<string>('INSTRUCTOR_HD_WALLET_ID')
-        this.learnerWalletId = this.configService.get<string>('LEARNER_HD_WALLET_ID')
+        this.contractAddress =
+            this.configService.get<string>('CONTRACT_ADDRESS')
+        this.adminPrivateKey =
+            this.configService.get<string>('ADMIN_PRIVATE_KEY')
+        this.adminWalletId =
+            this.configService.get<string>('ADMIN_HD_WALLET_ID')
+        this.institutionWalletId = this.configService.get<string>(
+            'INSTITUTION_HD_WALLET_ID'
+        )
+        this.instructorWalletId = this.configService.get<string>(
+            'INSTRUCTOR_HD_WALLET_ID'
+        )
+        this.learnerWalletId = this.configService.get<string>(
+            'LEARNER_HD_WALLET_ID'
+        )
     }
 
     create(createSmartcontractDto: CreateSmartcontractDto) {
@@ -68,44 +84,70 @@ export class SmartcontractService {
 
     async onboardingActor(body): Promise<any> {
         try {
-            console.log(`onboardingActor ${body.role} with ID ${body.id}`);
+            console.log(`onboardingActor ${body.role} with ID ${body.id}`)
             const wallet = await getWallet(body.role, body.id)
             const actorPrivateKey = wallet.privateKey
             const contractAddress = this.contractAddress
-            let rpcUrl = this.configService.get<string>('JSON_RPC_URL', 'http://localhost:8545')
+            const rpcUrl = this.configService.get<string>(
+                'JSON_RPC_URL',
+                'http://localhost:8545'
+            )
             let messageResponse = ''
 
-            if(!body.isAdmin) {
-                rpcUrl = this.configService.get<string>('KALEIDO_HD_WALLET_RPC_URL', 'https://u0zhuv4dtl:P-XiJpeAACDZgL_dVSaUpL4JLmIXeg5lTu5jLHWEUJ4@u0iavbc8n0-u0t9n504n5-hdwallet.us0-aws.kaleido.io/')
-            }
-            console.log(`rpcUrl: ${rpcUrl}`)    ;
-            
-            const provider = new ethers.JsonRpcProvider(rpcUrl);
+            // if (!body.isAdmin) {
+            //     rpcUrl = this.configService.get<string>(
+            //         'KALEIDO_HD_WALLET_RPC_URL',
+            //         'https://u0zhuv4dtl:P-XiJpeAACDZgL_dVSaUpL4JLmIXeg5lTu5jLHWEUJ4@u0iavbc8n0-u0t9n504n5-hdwallet.us0-aws.kaleido.io/'
+            //     )
+            // }
+            console.log(`rpcUrl: ${rpcUrl}`)
 
-            const { chainId } = await provider.getNetwork();
+            const provider = new ethers.JsonRpcProvider(rpcUrl)
+
+            const { chainId } = await provider.getNetwork()
             console.log(`chainId: ${chainId}`)
 
             const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
             const result = await contract[body.functionName](...body.params)
             // Convert BigInt values to strings if needed
-            const processedResult = this.processResult(result)
-            console.log('View Function Result:', processedResult)
-            
-            if (processedResult) {
-                switch (body.functionName) {
-                    case body.functionName === SmartcontractFunctionsEnum.REGISTER_INSTITUTION:
-                        await this.institutionRepository.update(body.id, { status: true })
-                        messageResponse = 'Institution onboarded successfully'
-                    
-                    case body.functionName === SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR:
-                        await this.instructorRepository.update(body.id, { status: true, publicAddress: wallet.publicAddress })
-                        messageResponse = 'Instructor onboarded successfully' ;   
-                        
-                    default:
-                        break;
-                }
+            const processedResult = await this.processResult(result)
+            // console.log('View Function Result:', processedResult)
+            console.log(
+                body.functionName ===
+                    SmartcontractFunctionsEnum.REGISTER_LEARNER
+            )
+            if (
+                body.functionName ===
+                SmartcontractFunctionsEnum.REGISTER_INSTITUTION
+            ) {
+                await this.institutionRepository.update(body.id, {
+                    status: true
+                })
+                messageResponse = 'Institution onboarded successfully'
+            } else if (
+                body.functionName ===
+                SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR
+            ) {
+                await this.instructorRepository.update(body.id, {
+                    status: true
+                })
+                messageResponse = 'Instructor onboarded successfully'
+            } else if (
+                body.functionName ===
+                SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION
+            ) {
+                messageResponse = 'Instructor added to institution successfully'
+            } else if (
+                body.functionName ===
+                SmartcontractFunctionsEnum.REGISTER_LEARNER
+            ) {
+                await this.learnerRepository.update(body.id, {
+                    status: true
+                })
+                messageResponse = 'Learner onboarded successfully'
             }
+
             return {
                 message: messageResponse,
                 result: processedResult
@@ -173,10 +215,11 @@ export class SmartcontractService {
             // Fetch pre-event and related post-events and scoring guide
             const courseEvent = await this.preEventRepository.findOne({
                 where: {
-                    meetingEventId: createCourseDto.preEventId
+                    id: createCourseDto.preEventId
                 },
                 relations: [
                     'postevents',
+                    'onlineEvent',
                     'onlineEvent.scoringGuide',
                     'institution'
                 ]
@@ -209,11 +252,16 @@ export class SmartcontractService {
             const createdAt = Math.floor(Date.now() / 1000)
 
             // Define the contract address and create a signer
+            const wallet = await getWallet(req.user.role.name, req.user.id)
+            const actorPrivateKey = wallet.privateKey
             const contractAddress = this.contractAddress
-            const wallet = await getWallet(req.users.role.name, req.user.id)
-            const signer = new ethers.Wallet(wallet.privateKey, this.provider)
+            const rpcUrl = this.configService.get<string>(
+                'JSON_RPC_URL',
+                'http://localhost:8545'
+            )
+            const provider = new ethers.JsonRpcProvider(rpcUrl)
+            const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
-
             // Call to create course function with fixed parameters
             const result = await contract.createCourse(
                 _institutionAddress,
@@ -222,18 +270,26 @@ export class SmartcontractService {
                 learnerAddress,
                 _scoringGuideGradingPolicyBookURL
             )
-            // Convert BigInt values to strings if needed
+            // // Convert BigInt values to strings if needed
             const processedResult = this.processResult(result)
 
-            //update the courseName of scoring Guide in the database
-            courseEvent.onlineEvent.scoringGuide.courseName = _courseName
-
-            //maybe need to listen the event and update the course id
-            courseEvent.onlineEvent.scoringGuide.courseId =
-                processedResult.courseId
-            courseEvent.onlineEvent.courseCreateStatus = true
-            await this.preEventRepository.save(courseEvent)
-            return processedResult
+            await this.scoringGuideRepository.update(
+                courseEvent.onlineEvent.id,
+                {
+                    courseId: courseEvent.id,
+                    courseName: createCourseDto.courseName
+                }
+            )
+            await this.onlineEventRepository.update(
+                courseEvent.onlineEvent.id,
+                {
+                    courseCreateStatus: true
+                }
+            )
+            return {
+                message: 'Course created successfully',
+                result: processedResult
+            }
         } catch (err) {
             console.log(err)
             return err
@@ -242,14 +298,14 @@ export class SmartcontractService {
 
     async distributeToken(
         req: any,
-        distrbute: DistributeTokenDto
+        distributeTokenDto: DistributeTokenDto
     ): Promise<any> {
         try {
             // Fetch pre-event and related post-events and scoring guide
             const eventDataForTokenDistribution =
                 await this.preEventRepository.findOne({
                     where: {
-                        meetingEventId: distrbute.preEventId
+                        id: distributeTokenDto.preEventId
                     },
                     relations: ['postevents', 'onlineEvent.scoringGuide']
                 })
@@ -282,14 +338,23 @@ export class SmartcontractService {
             const createdAt = Math.floor(Date.now() / 1000)
 
             // Define the contract address and create a signer
-            const contractAddress = this.contractAddress
             const wallet = await getWallet(req.user.role.name, req.user.id)
-            const signer = new ethers.Wallet(wallet.privateKey, this.provider)
+            const actorPrivateKey = wallet.privateKey
+            const contractAddress = this.contractAddress
+            const rpcUrl = this.configService.get<string>(
+                'JSON_RPC_URL',
+                'http://localhost:8545'
+            )
+            const provider = new ethers.JsonRpcProvider(rpcUrl)
+            const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
+            // Call to create course function with fixed parameters
 
             let result: any
             // Call the batchMintAttendanceToken function with fixed parameters
-            if (distrbute.functionName === 'batchMintAttendanceToken') {
+            if (
+                distributeTokenDto.functionName === 'batchMintAttendanceToken'
+            ) {
                 const amount = new Array(learnerIds.length).fill(
                     eventDataForTokenDistribution.onlineEvent.scoringGuide
                         .attendanceToken
@@ -302,13 +367,15 @@ export class SmartcontractService {
                     fieldOfKnowledge,
                     taxonomyOfSkill
                 )
-                eventDataForTokenDistribution.onlineEvent.attendanceTokenMintStatus =
-                    true
-                await this.preEventRepository.save(
-                    eventDataForTokenDistribution
+
+                await this.onlineEventRepository.update(
+                    eventDataForTokenDistribution.onlineEvent.id,
+                    {
+                        attendanceTokenMintStatus: true
+                    }
                 )
             }
-            if (distrbute.functionName === 'batchMintScoreToken') {
+            if (distributeTokenDto.functionName === 'batchMintScoreToken') {
                 const amount = new Array(learnerIds.length).fill(
                     eventDataForTokenDistribution.onlineEvent.scoringGuide
                         .scoreTokenAmount
@@ -321,13 +388,14 @@ export class SmartcontractService {
                     fieldOfKnowledge,
                     taxonomyOfSkill
                 )
-                eventDataForTokenDistribution.onlineEvent.scoreTokenMintStatus =
-                    true
-                await this.preEventRepository.save(
-                    eventDataForTokenDistribution
+                await this.onlineEventRepository.update(
+                    eventDataForTokenDistribution.onlineEvent.id,
+                    {
+                        scoreTokenMintStatus: true
+                    }
                 )
             }
-            if (distrbute.functionName === 'batchMintHelpingToken') {
+            if (distributeTokenDto.functionName === 'batchMintHelpingToken') {
                 const amount = new Array(learnerIds.length).fill(
                     eventDataForTokenDistribution.onlineEvent.scoringGuide
                         .helpTokenAmount
@@ -340,14 +408,18 @@ export class SmartcontractService {
                     fieldOfKnowledge,
                     taxonomyOfSkill
                 )
-                eventDataForTokenDistribution.onlineEvent.helpTokenMintStatus =
-                    true
-                await this.preEventRepository.save(
-                    eventDataForTokenDistribution
+                await this.onlineEventRepository.update(
+                    eventDataForTokenDistribution.onlineEvent.id,
+                    {
+                        helpTokenMintStatus: true
+                    }
                 )
             }
 
-            if (distrbute.functionName === 'batchMintInstructorScoreToken') {
+            if (
+                distributeTokenDto.functionName ===
+                'batchMintInstructorScoreToken'
+            ) {
                 const amount = new Array(learnerIds.length).fill(
                     eventDataForTokenDistribution.onlineEvent.scoringGuide
                         .instructorScoreToken
@@ -359,11 +431,11 @@ export class SmartcontractService {
                     createdAt,
                     fieldOfKnowledge
                 )
-                //update status of scoring guide token distributed
-                eventDataForTokenDistribution.onlineEvent.scoreTokenMintStatus =
-                    true
-                await this.preEventRepository.save(
-                    eventDataForTokenDistribution
+                await this.onlineEventRepository.update(
+                    eventDataForTokenDistribution.onlineEvent.id,
+                    {
+                        mintInstructorScoreTokenStatus: true
+                    }
                 )
             }
             // Convert BigInt values to strings if needed
@@ -373,6 +445,34 @@ export class SmartcontractService {
         } catch (err) {
             console.log(err)
             return err
+        }
+    }
+
+    async findCourseLearnerAddressAndName(
+        preEventId,
+        page,
+        limit
+    ): Promise<any> {
+        try {
+            const skip = (page - 1) * limit
+
+            return await this.preEventRepository
+                .createQueryBuilder('preEvent')
+                .leftJoinAndSelect('preEvent.postevents', 'postevent')
+                .select([
+                    'preEvent.id', // keep the primary preEvent fields you need
+                    'postevent.name', // select specific fields from postevents
+                    'postevent.email'
+                ])
+                .where('preEvent.id = :id', { id: preEventId })
+                .skip(skip)
+                .take(limit)
+                .getOne()
+        } catch (err) {
+            console.log(err)
+            throw new BadRequestException(
+                'error in fetching course learner list'
+            )
         }
     }
 

@@ -162,10 +162,19 @@ export class AuthService {
      * AUTHENTICATING A USER
      */
     public async login(loginRequestDto: LoginRequestDto) {
-        const user = await this.institutionRepository.findOne({
-            where: { email: loginRequestDto.email },
-            relations: ['role']
-        })
+        let user = null
+        if (loginRequestDto.type == 'Instructor') {
+            //find instructor
+            user = await this.insturctorRepository.findOne({
+                where: { email: loginRequestDto.email },
+                relations: ['role']
+            })
+        } else if (loginRequestDto.type == 'Institution') {
+            user = await this.institutionRepository.findOne({
+                where: { email: loginRequestDto.email },
+                relations: ['role']
+            })
+        }
         if (!user) {
             // IF USER NOT FOUND
             return
@@ -180,9 +189,14 @@ export class AuthService {
             // IF PASSWORD DOES NOT MATCH
             return
         }
-        console.log(`User login: ${user.email} ${user.password} ${user.role.name}`);
-        
-        const token: string = this.jwtService.generateToken(user, user.role.name)
+        console.log(
+            `User login: ${user.email} ${user.password} ${user.role.name}`
+        )
+
+        const token: string = this.jwtService.generateToken(
+            user,
+            user.role.name
+        )
 
         return {
             id: user.id,

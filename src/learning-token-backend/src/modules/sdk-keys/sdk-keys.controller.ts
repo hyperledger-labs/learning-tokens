@@ -17,7 +17,7 @@ export class SdkKeysController {
     constructor(private readonly sdkKeysService: SdkKeysService) {}
 
     @Get('gen/:id')
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     async generateSdkKeyForInstitution(@Param('id') id: string) {
         try {
             return {
@@ -28,7 +28,7 @@ export class SdkKeysController {
                 )
             }
         } catch (error) {
-            console.log(error);
+            console.log(error)
             throw new NotFoundException('Something went wrong')
         }
     }

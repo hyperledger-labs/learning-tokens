@@ -8,7 +8,9 @@ import {
     Delete,
     Query,
     UseGuards,
-    Req
+    Req,
+    DefaultValuePipe,
+    ParseIntPipe
 } from '@nestjs/common'
 import { SmartcontractService } from './smartcontract.service'
 import { CreateCourseDto } from './dto/create-course.dto'
@@ -26,11 +28,6 @@ export class SmartcontractController {
     @Get()
     findAll() {
         return this.smartcontractService.findAll()
-    }
-
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.smartcontractService.findOne(+id)
     }
 
     @Patch(':id')
@@ -57,14 +54,13 @@ export class SmartcontractController {
 
     @Post('register-actor')
     async registerInstitution(@Body() body: any) {
-        const result = await this.smartcontractService.onboardingActor(
-            body
-        )
+        const result = await this.smartcontractService.onboardingActor(body)
         return result
     }
 
-    @Post('token-distributions')
+    @UseGuards(JwtAuthGuard)
     @AllowUserTypes(RoleEnum.INSTRUCTOR)
+    @Post('token-distributions')
     async distributeToken(
         @Req() req: Request,
         @Body() distributeToken: DistributeTokenDto
@@ -73,6 +69,22 @@ export class SmartcontractController {
             req,
             distributeToken
         )
+        return result
+    }
+
+    @Get('course-learner-list')
+    async getCourseLearnerList(
+        @Query('preEventId', new DefaultValuePipe(1), ParseIntPipe)
+        preEventId: number,
+        @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+        @Query('limit', new DefaultValuePipe(1), ParseIntPipe) limit: number
+    ) {
+        const result =
+            await this.smartcontractService.findCourseLearnerAddressAndName(
+                +preEventId,
+                page,
+                limit
+            )
         return result
     }
 

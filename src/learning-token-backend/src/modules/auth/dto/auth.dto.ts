@@ -13,6 +13,10 @@ export class LoginRequestDto {
 
     @IsString()
     readonly password: string
+
+    @IsString()
+    @IsNotEmpty()
+    type: string
 }
 
 // Registration DTO
