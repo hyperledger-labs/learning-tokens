@@ -62,7 +62,7 @@ const ScoringGuide = () => {
               />
 
               <h1 className="font-bold">
-                Instructors : nvited speakers at presentations
+                Instructors : Invited speakers at presentations
               </h1>
 
               <TextInput
@@ -95,9 +95,10 @@ const ScoringGuide = () => {
                   <td className="text-center font-bold py-3">
                     Attendance Token
                   </td>
-                  <td className="text-center font-bold py-3">
-                    One for each participant
-                  </td>
+                  <TextInput
+                    name="attendanceToken"
+                    type="text"
+                    containerStyle={`w-full`}/>
                   <td className="text-center font-bold py-3">
                     Zoom Attendance Report (ID)
                   </td>
@@ -106,9 +107,10 @@ const ScoringGuide = () => {
                   <td className="text-center font-bold py-3">
                     Learner Score Token
                   </td>
-                  <td className="text-center font-bold py-3">
-                    One for each participant
-                  </td>
+                    <TextInput
+                      name="learnerScoreToken"
+                      type="text"
+                      containerStyle={`w-full`}/>  
                   <td className="text-center font-bold py-3">
                     Zoom Poll-Quiz, PostEvent Quiz (ID)
                   </td>
@@ -117,18 +119,20 @@ const ScoringGuide = () => {
                   <td className="text-center font-bold py-3">
                     Help Token for Learners
                   </td>
-                  <td className="text-center font-bold py-3">
-                    Two for each participant
-                  </td>
+                  <TextInput
+                    name="helpToken"
+                    type="text"
+                    containerStyle={`w-full`}/>
                   <td className="text-center font-bold py-3">Zoom Poll (ID)</td>
                 </tr>
                 <tr className="">
                   <td className="text-center font-bold py-3">
                     Instructor Score Token
                   </td>
-                  <td className="text-center font-bold py-3">
-                    One for each participant
-                  </td>
+                  <TextInput
+                    name="instructorScoreToken"
+                    type="text"
+                    containerStyle={`w-full`}/>
                   <td className="text-center font-bold py-3">
                     Zoom Q&A + Chat analytics (ID)
                   </td>
