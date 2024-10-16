@@ -1,32 +1,31 @@
 import { useNavigate } from "react-router-dom";
 import { Table } from "rsuite";
 const { Column, HeaderCell, Cell } = Table;
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const tableData = [
-  {
-    eventId: "EV113-2015",
-    eventName: "Event 1",
-    description: "Discussion with mock data",
-    eventDate: "12-08-2024",
-    organizer: "Hyperledger",
-    speakerName: "Dipu",
-    status: "incomplete scoring guide",
-  },
-  {
-    eventId: "EV225-2024",
-    eventName: "Event 2",
-    description: "Augmented Reality",
-    eventDate: "26-04-2024",
-    organizer: "Hyperledger",
-    speakerName: "Piash",
-    status: "incomplete create course",
-  },
-];
 const Events = () => {
   const navigate = useNavigate();
+  const [tableData, setTableData] = useState([]);
   const handleRowclick = (data: any) => {
     navigate(`/events/${data.eventId}`);
   };
+
+  useEffect(() => {
+    const fetchPreeventData = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/preevent`);
+        console.log(`response::: ${response}`);
+        
+        setTableData(response?.data?.result || []);
+      } catch (error) {
+        console.error("Error fetching preevent data:", error);
+      }
+    };
+
+    fetchPreeventData();
+  }, []);
+
   return (
     <Table
       data={tableData}
@@ -54,11 +53,11 @@ const Events = () => {
         <Cell dataKey="eventDate" />
       </Column>
       <Column flexGrow={1}>
-        <HeaderCell>organizer</HeaderCell>
+        <HeaderCell>Organizer</HeaderCell>
         <Cell dataKey="organizer" />
       </Column>
       <Column flexGrow={1}>
-        <HeaderCell>Speaker Name</HeaderCell>
+        <HeaderCell>Speaker's Name</HeaderCell>
         <Cell dataKey="speakerName" />
       </Column>
       <Column flexGrow={1}>

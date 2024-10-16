@@ -179,8 +179,14 @@ export class PreeventService {
         const orderByCondition: FindOptionsOrder<Preevent> = {
             [orderBy]: desc ? 'DESC' : 'ASC'
         }
+        console.log('reqUser::: ', reqUser);
+        
         return await paginate<Preevent>(this.preeventRepository, options, {
-            where: { id: reqUser.id },
+            where: { 
+                instructor: {
+                    id: reqUser.id
+                }
+             },
             relations: [
                 'onlineEvent',
                 'onlineEvent.scoringGuide',
