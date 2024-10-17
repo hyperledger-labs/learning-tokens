@@ -5,14 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { ScoringGuide } from './entities/scoring-guide.entity'
 import { CreateEventDto } from './dto/create-scoring-guide.dto'
-import { join } from 'path'
-import { stat, writeFileSync } from 'fs'
-import { PDFDocument } from 'pdf-lib'
-import axios from 'axios'
 import { PinataSDK } from 'pinata'
 import * as dotenv from 'dotenv'
 import { OnlineEvent } from './entities/event.entity'
-import { Preevent } from '../preevent/entities/preevent.entity'
+import * as fs from 'fs' // If you are working with files from the filesystem
+import { Preevent, PreEventEnum } from '../preevent/entities/preevent.entity'
+import { Instructor } from '../instructors/entities/instructor.entity'
 dotenv.config()
 
 @Injectable()
@@ -40,39 +38,49 @@ export class EventService {
     async createScoringGuide(createScoringGuideDTO: CreateScoringGuideDTO) {
         try {
             const isPreEventExists = await this.preEventRepository.findOne({
-                where: { meetingEventId: createScoringGuideDTO.meetingEventId }
+                where: { id: createScoringGuideDTO.preEventId },
+                relations: ['onlineEvent.scoringGuide', 'instructor']
             })
+
+            console.log('preEventId', isPreEventExists)
             //every scoring guide should have an isPreEventExists
             if (!isPreEventExists) {
                 throw new BadRequestException('Event does not exist')
             }
-            const scoringGuide = this.scoringGuideRepository.create(
-                createScoringGuideDTO
-            )
+            // const scoringGuide = this.scoringGuideRepository.create(
+            //     createScoringGuideDTO
+            // )
 
-            const createdScoringGuide = await this.scoringGuideRepository.save(
-                scoringGuide
-            )
+            // const createdScoringGuide = await this.scoringGuideRepository.save(
+            //     scoringGuide
+            // )
 
-            if (createdScoringGuide) {
-                const blob = await this.generatePdf({
-                    ...createScoringGuideDTO
+            if (isPreEventExists?.onlineEvent?.scoringGuide) {
+                const ipfsUrl = await this.uploadToPinata(
+                    createScoringGuideDTO,
+                    isPreEventExists.instructor
+                )
+                await this.scoringGuideRepository.update(
+                    isPreEventExists.onlineEvent.scoringGuide.id,
+                    {
+                        ipfsHash: ipfsUrl.IpfsHash,
+                        fieldOfKnowledge:
+                            createScoringGuideDTO.fieldOfKnowledge,
+                        taxonomyOfSkill: createScoringGuideDTO.taxonomyOfSkill,
+                        attendanceToken: createScoringGuideDTO.attendanceToken,
+                        scoreTokenAmount:
+                            createScoringGuideDTO.scoreTokenAmount,
+                        helpTokenAmount: createScoringGuideDTO.helpTokenAmount,
+                        instructorScoreToken:
+                            createScoringGuideDTO.instructorScoreToken
+                    }
+                )
+                await this.preEventRepository.update(isPreEventExists.id, {
+                    status: PreEventEnum.SUBMITPOSTEVENT
                 })
-                const ipfsUrl = await this.uploadToPinata(blob)
-                //update the scoring guide with the ipfs url
-                const scoringGuideCreated =
-                    await this.scoringGuideRepository.update(
-                        createdScoringGuide.id,
-                        {
-                            ipfsHash: ipfsUrl.IpfsHash,
-                            status: true
-                        }
-                    )
-                if (scoringGuideCreated.affected > 0) {
-                    isPreEventExists.onlineEvent.scoringGuide =
-                        createdScoringGuide
-                    //update the prevent table's online event's scoring guide with isEventExist
-                    return await this.preEventRepository.save(isPreEventExists)
+                return {
+                    status: 201,
+                    message: 'Scoring guide created successfully'
                 }
             } else {
                 throw new BadRequestException('Scoring guide not created')
@@ -101,39 +109,27 @@ export class EventService {
         return `This action removes a #${id} event`
     }
 
-    async generatePdf(payload: any): Promise<Buffer> {
-        const pdfDoc = await PDFDocument.create()
-        const page = pdfDoc.addPage()
-        page.drawText('Hello, World!', { x: 50, y: 700 })
-
-        const pdfBytes = await pdfDoc.save()
-        return Buffer.from(pdfBytes)
-    }
-
-    // async generatePdf(payload: any): Promise<Buffer> {
-    //     const pdfDoc = await PDFDocument.create()
-    //     const page = pdfDoc.addPage()
-    //     page.drawText('Hello, World!', { x: 50, y: 700 })
-
-    //     const pdfBytes = await pdfDoc.save()
-    //     const pdfBuffer = Buffer.from(pdfBytes)
-
-    //     // Dump the PDF locally for testing purposes
-    //     const filePath = join('document.pdf')
-    //     writeFileSync(filePath, pdfBuffer)
-
-    //     return pdfBuffer
-    // }
-
-    async uploadToPinata(pdfBuffer: any): Promise<any> {
+    async uploadToPinata(
+        scoringGuide: CreateScoringGuideDTO,
+        instructorData: Instructor
+    ): Promise<any> {
         try {
             const pinata = new PinataSDK({
                 pinataJwt: process.env.PINATA_JWT
             })
-            const file = new File([pdfBuffer], 'scoringGuide.pdf', {
-                type: 'text/plain'
+            const upload = await pinata.upload.json({
+                eventId: scoringGuide.preEventId,
+                meetingEventId: scoringGuide.meetingEventId,
+                instructorName: instructorData.name,
+                instructorEmail: instructorData.email,
+                fieldOfKnowledge: scoringGuide.fieldOfKnowledge,
+                taxonomyOfSkill: scoringGuide.taxonomyOfSkill,
+                attendanceTokenPerLesson: scoringGuide.attendanceToken,
+                scoringTokenPerLesson: scoringGuide.scoreTokenAmount,
+                helpTokenPerLesson: scoringGuide.helpTokenAmount,
+                instructorScoreTokenPerLesson: scoringGuide.instructorScoreToken
             })
-            const upload = await pinata.upload.file(file)
+            return upload
             return upload
         } catch (error) {
             console.log(error)

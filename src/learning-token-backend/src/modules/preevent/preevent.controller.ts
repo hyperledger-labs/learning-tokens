@@ -59,13 +59,12 @@ export class PreeventController {
 
     //find all event lists
 
-    @UseGuards(JwtAuthGuard, AccessControlGuard)
-    @AllowUserTypes(RoleEnum.ADMIN, RoleEnum.INSTITUTION, RoleEnum.INSTRUCTOR)
+    @UseGuards(JwtAuthGuard)
     @Get()
     async InstructorAssignedPreEventData(
         @Req() request: Request,
         @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
-        @Query('limit') limit: number,
+        @Query('limit', new DefaultValuePipe(1), ParseIntPipe) limit: number,
         @Query('search', new DefaultValuePipe('')) search = '',
         @Query('orderBy', new DefaultValuePipe('createdAt'))
         orderBy = 'createdAt',

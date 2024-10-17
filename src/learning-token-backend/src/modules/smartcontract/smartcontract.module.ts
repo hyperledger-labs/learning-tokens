@@ -8,6 +8,8 @@ import { Postevent } from '../postevent/entities/postevent.entity'
 import { Preevent } from '../preevent/entities/preevent.entity'
 import { SmartcontractController } from './smartcontract.controller'
 import { SmartcontractService } from './smartcontract.service'
+import { OnlineEvent } from '../event/entities/event.entity'
+import { ScoringGuide } from '../event/entities/scoring-guide.entity'
 
 @Module({
     imports: [
@@ -16,10 +18,13 @@ import { SmartcontractService } from './smartcontract.service'
             Learner,
             Institution,
             Instructor,
-            Postevent
+            Postevent,
+            ScoringGuide,
+            OnlineEvent
         ])
     ],
     controllers: [SmartcontractController],
-    providers: [SmartcontractService, ConfigService]
+    providers: [SmartcontractService, ConfigService],
+    exports: [SmartcontractService]
 })
-export class SmartcontractModule {}
+export class SmartcontractModule { }

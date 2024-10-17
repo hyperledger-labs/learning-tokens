@@ -60,20 +60,77 @@ const Login = () => {
     };
 
     try {
-      const result = await loginFunctions[values.type]({
-        email: values.email,
-        password: values.password,
-      }).unwrap();
-
-      if (result && result.status === 201) {
-        dispatch(userLoggedIn(result.result));
-        toast.success("Successfully Signed In");
-        navigate("/");
+      if (values.type === "admin") {
+        loginAdmin({
+          email: values.email,
+          password: values.password,
+          type: values.type,
+        })
+          .unwrap()
+          .then((res: any) => {
+            if (res && res.status === 201) {
+              dispatch(userLoggedIn(res.result));
+              toast.success("Successfully Signed In");
+              navigate("/");
+            }
+          })
+          .catch((e: any) => {
+            console.log(e);
+            toast.error("Something went wrong");
+          });
+      } else if (values.type === "institution") {
+        loginInstitution({
+          email: values.email,
+          password: values.password,
+        })
+          .unwrap()
+          .then((res: any) => {
+            if (res && res.status === 201) {
+              dispatch(userLoggedIn(res.result));
+              toast.success("Successfully Signed In");
+              navigate("/");
+            }
+          })
+          .catch((e: any) => {
+            console.log(e);
+            toast.error("Something went wrong");
+          });
+      } else if (values.type === "instructor") {
+        loginInstructor({
+          email: values.email,
+          password: values.password,
+        })
+          .unwrap()
+          .then((res: any) => {
+            if (res && res.status === 201) {
+              dispatch(userLoggedIn(res.result));
+              toast.success("Successfully Signed In");
+              navigate("/");
+            }
+          })
+          .catch((e: any) => {
+            console.log(e);
+            toast.error("Something went wrong");
+          });
+      } else {
+        loginLearner({
+          email: values.email,
+          password: values.password,
+        })
+          .unwrap()
+          .then((res: any) => {
+            if (res && res.status === 201) {
+              dispatch(userLoggedIn(res.result));
+              toast.success("Successfully Signed In");
+              navigate("/");
+            }
+          })
+          .catch((e: any) => {
+            console.log(e);
+            toast.error("Something went wrong");
+          });
       }
-    } catch (e) {
-      console.error(e);
-      toast.error("Something went wrong");
-    }
+    } catch (e) {}
   };
 
   return (

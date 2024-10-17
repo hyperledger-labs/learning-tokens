@@ -7,6 +7,10 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Preevent } from './entities/preevent.entity'
 import { Instructor } from '../instructors/entities/instructor.entity'
 import { JwtService } from '../auth/service/jwt.service'
+import { OnlineEvent } from '../event/entities/event.entity'
+import { ScoringGuide } from '../event/entities/scoring-guide.entity'
+import { Role } from '../role/entities/role.entity'
+import { SmartcontractModule } from '../smartcontract/smartcontract.module'
 
 @Module({
     controllers: [PreeventController],
@@ -16,9 +20,13 @@ import { JwtService } from '../auth/service/jwt.service'
             Preevent,
             Institution,
             Instructor,
-            JwtService
+            JwtService,
+            OnlineEvent,
+            ScoringGuide,
+            Role
         ]),
-        SdkKeysModule
+        SdkKeysModule,
+        SmartcontractModule
     ]
 })
 export class PreeventModule {}

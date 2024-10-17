@@ -11,6 +11,8 @@ async function main() {
   console.log(
     `LearningToken Contract Owner address ${await learningToken.owner()}`
   );
+  //print the tx hash
+  console.log(`Tx hash: ${learningToken.deployTransaction.hash}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

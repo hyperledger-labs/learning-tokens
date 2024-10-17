@@ -6,8 +6,8 @@ import { Instructor } from './entities/instructor.entity'
 import { AuthModule } from '../auth/auth.module'
 
 @Module({
-    controllers: [InstructorsController],
-    providers: [InstructorsService],
-    imports: [TypeOrmModule.forFeature([Instructor]), AuthModule]
+  controllers: [InstructorsController],
+  providers: [InstructorsService],
+  imports: [TypeOrmModule.forFeature([Instructor]), AuthModule]
 })
-export class InstructorsModule {}
+export class InstructorsModule { }
