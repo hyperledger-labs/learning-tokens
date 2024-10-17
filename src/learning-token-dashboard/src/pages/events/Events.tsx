@@ -6,14 +6,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { formatDateTime } from "../../utils";
 import { Table, Container, Pagination as BootstrapPagination } from "react-bootstrap";
+import { useEventContext } from "../../contexts/EventContext";
 
 const Events = () => {
   const navigate = useNavigate();
+  const { setEventData } = useEventContext();
   const [tableData, setTableData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
-  const handleRowclick = (data: any) => {
-    navigate(`/events/${data.eventId}`);
-  };
   const pagination = usePagination();
   const auth = useSelector((state: RootState) => state.auth);
 
@@ -51,6 +50,11 @@ const Events = () => {
 
   const totalPages = Math.ceil(totalItems / pagination.limit); //For Bootstrap Pagination
 
+  const handleRowclick = (data: any) => {
+    setEventData(data); // set the context value
+    navigate(`/events/${data.meetingEventId}`);
+  };
+
   return (
     <Container>
       <div className="table-responsive">
@@ -68,7 +72,7 @@ const Events = () => {
           </thead>
           <tbody>
             {tableData.map((event) => (
-              <tr key={event.meetingEventId} onClick={() => navigate(`/events/${event.meetingEventId}`)} className="cursor-pointer">
+              <tr key={event.meetingEventId} onClick={() => handleRowclick(event)} className="cursor-pointer">
                 <td className="text-center">{event.meetingEventId}</td>
                 <td className="text-center">{event.eventName}</td>
                 <td className="text-center">{event.description}</td>
