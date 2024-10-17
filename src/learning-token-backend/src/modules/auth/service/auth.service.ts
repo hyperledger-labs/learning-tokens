@@ -26,7 +26,9 @@ export class AuthService {
         @InjectRepository(Instructor)
         private readonly insturctorRepository: Repository<Instructor>,
         @Inject(JwtService)
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        @InjectRepository(Role)
+        private readonly roleRepository: Repository<Role>
     ) { }
 
     /**
@@ -160,10 +162,19 @@ export class AuthService {
      * AUTHENTICATING A USER
      */
     public async login(loginRequestDto: LoginRequestDto) {
-        const user = await this.institutionRepository.findOne({
-            where: { email: loginRequestDto.email },
-            relations: ['role']
-        })
+        let user = null
+        if (loginRequestDto.type == 'Instructor') {
+            //find instructor
+            user = await this.insturctorRepository.findOne({
+                where: { email: loginRequestDto.email },
+                relations: ['role']
+            })
+        } else if (loginRequestDto.type == 'Institution') {
+            user = await this.institutionRepository.findOne({
+                where: { email: loginRequestDto.email },
+                relations: ['role']
+            })
+        }
         if (!user) {
             // IF USER NOT FOUND
             return
@@ -186,9 +197,6 @@ export class AuthService {
             user,
             user.role.name
         )
-
-        const verifiedToken = this.jwtService.verify(token)
-        console.log('verifiedToken', verifiedToken)
 
         return {
             id: user.id,

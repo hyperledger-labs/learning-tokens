@@ -1,101 +1,107 @@
 import "../../../node_modules/metismenujs/scss/metismenujs.scss";
 import mainMenuItems, { MenuItem } from "../../config/menu";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import AccordionItem from "../Accordion";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { FiChevronRight } from "react-icons/fi";
 
 const Sidebar = () => {
-  /* accordion toggle */
   const [active, setActive] = useState(0);
-
-  const handleToggle = (index: number) => {
-    if (active === index) {
-      setActive(0);
-    } else {
-      setActive(index);
-    }
-  };
-
   const auth = useSelector((state: RootState) => state.auth);
 
+  const handleToggle = (index: number) => {
+    setActive(active === index ? 0 : index);
+  };
+
+  const filteredMenuItems = useMemo(() => {
+    return mainMenuItems.filter((menu: MenuItem) => {
+      if (!menu.subMenu) {
+        return menu.requiredPermissions?.includes(auth.user.type || "");
+      }
+      const hasSubPermission = menu.subMenu.some((item) =>
+        item!.requiredPermissions!.includes(auth.user.type)
+      );
+      return hasSubPermission;
+    });
+  }, [auth.user.type]);
+
   return (
-    <div className="bg-gradient-to-b from-[#013A44] to-[#025E6E] h-screen fixed z-20 left-0 top-0 bottom-0 w-[250px] shadow-lg flex flex-col">
-      <div className="font-bold p-4 text-xl h-[8vh] flex items-center justify-center text-white border-b border-[#ffffff33]">
-        <img src="/path-to-your-logo.svg" alt="Logo" className="h-8 mr-2" />
+    <div className="bg-gradient-to-b from-[#013A44] to-[#025E6E] h-screen fixed z-20 left-0 top-0 bottom-0 w-[280px] shadow-lg flex flex-col w-[15em]">
+      <div className="font-bold p-6 text-2xl h-fit flex items-center justify-center text-white border-b border-[#ffffff33]">
+        {/* <img src="/path-to-your-logo.svg" alt="Logo" className="h-8 mr-3" /> */}
         Learning Token
       </div>
-      <div className="flex flex-col gap-2 mt-4 w-full overflow-y-auto">
-        {mainMenuItems.map((menu: MenuItem, mainIndex: number) => {
-          if (
-            !menu.subMenu &&
-            menu?.requiredPermissions?.includes(auth.user.type || "")
-          ) {
-            return (
-              <NavLink
-                key={mainIndex}
-                to={menu.to}
-                className={({ isActive }: any) =>
-                  `py-3 px-6 rounded-md hover:bg-[#ffffff22] transition-colors duration-200 ${
-                    isActive ? "bg-[#ffffff33] text-white" : "text-gray-200"
-                  }`
-                }
-              >
-                {menu.name}
-              </NavLink>
-            );
-          }
-
-          const hasMenuPermission = menu.subMenu
-            ?.map((i: any) => i.requiredPermissions)
-            .flat();
-
-          const hasSubPermission = [auth.user.type].some((i) =>
-            hasMenuPermission?.includes(i)
-          );
-
-          return (
-            hasSubPermission && (
-              <AccordionItem
-                active={active}
-                handleToggle={handleToggle}
-                data={{ id: mainIndex, name: menu.name }}
-                key={mainIndex}
-              >
-                <div className="ml-8 mt-2">
-                  {menu?.subMenu?.map((item: any, index: number) => {
-                    const show = item.requiredPermissions.includes(
-                      auth.user.type
-                    );
-                    return (
-                      show && (
-                        <div
-                          className="flex items-center justify-end my-2"
-                          key={index}
-                        >
-                          <NavLink
-                            key={index}
-                            to={item.to}
-                            className={({ isActive }: any) =>
-                              `py-3 px-6 rounded-lg hover:text-white hover:bg-[#013A44] w-full ${
-                                isActive ? "bg-[#013A44] text-white" : ""
-                              }`
-                            }
-                          >
-                            {item.name}
-                          </NavLink>
-                        </div>
-                      )
-                    );
-                  })}
-                </div>
-              </AccordionItem>
-            )
-          );
-        })}
+      <div className="flex flex-col gap-2 mt-6 w-full overflow-y-auto custom-scrollbar">
+        {filteredMenuItems.map((menu: MenuItem, mainIndex: number) => (
+          <SidebarMenuItem
+            key={mainIndex}
+            menu={menu}
+            mainIndex={mainIndex}
+            active={active}
+            handleToggle={handleToggle}
+            userType={auth.user.type}
+          />
+        ))}
       </div>
     </div>
+  );
+};
+
+const SidebarMenuItem = ({
+  menu,
+  mainIndex,
+  active,
+  handleToggle,
+  userType,
+}) => {
+  if (!menu.subMenu) {
+    return (
+      <NavLink
+        to={menu.to}
+        className={({ isActive }) =>
+          `py-3 px-6 rounded-md hover:bg-[#ffffff22] transition-all duration-200 flex items-center ${
+            isActive
+              ? "bg-[#ffffff33] text-white font-semibold"
+              : "text-gray-200"
+          }`
+        }
+      >
+        {menu.icon && <menu.icon className="mr-3 text-xl" />}
+        {menu.name}
+      </NavLink>
+    );
+  }
+
+  return (
+    <AccordionItem
+      active={active}
+      handleToggle={handleToggle}
+      data={{ id: mainIndex, name: menu.name }}
+      className="border-b border-[#ffffff22] last:border-b-0"
+    >
+      <div className="ml-6 mt-2 mb-4">
+        {menu.subMenu
+          .filter((item) => item.requiredPermissions.includes(userType))
+          .map((item, index) => (
+            <NavLink
+              key={index}
+              to={item.to}
+              className={({ isActive }) =>
+                `py-2 px-4 rounded-md hover:bg-[#ffffff22] transition-all duration-200 flex items-center my-1 ${
+                  isActive
+                    ? "bg-[#ffffff33] text-white font-semibold"
+                    : "text-gray-300"
+                }`
+              }
+            >
+              <FiChevronRight className="mr-2 text-sm" />
+              {item.name}
+            </NavLink>
+          ))}
+      </div>
+    </AccordionItem>
   );
 };
 

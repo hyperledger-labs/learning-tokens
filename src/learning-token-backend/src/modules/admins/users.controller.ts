@@ -13,9 +13,9 @@ import { AdminService } from './users.service'
 
 @Controller('/admin')
 export class AdminController {
-    constructor(private readonly adminService: AdminService) {}
+    constructor(private readonly adminService: AdminService) { }
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Get('institution-list')
     private async get_institution_list(
         @Query('page') page = 1, // Set default value to 1
