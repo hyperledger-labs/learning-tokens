@@ -1,62 +1,114 @@
 import React, { useEffect, useState } from "react";
-import { Loader, Table, Toggle } from "rsuite";
+import { Loader, Toggle } from "rsuite";
 import {
   useLazyGetInstitutionQuery,
-  useSmartContractCallRegisterActorMutation,
+  useSmartContractCallMutation,
   useUpdateInstitutionStatusMutation,
 } from "../../store/features/admin/adminApi";
-import usePagination from "../../hooks/usePagination";
-import Pagination from "../../components/Pagination";
-import { LoaderIcon } from "react-hot-toast";
-const { Column, HeaderCell, Cell } = Table;
-import { RoleEnum } from "../../enums/roles.enum";
-import { SmartcontractFunctionsEnum } from "../../enums/smartcontract-functions.enum";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  getPaginationRowModel,
+  SortingState,
+  getSortedRowModel,
+} from "@tanstack/react-table";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 
 const Institution: React.FC = () => {
-  const [statusLoading, setStatusLoading] = useState({
-    id: null,
-    loading: false,
-  });
   const [getInstitution, { data, isLoading }] = useLazyGetInstitutionQuery();
   const [updateInstitutionStatus] = useUpdateInstitutionStatusMutation();
-  const [smartContractCallRegisterActor] = useSmartContractCallRegisterActorMutation();
-  const pagination = usePagination();
+  const [smartContractCall] = useSmartContractCallMutation();
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   useEffect(() => {
-    getInstitution({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
-  }, [pagination.page, pagination.limit]);
+    getInstitution({});
+  }, []);
 
   const toggleStatus = async (rowData: any) => {
-    setStatusLoading({ id: rowData.id, loading: true });
-  
-    try {
-      // Await the smart contract call
-      await smartContractCallRegisterActor({
-        isAdmin: true,
-        role: RoleEnum.ADMIN,
-        id: 0, //HD Wallet accountIndex of Admin - default to 0
-        functionName: SmartcontractFunctionsEnum.REGISTER_INSTITUTION,
-        params: [
-          rowData.name,
-          rowData.publicAddress,
-          Date.now(),
-          rowData.latitude,
-          rowData.longitude,
-        ],
-      });
-  
-      // Update the institution status
-      const updatedInstitution = await updateInstitutionStatus(rowData).unwrap();
-      console.log(`Institution updated: ${JSON.stringify(updatedInstitution)}`);
-    } catch (error) {
-      console.error(`Error updating institution status: ${error}`);
-    } finally {
-      setStatusLoading({ id: null, loading: false });
-    }
+    console.log(rowData);
+    smartContractCall({
+      isAdmin: false,
+      isView: false,
+      isWrite: true,
+      type: "institution",
+      id: rowData.id,
+      functionName: "addInstitutionToInstitution",
+      params: [rowData.publicAddress, Date.now()],
+    }).then(() => {
+      updateInstitutionStatus(rowData);
+    });
   };
+
+  const columns: ColumnDef<any>[] = [
+    {
+      accessorKey: "id",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Id
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("id")}</div>
+      ),
+    },
+    {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Name
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+    },
+    {
+      accessorKey: "publicAddress",
+      header: "Public Address",
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <Toggle
+          checked={row.original.status}
+          onClick={() => toggleStatus(row.original)}
+        />
+      ),
+    },
+  ];
+
+  const table = useReactTable({
+    data: data?.result?.data || [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+  });
 
   if (isLoading) {
     return (
@@ -68,55 +120,70 @@ const Institution: React.FC = () => {
 
   return (
     <div className="py-3">
-      <Table
-        data={data?.result?.data}
-        autoHeight
-        rowClassName={"cursor-pointer"}
-      >
-        <Column flexGrow={1} align="center" fixed>
-          <HeaderCell>Id</HeaderCell>
-          <Cell dataKey="id" />
-        </Column>
-
-        <Column flexGrow={1}>
-          <HeaderCell>Name</HeaderCell>
-          <Cell dataKey="name" />
-        </Column>
-
-        <Column flexGrow={1}>
-          <HeaderCell>Public Address</HeaderCell>
-          <Cell dataKey="publicAddress" />
-        </Column>
-
-        <Column flexGrow={1}>
-          <HeaderCell>Status</HeaderCell>
-          <Cell>
-            {(rowData: any) => {
-              return (
-                <>
-                  {statusLoading.id === rowData.id && statusLoading.loading ? (
-                    <LoaderIcon />
-                  ) : (
-                    <Toggle
-                      checked={rowData.status}
-                      onClick={() => toggleStatus(rowData)}
-                      disabled={rowData.status}
-                    />
-                  )}
-                </>
-              );
-            }}
-          </Cell>
-        </Column>
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </TableHead>
+              ))}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
       </Table>
-
-      <Pagination
-        total={data?.result?.pagination.totalCount || 0}
-        activePage={pagination.page || 1}
-        limit={pagination.limit || 10}
-        onChangePage={pagination.handleChangePage}
-        onChangeLimit={pagination.handleChangeLimit}
-      />
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <div className="text-sm text-muted-foreground">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </div>
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

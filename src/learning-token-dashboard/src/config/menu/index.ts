@@ -1,6 +1,14 @@
 import { BsBoxSeam, BsGrid } from "react-icons/bs";
 
-const mainMenuItems = [
+export interface MenuItem {
+  name: string;
+  to: string;
+  icon?: React.ElementType;
+  requiredPermissions?: string[];
+  subMenu?: MenuItem[];
+}
+
+const mainMenuItems: MenuItem[] = [
   {
     name: "Dashboard",
     to: "/",
@@ -37,6 +45,11 @@ const mainMenuItems = [
     subMenu: [
       {
         name: "List",
+        to: "/events/list-template",
+        requiredPermissions: ["instructor"],
+      },
+      {
+        name: "Events List",
         to: "/events/list",
         requiredPermissions: ["instructor"],
       },

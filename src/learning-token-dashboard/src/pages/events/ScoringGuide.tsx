@@ -2,8 +2,9 @@ import { Form, Formik, FormikProps } from "formik";
 import { useRef } from "react";
 import { object, string } from "yup";
 import TextInput from "../../components/TextInput";
-import Button from "../../components/Button";
 import { useParams } from "react-router-dom";
+import { useEventContext } from "../../contexts/EventContext";
+import { Container, Row, Col, Card, Table, Button } from "react-bootstrap";
 
 const initialValues = {
   organizer: "",
@@ -22,132 +23,151 @@ const validationSchema = object().shape({
 const ScoringGuide = () => {
   const { id } = useParams();
   const formikRef = useRef<FormikProps<any>>(null);
+  const { eventData } = useEventContext();
 
   const handleSubmit = (values: any) => {
     console.log(values);
   };
 
+  console.log(`eventData: `, eventData);
+
+
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      innerRef={formikRef}
-      onSubmit={handleSubmit}
-    >
-      {() => (
-        <Form className="flex flex-col justify-between w-[700px] ">
-          <div className="border rounded-md border-gray-700 bg-gray-200">
-            <div className="flex flex-col items-center border-gray-700 border-b">
-              <h1 className="font-bold">Scoring Guide</h1>
-              <h1 className="font-bold">Metadata</h1>
-            </div>
+    <Container className="mt-4">
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        innerRef={formikRef}
+        onSubmit={handleSubmit}
+      >
+        {({ handleSubmit }) => (
+          <Form onSubmit={handleSubmit}>
+            <Card>
+              <Card.Body>
+                <Card.Title className="text-center mb-5"><strong>Scoring Guide</strong></Card.Title>
+                <Card.Subtitle className="mb-3 text-muted text-center"><strong>Metadata</strong></Card.Subtitle>
 
-            <div className="p-3 font-medium">EventID :{id}</div>
+                <div className="font-medium border-top pt-3 mb-3"><strong>Event ID: {id}</strong></div>
 
-            <div className="p-3 border-gray-700 border-t">
-              <h1 className="font-bold">
-                Institution : Hyperledger Foundation
-              </h1>
-              <TextInput
-                name="community"
-                type="text"
-                label="community"
-                containerStyle={`w-full`}
-              />
-              <TextInput
-                name="organizer"
-                type="text"
-                label="organizer"
-                containerStyle={`w-full`}
-              />
+                {eventData && (
+                  <div className="border-top pt-3">
+                    <div className="font-medium mb-3"><strong>Institution: {eventData.organization}</strong></div>
+                    <Row>
+                      <Col>
+                        <TextInput
+                          name="community"
+                          type="text"
+                          label="Community"
+                          containerStyle={`w-100`}
+                        />
+                      </Col>
+                      <Col>
+                        <TextInput
+                          name="organizer"
+                          type="text"
+                          label="Organizer"
+                          containerStyle={`w-100`}
+                          value={eventData.organizerName}
+                        />
+                      </Col>
+                    </Row>
 
-              <h1 className="font-bold">
-                Instructors : nvited speakers at presentations
-              </h1>
+                    <div className="font-medium mb-3"><strong>Instructors: {eventData.speakersName.join(", ")}</strong></div>
 
-              <TextInput
-                name="fieldsOfKnowledge"
-                type="text"
-                label="fieldsOfKnowledge"
-                containerStyle={`w-full`}
-              />
-              <TextInput
-                name="taxonomyOfSkills"
-                type="text"
-                label="taxonomyOfSkills"
-                containerStyle={`w-full`}
-              />
-            </div>
+                    <Row>
+                      <Col>
+                        <TextInput
+                          name="fieldsOfKnowledge"
+                          type="text"
+                          label="Fields of Knowledge"
+                          containerStyle={`w-100`}
+                        />
+                      </Col>
+                      <Col>
+                        <TextInput
+                          name="taxonomyOfSkills"
+                          type="text"
+                          label="Taxonomy of Skills"
+                          containerStyle={`w-100`}
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+                )}
 
-            <div>
-              <div className="border-t border-gray-700">
-                <h1 className="text-center font-medium">
-                  Token Creation and Distribution
-                </h1>
-              </div>
-              <table className="w-full">
-                <tr className="border-b border-gray-700">
-                  <td className="text-center font-bold">Type of Tokens</td>
-                  <td className="text-center font-bold">Number of Tokens</td>
-                  <td className="text-center font-bold">Support Material</td>
-                </tr>
-                <tr className="">
-                  <td className="text-center font-bold py-3">
-                    Attendance Token
-                  </td>
-                  <td className="text-center font-bold py-3">
-                    One for each participant
-                  </td>
-                  <td className="text-center font-bold py-3">
-                    Zoom Attendance Report (ID)
-                  </td>
-                </tr>
-                <tr className="">
-                  <td className="text-center font-bold py-3">
-                    Learner Score Token
-                  </td>
-                  <td className="text-center font-bold py-3">
-                    One for each participant
-                  </td>
-                  <td className="text-center font-bold py-3">
-                    Zoom Poll-Quiz, PostEvent Quiz (ID)
-                  </td>
-                </tr>
-                <tr className="">
-                  <td className="text-center font-bold py-3">
-                    Help Token for Learners
-                  </td>
-                  <td className="text-center font-bold py-3">
-                    Two for each participant
-                  </td>
-                  <td className="text-center font-bold py-3">Zoom Poll (ID)</td>
-                </tr>
-                <tr className="">
-                  <td className="text-center font-bold py-3">
-                    Instructor Score Token
-                  </td>
-                  <td className="text-center font-bold py-3">
-                    One for each participant
-                  </td>
-                  <td className="text-center font-bold py-3">
-                    Zoom Q&A + Chat analytics (ID)
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
+                <div className="border-top border-bottom my-4">
+                  <div className="font-medium text-center mt-2 mb-2">
+                    <strong>Token Creation and Distribution</strong>
+                  </div>
+                </div>
 
-          <Button
-            size="small"
-            className="w-full mt-3"
-            variant="primary"
-            type="submit"
-          >
-            Add Scoring Guide
-          </Button>
-        </Form>
-      )}
-    </Formik>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th className="text-center">Type of Tokens</th>
+                      <th className="text-center">Number of Tokens</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Attendance Token</td>
+                      <td>
+                        <TextInput
+                          name="attendanceToken"
+                          type="number"
+                          containerStyle={`w-100`}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-center">Learner Score Token</td>
+                      <td>
+                        <TextInput
+                          name="learnerScoreToken"
+                          type="number"
+                          containerStyle={`w-100`}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-center">Help Token for Learners</td>
+                      <td>
+                        <TextInput
+                          name="helpTokenAmount"
+                          type="number"
+                          containerStyle={`w-100`}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-center">Instructor Score Token</td>
+                      <td>
+                        <TextInput
+                          name="instructorScoreToken"
+                          type="number"
+                          containerStyle={`w-100`}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
+
+              </Card.Body>
+            </Card>
+
+            <Button
+              size="small"
+              className="w-100 mt-3"
+              variant="btn btn-outline-primary"
+              type="submit"
+            >
+              Add Scoring Guide
+            </Button>
+
+          </Form>
+        )}
+      </Formik>
+    </Container>
   );
 };
 

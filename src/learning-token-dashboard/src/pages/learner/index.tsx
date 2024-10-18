@@ -1,12 +1,17 @@
-import { Table } from "rsuite";
-
 import {
-  useLazyGetLearnerListQuery,
-} from "../../store/features/admin/adminApi";
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
+
+import { useLazyGetLearnerListQuery } from "../../store/features/admin/adminApi";
 import usePagination from "../../hooks/usePagination";
 import { useEffect } from "react";
 import Pagination from "../../components/Pagination";
-const { Column, HeaderCell, Cell } = Table;
+
 const Learner = () => {
   const [getLearnerList, { data, isLoading }] = useLazyGetLearnerListQuery();
 
@@ -23,29 +28,36 @@ const Learner = () => {
     return <>Loading...</>;
   }
 
+  const learners = data?.result?.data || [];
+
   return (
     <div className="py-3">
-      <Table data={data?.result?.data} autoHeight rowClassName={"cursor-pointer"}>
-        <Column flexGrow={1} align="center" fixed>
-          <HeaderCell>Id</HeaderCell>
-          <Cell dataKey="id" />
-        </Column>
-
-        <Column flexGrow={1}>
-          <HeaderCell>Name</HeaderCell>
-          <Cell dataKey="name" />
-        </Column>
-
-        <Column flexGrow={1}>
-          <HeaderCell>Email</HeaderCell>
-          <Cell dataKey="email" />
-        </Column>
-
-        <Column flexGrow={1}>
-          <HeaderCell>Public Address</HeaderCell>
-          <Cell dataKey="publicAddress" />
-        </Column>
-      </Table>
+      {learners.length > 0 ? (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="text-center">Id</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Public Address</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {learners.map((learner) => (
+              <TableRow key={learner.id} className="cursor-pointer">
+                <TableCell className="text-center">{learner.id}</TableCell>
+                <TableCell>{learner.name}</TableCell>
+                <TableCell>{learner.email}</TableCell>
+                <TableCell>{learner.publicAddress}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <div className="text-center py-4 py-4 text-gray-500">
+          No learners found.
+        </div>
+      )}
 
       <Pagination
         total={data?.result?.pagination.totalCount || 0}

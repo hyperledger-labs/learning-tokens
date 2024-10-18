@@ -115,7 +115,7 @@ export class SmartcontractService {
             // console.log('View Function Result:', processedResult)
             console.log(
                 body.functionName ===
-                    SmartcontractFunctionsEnum.REGISTER_LEARNER
+                SmartcontractFunctionsEnum.REGISTER_LEARNER
             )
             if (
                 body.functionName ===

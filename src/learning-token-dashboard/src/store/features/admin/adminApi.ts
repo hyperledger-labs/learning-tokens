@@ -1,7 +1,7 @@
 import { apiSlice } from "../api/apiSlice";
 
 export const adminApi = apiSlice
-  .enhanceEndpoints({ addTagTypes: ["AdminAuth", "Institution", "Instructor","Learner"] })
+  .enhanceEndpoints({ addTagTypes: ["AdminAuth", "Institution", "Instructor", "Learner"] })
   .injectEndpoints({
     endpoints: (builder) => ({
       loginAdmin: builder.mutation<any, any>({
@@ -41,8 +41,7 @@ export const adminApi = apiSlice
         { page?: number; limit?: number } | void
       >({
         query: (queryParams) =>
-          `/admin/institution-list?page=${queryParams?.page || 1}&limit=${
-            queryParams?.limit || 10
+          `/admin/institution-list?page=${queryParams?.page || 1}&limit=${queryParams?.limit || 10
           }`,
         providesTags: ["Institution"],
       }),
@@ -59,8 +58,7 @@ export const adminApi = apiSlice
         { page?: number; limit?: number } | void
       >({
         query: (queryParams) =>
-          `/admin/instructor-list?page=${queryParams?.page || 1}&limit=${
-            queryParams?.limit || 10
+          `/admin/instructor-list?page=${queryParams?.page || 1}&limit=${queryParams?.limit || 10
           }`,
         providesTags: ["Instructor"],
       }),
@@ -77,8 +75,7 @@ export const adminApi = apiSlice
         { page?: number; limit?: number } | void
       >({
         query: (queryParams) =>
-          `/admin/learner-list?page=${queryParams?.page || 1}&limit=${
-            queryParams?.limit || 10
+          `/admin/learner-list?page=${queryParams?.page || 1}&limit=${queryParams?.limit || 10
           }`,
         providesTags: ["Learner"],
       }),

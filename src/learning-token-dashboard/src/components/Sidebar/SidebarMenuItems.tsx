@@ -45,7 +45,7 @@ const SidebarMenuItem: FC<Props> = ({ className, menuItem }) => {
   return (
     <li className={className} ref={menuItemRef}>
       {menuItem.subMenu ? (
-        <Link to="#" className={`${classes} has-arrow text-gray-600`}>
+        <Link to="#" className={`${classes} has-arrow text-gray-300`}>
           {menuItem.icon && (
             <span className="text-xl mr-3 w-[20px]">
               <menuItem.icon />
@@ -58,7 +58,7 @@ const SidebarMenuItem: FC<Props> = ({ className, menuItem }) => {
           to={menuItem.to || "#"}
           className={({ isActive }: any) => {
             return `${classes} ${
-              isActive ? "bg-[#013A44] text-white" : "text-gray-600"
+              isActive ? "bg-[#013A44] text-white" : "text-gray-300"
             }`;
           }}
         >

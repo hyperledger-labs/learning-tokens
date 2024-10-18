@@ -29,7 +29,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
         @InjectRepository(Role)
         private readonly roleRepository: Repository<Role>
-    ) {}
+    ) { }
 
     /**
      * REGISTRATION OF A USER

@@ -23,7 +23,7 @@ import { DistributeTokenDto } from './dto/distrbute-token.dto'
 
 @Controller('smartcontract')
 export class SmartcontractController {
-    constructor(private readonly smartcontractService: SmartcontractService) {}
+    constructor(private readonly smartcontractService: SmartcontractService) { }
 
     @Get()
     findAll() {
@@ -52,13 +52,7 @@ export class SmartcontractController {
         return result
     }
 
-    @Post('register-actor')
-    async registerInstitution(@Body() body: any) {
-        const result = await this.smartcontractService.onboardingActor(body)
-        return result
-    }
-
-    @UseGuards(JwtAuthGuard)
+    @Post('token-distributions')
     @AllowUserTypes(RoleEnum.INSTRUCTOR)
     @Post('token-distributions')
     async distributeToken(

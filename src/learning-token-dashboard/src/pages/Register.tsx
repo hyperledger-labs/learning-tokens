@@ -1,240 +1,267 @@
-import { Form, Formik, FormikProps } from "formik";
-import { useEffect, useRef } from "react";
-import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { object, ref, string } from "yup";
-import Button from "../components/Button";
-import SelectInput from "../components/SelectInput";
-import TextInput from "../components/TextInput";
+import toast from "react-hot-toast";
+
 import {
-  useLoginAdminMutation,
-  useRegisterAdminMutation,
-} from "../store/features/admin/adminApi";
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "../components/ui/form";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "../components/ui/select";
+import { Input } from "../components/ui/input";
+
 import { userLoggedIn } from "../store/features/auth/authSlice";
-import {
-  useLoginInstitutionMutation,
-  useRegisterInstitutionMutation,
-} from "../store/features/institution/institutionApi";
-import {
-  useLoginInstructorMutation,
-  useRegisterInstructorMutation,
-} from "../store/features/instructor/instructorApi";
-import {
-  useLoginLearnerMutation,
-  useRegisterLearnerMutation,
-} from "../store/features/learner/learnerApi";
+import { useEffect } from "react";
+import { initWeb3 } from "../utils";
+import { useRegisterAdminMutation } from "@/store/features/admin/adminApi";
+import { useRegisterInstitutionMutation } from "@/store/features/institution/institutionApi";
+import { useRegisterInstructorMutation } from "@/store/features/instructor/instructorApi";
+import { useRegisterLearnerMutation } from "@/store/features/learner/learnerApi";
+import { Button } from "@/components/ui/button";
 
-const initialValues = {
-  name: "",
-  email: "",
-  password: "",
-  confirm: "",
-  type: "learner",
-  latitude: "23.7984463",
-  longitude: "90.4031033",
-};
+const FormSchema = z
+  .object({
+    name: z.string().min(1, "Name is required."),
+    email: z.string().email("Please enter a valid email address."),
+    password: z.string().min(8, "Password must be at least 8 characters."),
+    confirm: z.string(),
+    publicAddress: z.string().min(1, "Public address is required."),
+    type: z.enum(["admin", "institution", "instructor", "learner"]),
+    latitude: z.string().optional(),
+    longitude: z.string().optional(),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Passwords do not match",
+    path: ["confirm"],
+  });
 
-const validationSchema = object().shape({
-  name: string().required("Name is required."),
-  email: string()
-    .required("Email is required.")
-    .email("Please enter a valid email address."),
-  password: string()
-    .required("Password is required.")
-    .min(8, "Password must be 8 characters."),
-  confirm: string()
-    .required("Please retype your password.")
-    .oneOf([ref("password")], "Passwords does not match"),
-  type: string()
-    .required("Please select a type")
-    .oneOf(["admin", "institution", "instructor", "learner"]),
-  latitude: string().when("type", {
-    is: "learner" || "institution",
-    then: (schema) => schema.required("Latitude is required"),
-  }),
-  longitude: string().when("type", {
-    is: "learner" || "institution",
-    then: (schema) => schema.required("Longitude is required"),
-  }),
-});
+const Register = () => {
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirm: "",
+      publicAddress: "",
+      type: "learner",
+      latitude: "",
+      longitude: "",
+    },
+  });
 
-const Login = () => {
-  const formikRef = useRef<FormikProps<any>>(null);
   const [registerAdmin] = useRegisterAdminMutation();
-  const [loginAdmin] = useLoginAdminMutation();
   const [registerInstitution] = useRegisterInstitutionMutation();
-  const [loginInstitution] = useLoginInstitutionMutation();
+  const [registerInstructor] = useRegisterInstructorMutation();
+  const [registerLearner] = useRegisterLearnerMutation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const handleSubmit = async (values: any) => {
-    try {
-      if (values.type === "admin") {
-        registerAdmin({
-          name: values.name,
-          email: values.email,
-          password: values.password,
-        })
-          .unwrap()
-          .then((result: any) => {
-            if (result && result.status === 201) {
-              loginAdmin({
-                email: values.email,
-                password: values.password,
-              })
-                .unwrap()
-                .then((res: any) => {
-                  if (res && res.status === 201) {
-                    dispatch(userLoggedIn(res.result));
-                    toast.success("Successfully Signed In");
-                    navigate("/");
-                  }
-                });
-            }
-          });
-      } else if (values.type === "institution") {
-        console.log({
-          name: values.name,
-          email: values.email,
-          password: values.password,
-          latitude: values.latitude,
-          longitude: values.longitude,
-        });
 
-        registerInstitution({
-          name: values.name,
-          email: values.email,
-          password: values.password,
-          latitude: values.latitude,
-          longitude: values.longitude,
-        })
-          .unwrap()
-          .then((result: any) => {
-            if (result && result.status === 201) {
-              loginInstitution({
-                email: values.email,
-                password: values.password,
-              })
-                .unwrap()
-                .then((res: any) => {
-                  if (res && res.status === 201) {
-                    dispatch(userLoggedIn(res.result));
-                    toast.success("Successfully Signed In");
-                    navigate("/");
-                  }
-                });
-            }
-          });
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    try {
+      let result;
+      switch (values.type) {
+        case "admin":
+          result = await registerAdmin(values).unwrap();
+          break;
+        case "institution":
+          result = await registerInstitution(values).unwrap();
+          break;
+        case "instructor": {
+          const contract = await initWeb3();
+          const tx = await contract!.registerInstructor(
+            values.name,
+            Date.now()
+          );
+          if (tx) {
+            result = await registerInstructor(values).unwrap();
+          }
+          break;
+        }
+        case "learner": {
+          const learnerContract = await initWeb3();
+          const learnerTx = await learnerContract!.registerLearner(
+            values.name,
+            Date.now(),
+            values.latitude,
+            values.longitude
+          );
+          if (learnerTx) {
+            result = await registerLearner(values).unwrap();
+          }
+          break;
+        }
+      }
+
+      if (result && result.status === 201) {
+        toast.success("Successfully Registered");
+        console.log(result);
+
+        dispatch(userLoggedIn({ ...result.result, registered: true }));
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       toast.error("Something went wrong");
     }
   };
 
   useEffect(() => {
-    //getting location from browser
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        const formik = formikRef.current;
-        formik?.setFieldValue("latitude", latitude.toString());
-        formik?.setFieldValue("longitude", longitude.toString());
+      navigator.geolocation.getCurrentPosition((position) => {
+        form.setValue("latitude", position.coords.latitude.toString());
+        form.setValue("longitude", position.coords.longitude.toString());
       });
     }
   }, []);
 
   return (
-    <div className="min-h-screen min-w-[100vw] flex items-center justify-center">
-      <div className="rounded border shadow p-5 w-[25vw]">
-        <div className="font-bold text-xl text-center my-3">Learning-Token</div>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          innerRef={formikRef}
-          onSubmit={handleSubmit}
+    <div className="">
+      <div className="font-bold text-xl text-center my-3">Learning-Token</div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-2 justify-between"
         >
-          {({ values }) => {
-            return (
-              <Form className="flex flex-col items-center justify-between">
-                <TextInput
-                  name="name"
-                  type="text"
-                  label="Name"
-                  containerStyle={`w-full`}
-                  size="small"
-                />
-                <TextInput
-                  name="email"
-                  type="email"
-                  label="Email"
-                  containerStyle={`w-full`}
-                  size="small"
-                />
-                <TextInput
-                  name="password"
-                  type="password"
-                  label="Password"
-                  containerStyle={`w-full`}
-                  size="small"
-                />
-                <TextInput
-                  name="confirm"
-                  type="password"
-                  label="Confirm Password"
-                  containerStyle={`w-full`}
-                  size="small"
-                />
-                <SelectInput
-                  containerStyle={"w-full"}
-                  label="Type"
-                  size="small"
-                  name="type"
-                  options={[
-                    { value: "admin", label: "Admin" },
-                    { value: "institution", label: "Institution" },
-                  ]}
-                />
-                {(values.type === "learner" ||
-                  values.type === "institution") && (
-                    <TextInput
-                      name="latitude"
-                      type="text"
-                      label="Latitude"
-                      containerStyle={`w-full`}
-                      size="small"
-                    />
-                  )}
-                {(values.type === "learner" ||
-                  values.type === "institution") && (
-                    <TextInput
-                      name="longitude"
-                      type="text"
-                      label="Longitude"
-                      containerStyle={`w-full`}
-                      size="small"
-                    />
-                  )}
-
-                <Button
-                  size="small"
-                  className="w-full"
-                  variant="primary"
-                  type="submit"
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} type="email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirm"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="publicAddress"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Public Address</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>User Type</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
                 >
-                  Register
-                </Button>
-              </Form>
-            );
-          }}
-        </Formik>
-        <div className="text-xs my-3 text-center">
-          <Link to={"/login"}>Already registered? Login</Link>
-        </div>
-      </div>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select user type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="institution">Institution</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {(form.watch("type") === "learner" ||
+            form.watch("type") === "institution") && (
+            <>
+              <FormField
+                control={form.control}
+                name="latitude"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Latitude</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="longitude"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Longitude</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
+          <Button type="submit" className="w-full rounded-[5px]">
+            Register
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 };
 
-export default Login;
+export default Register;
+/*
+logitude and latitude are optional for institution only
+*/

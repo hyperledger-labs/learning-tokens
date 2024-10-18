@@ -27,11 +27,11 @@ function Dashboard() {
     const contract = await initWeb3Method();
     const tx = await contract!.getLearnerTokenMetadata(auth.user.publicAddress);
 
-    let temp: any = [];
-    for (let key in tx) {
+    const temp: any = [];
+    for (const key in tx) {
       if (tx.hasOwnProperty(key)) {
         if (Array.isArray(tx[key])) {
-          let obj: any = {};
+          const obj: any = {};
           tx[key].forEach((item: any, index: number) => {
             if (index === 0) {
               obj["institutionId"] = Number(item);
@@ -75,7 +75,7 @@ function Dashboard() {
     return (
       <>
         <div className="font-bold text-lg">
-          Hello <span className="capitalize">{auth.user.name}</span>
+          Hello, <span className="capitalize">{auth.user.name}</span>
           <div>
             Public Address: <span>{auth.user.publicAddress}</span>
           </div>
@@ -126,7 +126,7 @@ function Dashboard() {
   return (
     <>
       <div className="font-bold text-lg">
-        Hello <span className="capitalize">{auth.user.name}</span>
+        Hello, <span className="capitalize">{auth.user.name}</span>
         <div>
           Public Address: <span>{auth.user.publicAddress}</span>
         </div>

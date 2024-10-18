@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService as Jwt } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import * as bcrypt from 'bcryptjs'
@@ -91,10 +91,22 @@ export class JwtService {
         return bcrypt.hashSync(password, salt)
     }
 
-    // Validate JWT Token, throw forbidden error if JWT Token is invalid
+    // Validate JWT Token, throw unauthorized exception if JWT Token is invalid
     public async verify(token: string): Promise<any> {
+        console.log('Received token:', token)
+
+        if (!token || typeof token !== 'string') {
+            console.error('Invalid token received:', token)
+            throw new UnauthorizedException('No valid token provided')
+        }
+
         try {
-            return this.jwt.verify(token)
-        } catch (err) {}
+            const decoded = this.jwt.verify(token)
+            console.log('Decoded token:', decoded)
+            return decoded
+        } catch (err) {
+            console.error('Token verification failed:', err.message)
+            throw new UnauthorizedException('Invalid token')
+        }
     }
 }

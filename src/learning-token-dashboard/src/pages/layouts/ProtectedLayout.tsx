@@ -9,7 +9,7 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!accessToken) {
-      navigate("/login");
+      navigate("/landingPage");
       return;
     }
   }, [accessToken]);
