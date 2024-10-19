@@ -37,11 +37,6 @@ const mainMenuItems = [
     subMenu: [
       {
         name: "List",
-        to: "/events/list-template",
-        requiredPermissions: ["instructor"],
-      },
-      {
-        name: "Events List",
         to: "/events/list",
         requiredPermissions: ["instructor"],
       },
