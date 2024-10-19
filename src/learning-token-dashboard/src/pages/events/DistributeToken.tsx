@@ -1,8 +1,14 @@
 import { Form, Formik, FormikProps } from "formik";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { array, number, object, string } from "yup";
-import Button from "../../components/Button";
 import SelectInput from "../../components/SelectInput";
+import { Container, Card, Button, FormGroup } from "react-bootstrap";
+import { useEventContext } from "../../contexts/EventContext";
+import { SuccessModal } from "../../components/Modal/SuccessModal";
+import { SmartcontractFunctionsEnum } from "../../enums/smartcontract-functions.enum";
+import axios from "axios";
+import { RootState } from "../../store";
+import { useSelector } from "react-redux";
 
 const initialValues = {
   token_type: "attendance_token",
@@ -25,9 +31,36 @@ const validationSchema = object().shape({
 });
 const DistributeToken = () => {
   const formikRef = useRef<FormikProps<any>>(null);
+  const { eventData } = useEventContext();
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const auth = useSelector((state: RootState) => state.auth);
 
   const handleSubmit = async (values: any) => {
-    console.log(values);
+    console.log("Form Submitted with values:", values);
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/token-distributions`, {
+        functionName: SmartcontractFunctionsEnum.BATCH_MINT_ATTENDANCE_TOKEN,
+        preEventId: eventData.id,
+      }, {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
+      });
+
+      console.log(`eventData: ${eventData}`);
+
+      if (response.status === 201) {
+        setModalMessage(response.data.message);
+        setModalVisible(true);
+      }
+    } catch (error) {
+      console.error("Error creating course:", error);
+    }
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
   const tokenType = [
@@ -35,9 +68,9 @@ const DistributeToken = () => {
     // { value: "batch_attendance_token", label: "Batch Attendance Token" },
     // { value: "helping_token", label: "Helping Token" },
     // { value: "batch_helping_token", label: "Batch Helping Token" },
-    // { value: "score_token", label: "Score Token" },
+    { value: "score_token", label: "Score Token" },
     // { value: "batch_score_token", label: "Batch Score Token" },
-    // { value: "instructorScore_token", label: "Instructor Score Token" },
+    { value: "instructorScore_token", label: "Instructor Score Token" },
     // {
     //   value: "batch_instructorScore_token",
     //   label: "Batch Instructor Score Token",
@@ -45,34 +78,44 @@ const DistributeToken = () => {
   ];
 
   return (
-    <div className="w-[800px] mx-auto my-8">
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        innerRef={formikRef}
-        onSubmit={handleSubmit}
-      >
-        {() => (
-          <Form className="flex flex-col justify-between">
-            <SelectInput
-              containerStyle={"w-full"}
-              label="Token"
-              size="small"
-              name="token_type"
-              options={tokenType}
-            />
-            <Button
-              size="small"
-              className="w-full mt-3"
-              variant="primary"
-              type="submit"
-            >
-              Distribute
-            </Button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+    <Container className="my-4">
+      <Card className="p-4" style={{ width: '600px', margin: 'auto' }}>
+        <Card.Body>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            innerRef={formikRef}
+            onSubmit={handleSubmit}
+          >
+            {({values}) => (
+              <Form>
+                <FormGroup>
+                  <h5>Token</h5>
+                  <SelectInput
+                    containerStyle={"w-100"}
+                    size="small"
+                    name="token_type"
+                    options={tokenType}
+                  />
+                </FormGroup>
+                <Button
+                  size="sm"
+                  className="w-100 mt-3"
+                  variant="btn btn-outline-primary"
+                  type="submit"
+                  onClick={() => handleSubmit(values)}
+                >
+                  Distribute
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </Card.Body>
+      </Card>
+
+      <SuccessModal show={isModalVisible} message={modalMessage} onClose={closeModal} />
+
+    </Container>
   );
 };
 
