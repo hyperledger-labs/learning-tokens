@@ -221,7 +221,7 @@ const ScoringGuide = () => {
 
             {eventData.status === "defineScoringGuide" && formEditable && (
               <Button
-                size="small"
+                size="sm"
                 className="w-100 mt-3"
                 variant="btn btn-outline-primary"
                 type="submit"
