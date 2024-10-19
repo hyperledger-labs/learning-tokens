@@ -36,14 +36,13 @@ export class PosteventService {
             throw new Error('Institution not found')
         }
 
-        const role = await this.roleRepository.findOne({
-            where: { name: 'learner' }
-        })
-
         //every post event will have the same preevent
 
         await this.entityManager.transaction(async () => {
             // await this.posteventRepository.save(postevent)
+            const role = await this.roleRepository.findOne({
+                where: { name: 'learner' }
+            })
 
             for (
                 let index = 0;
@@ -59,15 +58,17 @@ export class PosteventService {
                     preevent: event
                 })
                 const createdAt = Math.floor(Date.now() / 1000)
-
-                let body = {
-                    role: 'learner',
-                    id: learner.id,
-                    functionName: SmartcontractFunctionsEnum.REGISTER_LEARNER,
-                    params: [learner.name, createdAt, '123', '321']
-                }
+                console.log('learner :::', learner);
+                
+                let body = {}
                 if (learner) {
-                    await this.smartContractService.onboardingActor(body)
+                    body = {
+                        role: 'learner',
+                        id: learner.id,
+                        functionName: SmartcontractFunctionsEnum.REGISTER_LEARNER,
+                        params: [learner.name, createdAt, '123', '321']
+                    }
+                    await this.smartContractService.onboardingActor(body);
                 }
                 await this.posteventRepository.save(postevent)
                 if (!learner) {
@@ -78,12 +79,13 @@ export class PosteventService {
 
                     const salt: string = bcrypt.genSaltSync(10)
                     _learner.password = bcrypt.hashSync('12345678', salt)
-
+                    console.log('registeredLearner :::', _learner);
+                    
                     const registeredLearner = await this.learnerRepository.save(
                         _learner
                     )
 
-                    sendLoginCredentials(
+                    await sendLoginCredentials(
                         element.email,
                         element.email,
                         '12345678',

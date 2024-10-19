@@ -1,4 +1,4 @@
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { array, object, string } from "yup";
 import TextInput from "../../components/TextInput";
@@ -12,16 +12,16 @@ import { useEventContext } from "../../contexts/EventContext";
 
 const initialValues = {
   courseName: "",
-  learnerAddress: [],
+  learnersList: [],
 };
 
 const validationSchema = object().shape({
   courseName: string().required("Course Name is required."),
-  learnerAddress: array().min(1).required("At least 1 learner should be added"),
+  learnersList: array().min(1).required("At least 1 learner should be added"),
 });
 
 const CreateCourse = () => {
-  const formikRef = useRef<FormikProps<any>>(null);
+  const formikRef = useRef<any>(null);
   const [totalItems, setTotalItems] = useState(0);
   const pagination = usePagination();
   const auth = useSelector((state: RootState) => state.auth);
@@ -31,7 +31,7 @@ const CreateCourse = () => {
   const [modalMessage, setModalMessage] = useState("");
   const { eventData } = useEventContext();
 
-  useEffect (() => {
+  useEffect(() => {
     if (eventData.status === "submitPostEventData") {
       setFormEditable(true);
     }
@@ -49,8 +49,8 @@ const CreateCourse = () => {
             Authorization: `Bearer ${auth.accessToken}`,
           },
         });
-        
-        setLearnersList(response?.data?.result?.data|| []);
+
+        setLearnersList(response?.data?.result?.data || []);
         setTotalItems(response?.data?.result?.pagination?.totalCount || 0);
       } catch (error) {
         console.error("Error fetching learners list:", error);
@@ -62,14 +62,19 @@ const CreateCourse = () => {
 
   const handleSubmit = async (values: any) => {
     console.log("Form Submitted with values:", values);
+
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/create-course`, {
         courseName: values.courseName,
         preEventId: eventData.id,
-      }); 
+      }, {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
+      });
 
-      console.log(`eventData: ${eventData}`);
-      
+      console.log(`response: ${response.data}`);
+
       if (response.status === 201) {
         setModalMessage(response.data.message);
         setModalVisible(true);
@@ -94,8 +99,8 @@ const CreateCourse = () => {
             innerRef={formikRef}
             onSubmit={handleSubmit}
           >
-            {({handleSubmit}) => (
-              <Form onSubmit={handleSubmit}>
+            {({ values }) => (
+              <Form>
                 <Row className="mb-3">
                   <Col>
                     <h4>Course Name</h4>
@@ -125,6 +130,8 @@ const CreateCourse = () => {
                   className="mt-3"
                   variant="btn btn-outline-primary"
                   type="submit"
+                  disabled={!formEditable}
+                  onClick={() => handleSubmit(values)}
                 >
                   Create Course
                 </Button>
@@ -135,7 +142,6 @@ const CreateCourse = () => {
       </Card>
 
       <SuccessModal show={isModalVisible} message={modalMessage} onClose={closeModal} />
-
     </Container>
   );
 };

@@ -100,23 +100,18 @@ export class SmartcontractService {
             //         'https://u0zhuv4dtl:P-XiJpeAACDZgL_dVSaUpL4JLmIXeg5lTu5jLHWEUJ4@u0iavbc8n0-u0t9n504n5-hdwallet.us0-aws.kaleido.io/'
             //     )
             // }
-            console.log(`rpcUrl: ${rpcUrl}`)
-
+            
             const provider = new ethers.JsonRpcProvider(rpcUrl)
 
             const { chainId } = await provider.getNetwork()
-            console.log(`chainId: ${chainId}`)
-
+            
             const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
             const result = await contract[body.functionName](...body.params)
             // Convert BigInt values to strings if needed
-            const processedResult = await this.processResult(result)
-            // console.log('View Function Result:', processedResult)
-            console.log(
-                body.functionName ===
-                    SmartcontractFunctionsEnum.REGISTER_LEARNER
-            )
+            const processedResult = this.processResult(result)
+            console.log('View Function Result:', processedResult)
+            
             if (
                 body.functionName ===
                 SmartcontractFunctionsEnum.REGISTER_INSTITUTION
@@ -147,7 +142,8 @@ export class SmartcontractService {
                 })
                 messageResponse = 'Learner onboarded successfully'
             }
-
+            console.log(`DEbug body: ${body}`);
+            
             return {
                 message: messageResponse,
                 result: processedResult

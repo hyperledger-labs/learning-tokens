@@ -72,7 +72,7 @@ const Events = () => {
           </thead>
           <tbody>
             {tableData.map((event) => (
-              <tr key={event.meetingEventId} onClick={() => handleRowclick(event)} className="cursor-pointer">
+              <tr key={event.id} onClick={() => handleRowclick(event)} className="cursor-pointer">
                 <td className="text-center">{event.meetingEventId}</td>
                 <td className="text-center">{event.eventName}</td>
                 <td className="text-center">{event.description}</td>

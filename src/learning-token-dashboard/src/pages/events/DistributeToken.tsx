@@ -7,6 +7,8 @@ import { useEventContext } from "../../contexts/EventContext";
 import { SuccessModal } from "../../components/Modal/SuccessModal";
 import { SmartcontractFunctionsEnum } from "../../enums/smartcontract-functions.enum";
 import axios from "axios";
+import { RootState } from "../../store";
+import { useSelector } from "react-redux";
 
 const initialValues = {
   token_type: "attendance_token",
@@ -32,6 +34,7 @@ const DistributeToken = () => {
   const { eventData } = useEventContext();
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const auth = useSelector((state: RootState) => state.auth);
 
   const handleSubmit = async (values: any) => {
     console.log("Form Submitted with values:", values);
@@ -39,6 +42,10 @@ const DistributeToken = () => {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/token-distributions`, {
         functionName: SmartcontractFunctionsEnum.BATCH_MINT_ATTENDANCE_TOKEN,
         preEventId: eventData.id,
+      }, {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
       });
 
       console.log(`eventData: ${eventData}`);
@@ -80,8 +87,8 @@ const DistributeToken = () => {
             innerRef={formikRef}
             onSubmit={handleSubmit}
           >
-            {({handleSubmit}) => (
-              <Form onSubmit={handleSubmit}>
+            {({values}) => (
+              <Form>
                 <FormGroup>
                   <h5>Token</h5>
                   <SelectInput
@@ -96,6 +103,7 @@ const DistributeToken = () => {
                   className="w-100 mt-3"
                   variant="btn btn-outline-primary"
                   type="submit"
+                  onClick={() => handleSubmit(values)}
                 >
                   Distribute
                 </Button>

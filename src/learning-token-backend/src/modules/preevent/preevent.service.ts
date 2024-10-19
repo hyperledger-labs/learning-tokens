@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, BadRequestException } from '@nestjs/common'
 import { UpdatePreeventDto } from './dto/update-preevent.dto'
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm'
 import {
@@ -142,22 +142,32 @@ export class PreeventService {
                     instructor: _user
                 })
 
-                let body = {
-                    role: 'instructor',
-                    id: _instructor.id,
-                    functionName:
-                        SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR,
-                    params: [_instructor.name, createdAt]
+                try {
+                    let body = {
+                        role: 'instructor',
+                        id: registeredInstructor.id,
+                        functionName: SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR,
+                        params: [registeredInstructor.name, createdAt]
+                    };
+                
+                    const instructorOnboardingResult = await this.smartContractService.onboardingActor(body);
+                    console.log('Instructor Onboarding Success:', instructorOnboardingResult);
+                
+                    // Proceed only if the first call succeeds
+                    body = {
+                        role: 'institution',
+                        id: institution.id,
+                        functionName: SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
+                        params: [registeredInstructor.publicAddress, createdAt]
+                    };
+                
+                    const institutionOnboardingResult = await this.smartContractService.onboardingActor(body);
+                    console.log('Institution Onboarding Success:', institutionOnboardingResult);
+                
+                } catch (error) {
+                    console.error('Error during onboarding:', error);
+                    throw new BadRequestException('Error during onboarding');
                 }
-                await this.smartContractService.onboardingActor(body)
-                body = {
-                    role: 'institution',
-                    id: institution.id,
-                    functionName:
-                        SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
-                    params: [registeredInstructor.publicAddress, createdAt]
-                }
-                await this.smartContractService.onboardingActor(body)
             }
         })
 
