@@ -2,7 +2,7 @@ import { Form, Formik, FormikProps } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { array, object, string } from "yup";
 import TextInput from "../../components/TextInput";
-import { Container, Row, Col, Button, Card, Pagination as BootstrapPagination } from "react-bootstrap";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import usePagination from "../../hooks/usePagination";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
