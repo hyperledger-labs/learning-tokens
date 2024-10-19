@@ -61,9 +61,9 @@ const DistributeToken = () => {
     // { value: "batch_attendance_token", label: "Batch Attendance Token" },
     // { value: "helping_token", label: "Helping Token" },
     // { value: "batch_helping_token", label: "Batch Helping Token" },
-    // { value: "score_token", label: "Score Token" },
+    { value: "score_token", label: "Score Token" },
     // { value: "batch_score_token", label: "Batch Score Token" },
-    // { value: "instructorScore_token", label: "Instructor Score Token" },
+    { value: "instructorScore_token", label: "Instructor Score Token" },
     // {
     //   value: "batch_instructorScore_token",
     //   label: "Batch Instructor Score Token",
