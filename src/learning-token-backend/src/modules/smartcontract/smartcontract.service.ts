@@ -84,7 +84,6 @@ export class SmartcontractService {
 
     async onboardingActor(body): Promise<any> {
         try {
-            console.log(`onboardingActor ${body.role} with ID ${body.id}`)
             const wallet = await getWallet(body.role, body.id)
             const actorPrivateKey = wallet.privateKey
             const contractAddress = this.contractAddress
@@ -94,31 +93,29 @@ export class SmartcontractService {
             )
             let messageResponse = ''
 
-            // if (!body.isAdmin) {
-            //     rpcUrl = this.configService.get<string>(
-            //         'KALEIDO_HD_WALLET_RPC_URL',
-            //         'https://u0zhuv4dtl:P-XiJpeAACDZgL_dVSaUpL4JLmIXeg5lTu5jLHWEUJ4@u0iavbc8n0-u0t9n504n5-hdwallet.us0-aws.kaleido.io/'
-            //     )
-            // }
-            
             const provider = new ethers.JsonRpcProvider(rpcUrl)
 
-            const { chainId } = await provider.getNetwork()
-            
             const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
             const result = await contract[body.functionName](...body.params)
+            //external sleep for 10 seconds
+            await new Promise((r) => setTimeout(r, 5000))
             // Convert BigInt values to strings if needed
-            const processedResult = this.processResult(result)
-            console.log('View Function Result:', processedResult)
-            
+            // const processedResult = this.processResult(result)
+            // console.log('View Function Result:', processedResult)
+
             if (
                 body.functionName ===
                 SmartcontractFunctionsEnum.REGISTER_INSTITUTION
             ) {
-                await this.institutionRepository.update(body.id, {
-                    status: true
-                })
+                await this.institutionRepository.update(
+                    {
+                        publicAddress: body.params[1]
+                    },
+                    {
+                        status: true
+                    }
+                )
                 messageResponse = 'Institution onboarded successfully'
             } else if (
                 body.functionName ===
@@ -142,11 +139,10 @@ export class SmartcontractService {
                 })
                 messageResponse = 'Learner onboarded successfully'
             }
-            console.log(`DEbug body: ${body}`);
-            
+
             return {
                 message: messageResponse,
-                result: processedResult
+                result: result
             }
         } catch (err) {
             console.log('err', err)
@@ -157,8 +153,6 @@ export class SmartcontractService {
     async callContractFunction(functionName: string, body?: any): Promise<any> {
         try {
             // Create a contract instance
-            const { chainId } = await this.provider.getNetwork()
-            console.log(chainId) // 42
             const contractAddress = this.contractAddress
             //when we have to call from admin permission
             if (body.isAdmin && body.isWrite) {
@@ -282,6 +276,9 @@ export class SmartcontractService {
                     courseCreateStatus: true
                 }
             )
+            await this.preEventRepository.update(courseEvent.id, {
+                status: PreEventEnum.TOKENDISTRIBUTION
+            })
             return {
                 message: 'Course created successfully',
                 result: processedResult
@@ -318,11 +315,11 @@ export class SmartcontractService {
                 },
                 select: ['id']
             })
-            const learnerIds = learnerEntities.map((learner) => learner.id)
-
+            const learnerIds = learnerEntities.map((learner, index) => index)
             // Retrieve course details
             const courseId =
-                eventDataForTokenDistribution.onlineEvent.scoringGuide.courseId
+                eventDataForTokenDistribution.onlineEvent.scoringGuide
+                    .courseId - 1
             const fieldOfKnowledge =
                 eventDataForTokenDistribution.onlineEvent.scoringGuide
                     .fieldOfKnowledge
@@ -355,6 +352,7 @@ export class SmartcontractService {
                     eventDataForTokenDistribution.onlineEvent.scoringGuide
                         .attendanceToken
                 )
+
                 result = await contract.batchMintAttendanceToken(
                     learnerIds,
                     amount,
@@ -434,10 +432,10 @@ export class SmartcontractService {
                     }
                 )
             }
-            // Convert BigInt values to strings if needed
-            const processedResult = this.processResult(result)
-            console.log('View Function Result:', processedResult)
-            return processedResult
+            return {
+                message: 'Token distributed successfully',
+                result: result
+            }
         } catch (err) {
             console.log(err)
             return err

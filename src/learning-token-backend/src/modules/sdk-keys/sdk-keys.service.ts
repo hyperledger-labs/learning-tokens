@@ -22,7 +22,9 @@ export class SdkKeysService {
             where: { id, status: true }
         })
         if (!institutionExists) {
-            throw new NotFoundException(`Institution does not exist or activated`)
+            throw new NotFoundException(
+                `Institution does not exist or activated`
+            )
         }
 
         // Generate a unique SDK key
@@ -31,10 +33,10 @@ export class SdkKeysService {
         const sdkKey = `LTN-${timestamp}-${id}-${randomPart}`
 
         await this.institutionRepository.update(id, { sdkKeys: sdkKey })
-        
+
         return sdkKey
     }
-    
+
     /**
      * Gets a unique SDK key for an institution.
      *
@@ -121,11 +123,10 @@ export class SdkKeysService {
         return { isValid: true }
     }
 
-
     async validateSecretKey(secretKey: string): Promise<boolean> {
         const keyExists = await this.institutionRepository.findOne({
             where: { sdkKeys: secretKey }
-        })        
+        })
         return !!keyExists
     }
 }
