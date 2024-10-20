@@ -130,7 +130,6 @@ export class EventService {
                 instructorScoreTokenPerLesson: scoringGuide.instructorScoreToken
             })
             return upload
-            return upload
         } catch (error) {
             console.log(error)
         }

@@ -42,7 +42,6 @@ export class AuthService {
         latitude,
         longitude
     }: any) {
-        console.log(type)
         if (type == 'Admin') {
             const user = new User()
             user.name = name
@@ -74,13 +73,13 @@ export class AuthService {
             })
 
             const registeredUser = await this.institutionRepository.save(user)
-            const _user = await this.institutionRepository.findOneBy({
-                id: registeredUser.id
-            })
+            console.log('registeredUser', registeredUser)
             const wallet = await getWallet('institution', registeredUser.id)
-            _user.publicAddress = wallet.address
-            _user.role = role
-            this.institutionRepository.save(_user)
+            console.log('wallet', wallet)
+            await this.institutionRepository.update(registeredUser.id, {
+                publicAddress: wallet.address,
+                role: role
+            })
             return {
                 id: registeredUser.id,
                 name: registeredUser.name,

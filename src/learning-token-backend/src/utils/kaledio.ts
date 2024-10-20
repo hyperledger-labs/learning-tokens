@@ -33,7 +33,6 @@ export const getWallet = async (type: string, id: number) => {
     }
 
     const result = await axios.get(url)
-    console.log('Kaleido HD Wallet result', result.data)
-
+    console.log(result.data)
     return result.data
 }

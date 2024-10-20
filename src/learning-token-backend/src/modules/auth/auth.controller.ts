@@ -94,6 +94,7 @@ export class AuthController {
                 result: result
             }
         } catch (error) {
+            console.log(error)
             throw new ConflictException(error.message)
         }
     }

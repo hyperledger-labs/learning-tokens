@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { CreatePosteventDto } from './dto/create-postevent.dto'
 import { UpdatePosteventDto } from './dto/update-postevent.dto'
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm'
@@ -58,17 +58,26 @@ export class PosteventService {
                     preevent: event
                 })
                 const createdAt = Math.floor(Date.now() / 1000)
-                console.log('learner :::', learner);
-                
+
                 let body = {}
                 if (learner) {
                     body = {
                         role: 'learner',
                         id: learner.id,
-                        functionName: SmartcontractFunctionsEnum.REGISTER_LEARNER,
-                        params: [learner.name, createdAt, '123', '321']
+                        functionName:
+                            SmartcontractFunctionsEnum.REGISTER_LEARNER,
+                        params: [
+                            learner.name,
+                            createdAt,
+                            learner.latitude !== null
+                                ? learner.latitude
+                                : '123.123',
+                            learner.longitude !== null
+                                ? learner.longitude
+                                : '123.123'
+                        ]
                     }
-                    await this.smartContractService.onboardingActor(body);
+                    await this.smartContractService.onboardingActor(body)
                 }
                 await this.posteventRepository.save(postevent)
                 if (!learner) {
@@ -79,20 +88,22 @@ export class PosteventService {
 
                     const salt: string = bcrypt.genSaltSync(10)
                     _learner.password = bcrypt.hashSync('12345678', salt)
-                    console.log('registeredLearner :::', _learner);
-                    
+
                     const registeredLearner = await this.learnerRepository.save(
                         _learner
                     )
 
-                    await sendLoginCredentials(
-                        element.email,
-                        element.email,
-                        '12345678',
-                        'Dear learner, Please login with credentials'
-                    ).then((res) => {
-                        console.log(res)
-                    })
+                    // await sendLoginCredentials(
+                    //     element.email,
+                    //     element.email,
+                    //     '12345678',
+                    //     'Dear learner, Please login with credentials'
+                    // )
+                    //     .then((res) => {})
+                    //     .catch((err) => {
+                    //         console.log(err)
+                    //         throw new BadRequestException('Email not sent')
+                    //     })
 
                     const _user = await this.learnerRepository.findOneBy({
                         id: registeredLearner.id
@@ -113,15 +124,20 @@ export class PosteventService {
                         params: [
                             registeredLearner.name,
                             createdAt,
-                            registeredLearner.latitude,
-                            registeredLearner.longitude
+                            registeredLearner.latitude !== null
+                                ? registeredLearner.latitude
+                                : '123.123',
+                            registeredLearner.longitude !== null
+                                ? registeredLearner.longitude
+                                : '123.123'
                         ]
                     }
+                    console.log('body', body)
                     await this.smartContractService.onboardingActor(body)
                 }
             }
         })
-
+        console.log('event', event)
         await this.preeventRepository.update(event.id, {
             status: PreEventEnum.COURSECREATING
         })

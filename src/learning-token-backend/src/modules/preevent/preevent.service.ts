@@ -71,6 +71,8 @@ export class PreeventService {
                 }
             })
             const createdAt = Math.floor(Date.now() / 1000)
+
+            let body = {}
             if (instructor) {
                 await this.preeventRepository.update(preEventData.id, {
                     instructor: instructor
@@ -78,7 +80,7 @@ export class PreeventService {
                 await this.onlineEventRepository.update(savedEvent.id, {
                     instructor: instructor
                 })
-                let body = {
+                body = {
                     role: 'instructor',
                     id: instructor.id,
                     functionName:
@@ -114,12 +116,12 @@ export class PreeventService {
                     _instructor
                 )
 
-                await sendLoginCredentials(
-                    createPreeventDto.organizerEmail,
-                    createPreeventDto.organizerName,
-                    '12345678',
-                    'Dear Instructor, Please login with credentials'
-                )
+                // await sendLoginCredentials(
+                //     createPreeventDto.organizerEmail,
+                //     createPreeventDto.organizerName,
+                //     '12345678',
+                //     'Dear Instructor, Please login with credentials'
+                // )
                 const _user = await this.instructorRepository.findOneBy({
                     id: registeredInstructor.id
                 })
@@ -143,30 +145,32 @@ export class PreeventService {
                 })
 
                 try {
-                    let body = {
+                    body = {
                         role: 'instructor',
                         id: registeredInstructor.id,
-                        functionName: SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR,
+                        functionName:
+                            SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR,
                         params: [registeredInstructor.name, createdAt]
-                    };
-                
-                    const instructorOnboardingResult = await this.smartContractService.onboardingActor(body);
-                    console.log('Instructor Onboarding Success:', instructorOnboardingResult);
-                
+                    }
+                    // console.log('Instructor Onboarding:', body)
+                    const data =
+                        await this.smartContractService.onboardingActor(body)
+                    console.log('Instructor Onboarding:', data)
                     // Proceed only if the first call succeeds
                     body = {
                         role: 'institution',
                         id: institution.id,
-                        functionName: SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
+                        functionName:
+                            SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
                         params: [registeredInstructor.publicAddress, createdAt]
-                    };
-                
-                    const institutionOnboardingResult = await this.smartContractService.onboardingActor(body);
-                    console.log('Institution Onboarding Success:', institutionOnboardingResult);
-                
+                    }
+                    // console.log('Instructor added to institution:', body)
+                    const data2 =
+                        await this.smartContractService.onboardingActor(body)
+                    console.log('Instructor added to institution:', data2)
                 } catch (error) {
-                    console.error('Error during onboarding:', error);
-                    throw new BadRequestException('Error during onboarding');
+                    console.error('Error during onboarding:', error)
+                    throw new BadRequestException('Error during onboarding')
                 }
             }
         })
@@ -189,14 +193,14 @@ export class PreeventService {
         const orderByCondition: FindOptionsOrder<Preevent> = {
             [orderBy]: desc ? 'DESC' : 'ASC'
         }
-        console.log('reqUser::: ', reqUser);
-        
+        console.log('reqUser::: ', reqUser)
+
         return await paginate<Preevent>(this.preeventRepository, options, {
-            where: { 
+            where: {
                 instructor: {
                     id: reqUser.id
                 }
-             },
+            },
             relations: [
                 'onlineEvent',
                 'onlineEvent.scoringGuide',
