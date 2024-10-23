@@ -3,17 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { array, object, string } from "yup";
 import TextInput from "../../components/TextInput";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
-import usePagination from "../../hooks/usePagination";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { SuccessModal } from "../../components/Modal/SuccessModal";
 import { useEventContext } from "../../contexts/EventContext";
-
-const initialValues = {
-  courseName: "",
-  learnersList: [],
-};
 
 const validationSchema = object().shape({
   courseName: string().required("Course Name is required."),
@@ -22,8 +16,6 @@ const validationSchema = object().shape({
 
 const CreateCourse = () => {
   const formikRef = useRef<any>(null);
-  const [totalItems, setTotalItems] = useState(0);
-  const pagination = usePagination();
   const auth = useSelector((state: RootState) => state.auth);
   const [learnersList, setLearnersList] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -32,33 +24,37 @@ const CreateCourse = () => {
   const { eventData } = useEventContext();
 
   useEffect(() => {
-    if (eventData.status === "submitPostEventData") {
-      setFormEditable(true);
+    if (eventData?.eventName) {
+      console.log(`eventData: ${eventData.id}`);
+      console.log(`auth user: ${auth.user.id}`);
+      setFormEditable(false);
     }
-  }, [eventData]);
+  }, [eventData?.eventName]);
 
   useEffect(() => {
     const fetchLearnersList = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/learner-list`, {
-          params: {
-            page: pagination.page,
-            limit: pagination.limit,
-          },
           headers: {
             Authorization: `Bearer ${auth.accessToken}`,
           },
         });
 
+        console.log(`response: ${response.data}`);
+        
         setLearnersList(response?.data?.result?.data || []);
-        setTotalItems(response?.data?.result?.pagination?.totalCount || 0);
       } catch (error) {
         console.error("Error fetching learners list:", error);
       }
     };
 
     fetchLearnersList();
-  }, [pagination.page, pagination.limit, auth.accessToken]);
+  }, [auth.accessToken]);
+
+  const initialValues = {
+    courseName: eventData?.eventName,
+    learnersList: [],
+  };
 
   const handleSubmit = async (values: any) => {
     console.log("Form Submitted with values:", values);
@@ -103,7 +99,7 @@ const CreateCourse = () => {
               <Form>
                 <Row className="mb-3">
                   <Col>
-                    <h4>Course Name</h4>
+                    <h4>Event Name</h4>
                     <TextInput
                       name="courseName"
                       type="text"
@@ -111,6 +107,15 @@ const CreateCourse = () => {
                       size="small"
                       disabled={!formEditable}
                     />
+                  </Col>
+                </Row>
+
+                <h4>Instructor</h4>
+                <Row className="mb-3">
+                  <Col className="mb-2">
+                    <div className="border p-2 text-center">
+                      {auth.user.name} - {auth.user.publicAddress}
+                    </div>
                   </Col>
                 </Row>
 

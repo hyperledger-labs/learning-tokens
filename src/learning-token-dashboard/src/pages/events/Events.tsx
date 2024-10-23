@@ -67,7 +67,7 @@ const Events = () => {
               <th className="text-center" style={{ width: "12%" }}>Event Date</th>
               <th className="text-center" style={{ width: "10%" }}>Organizer</th>
               <th className="text-center" style={{ width: "20%" }}>Speaker's Name</th>
-              <th className="text-center" style={{ width: "10%" }}>Status</th>
+              <th className="text-center" style={{ width: "10%" }}>Next Step</th>
             </tr>
           </thead>
           <tbody>

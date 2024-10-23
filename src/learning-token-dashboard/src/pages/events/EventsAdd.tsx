@@ -12,7 +12,7 @@ const EventsAdd = () => {
 
   const steps = [
     { label: "Scoring Guide", id: 1 },
-    { label: "Create Course", id: 2 },
+    { label: "Review Wallets", id: 2 },
     { label: "Distribute Token", id: 3 },
   ];
 
