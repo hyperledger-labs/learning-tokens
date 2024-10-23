@@ -39,9 +39,11 @@ export class PosteventController {
         }
     }
 
-    @Get()
-    findAll() {
-        return this.posteventService.findAll()
+    @Get(':preeventId')
+    async findAll(@Param('preeventId') preeventId: string) {
+        console.log('preeventId:::', preeventId);
+        
+        return this.posteventService.findAll(+preeventId)
     }
 
     @Get(':id')

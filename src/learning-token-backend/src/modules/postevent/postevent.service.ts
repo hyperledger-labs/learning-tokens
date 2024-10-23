@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { CreatePosteventDto } from './dto/create-postevent.dto'
 import { UpdatePosteventDto } from './dto/update-postevent.dto'
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm'
@@ -27,7 +27,7 @@ export class PosteventService {
         @InjectEntityManager()
         private readonly entityManager: EntityManager,
         private readonly smartContractService: SmartcontractService
-    ) {}
+    ) { }
     async create(createPosteventDto: CreatePosteventDto) {
         const event = await this.preeventRepository.findOne({
             where: { meetingEventId: createPosteventDto.meetingEventId }
@@ -139,7 +139,7 @@ export class PosteventService {
         })
         console.log('event', event)
         await this.preeventRepository.update(event.id, {
-            status: PreEventEnum.COURSECREATING
+            status: PreEventEnum.REVIEWWALLETS
         })
         return {
             status: 201,
@@ -147,8 +147,18 @@ export class PosteventService {
         }
     }
 
-    findAll() {
-        return `This action returns all postevent`
+    async findAll(preeventId: number) {
+        const preevent = await this.preeventRepository.findOne({
+            where: { id: preeventId }
+        })
+        
+        if (!preevent) {
+            throw new NotFoundException('Preevent not found')
+        }
+
+        const postevents = await this.posteventRepository.find({ where: { preevent: { id: preeventId } } });
+        console.log(postevents);
+        return postevents;
     }
 
     findOne(id: number) {

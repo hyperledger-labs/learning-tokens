@@ -24,12 +24,14 @@ const CreateCourse = () => {
   const { eventData } = useEventContext();
 
   useEffect(() => {
-    if (eventData?.eventName) {
+    console.log(`learnerList: ${learnersList.length>0}`);
+    
+    if (eventData?.eventName && learnersList.length>0) {
       console.log(`eventData: ${eventData.id}`);
       console.log(`auth user: ${auth.user.id}`);
       setFormEditable(false);
     }
-  }, [eventData?.eventName]);
+  }, [eventData?.eventName, learnersList.length]);
 
   useEffect(() => {
     const fetchLearnersList = async () => {

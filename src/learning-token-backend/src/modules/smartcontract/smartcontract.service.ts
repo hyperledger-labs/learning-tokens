@@ -97,6 +97,8 @@ export class SmartcontractService {
 
             const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
+            console.log(`registerInstution: body: ${JSON.stringify(body)}`);
+            
             const result = await contract[body.functionName](...body.params)
             //external sleep for 10 seconds
             await new Promise((r) => setTimeout(r, 5000))
@@ -353,6 +355,8 @@ export class SmartcontractService {
                         .attendanceToken
                 )
 
+                console.log(`learnerIds: ${learnerIds}`);
+                
                 result = await contract.batchMintAttendanceToken(
                     learnerIds,
                     amount,

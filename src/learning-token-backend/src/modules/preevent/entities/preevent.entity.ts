@@ -20,7 +20,7 @@ import {
 export enum PreEventEnum {
     DEFINESCORINGGUIDE = 'defineScoringGuide',
     SUBMITPOSTEVENT = 'submitPostEventData',
-    COURSECREATING = 'courseCreating',
+    REVIEWWALLETS = 'reviewWallets',
     TOKENDISTRIBUTION = 'tokenDistribution',
     COMPLETION = 'completion'
 }
