@@ -21,6 +21,16 @@ import { CreateInstructorDto } from '../instructors/dto/create-instructor.dto'
 import * as etherjs from 'ethers'
 import { OnlineEvent } from '../event/entities/event.entity'
 import { ScoringGuide } from '../event/entities/scoring-guide.entity'
+declare global {
+    interface BigInt {
+        toJSON(): string // or `number` if precision loss is acceptable
+    }
+}
+
+// Attach `toJSON` to BigInt prototype to automatically serialize BigInts as strings
+BigInt.prototype.toJSON = function (): string {
+    return this.toString() // Ensures precision
+}
 
 @Injectable()
 export class SmartcontractService {
@@ -98,10 +108,11 @@ export class SmartcontractService {
             const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
 
-            const result = await contract[body.functionName](...body.params)
+            let result = await contract[body.functionName](...body.params)
             //external sleep for 10 seconds
             await new Promise((r) => setTimeout(r, 10000))
             // Convert BigInt values to strings if needed
+
             // const processedResult = this.processResult(result)
             // console.log('View Function Result:', processedResult)
 
@@ -140,7 +151,16 @@ export class SmartcontractService {
                 })
                 messageResponse = 'Learner onboarded successfully'
             }
-
+            if (
+                body.functionName ===
+                SmartcontractFunctionsEnum.LEARNER_TOKEN_METADATA
+            ) {
+                messageResponse = 'Learner token metadata fetch successfully'
+            } else if (
+                body.functionName === SmartcontractFunctionsEnum.TOKEN_BALANCE
+            ) {
+                messageResponse = 'Token balance fetch successfully'
+            }
             return {
                 message: messageResponse,
                 result: result
@@ -489,7 +509,7 @@ export class SmartcontractService {
         }
     }
 
-    processResult(result: any): any {
+    async processResult(result: any): Promise<any> {
         if (typeof result === 'bigint') {
             return result.toString()
         } else if (Array.isArray(result)) {
