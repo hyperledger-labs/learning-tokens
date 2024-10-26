@@ -41,19 +41,10 @@ export class EventService {
                 where: { id: createScoringGuideDTO.preEventId },
                 relations: ['onlineEvent.scoringGuide', 'instructor']
             })
-
-            console.log('preEventId', isPreEventExists)
             //every scoring guide should have an isPreEventExists
             if (!isPreEventExists) {
                 throw new BadRequestException('Event does not exist')
             }
-            // const scoringGuide = this.scoringGuideRepository.create(
-            //     createScoringGuideDTO
-            // )
-
-            // const createdScoringGuide = await this.scoringGuideRepository.save(
-            //     scoringGuide
-            // )
 
             if (isPreEventExists?.onlineEvent?.scoringGuide) {
                 const ipfsUrl = await this.uploadToPinata(
@@ -76,7 +67,7 @@ export class EventService {
                     }
                 )
                 await this.preEventRepository.update(isPreEventExists.id, {
-                    status: PreEventEnum.SUBMITPOSTEVENT
+                    status: PreEventEnum.REVIEWWALLETS
                 })
                 return {
                     status: 201,

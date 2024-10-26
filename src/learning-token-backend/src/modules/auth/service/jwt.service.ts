@@ -32,7 +32,6 @@ export class JwtService {
     // Get User by User ID we get from decode()
     public async validateUser(decoded: any) {
         let user: any
-        console.log('decoded', decoded)
         if (decoded.type == 'admin') {
             user = await this.userRepository.findOne({
                 where: { id: decoded.id },

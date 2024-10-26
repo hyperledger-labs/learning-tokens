@@ -22,7 +22,7 @@ export class Learner extends BaseEntity {
     @Column({
         type: 'varchar',
         length: 50,
-        unique: false,
+        unique: true,
         nullable: false
     })
     @IsEmail()
@@ -31,6 +31,7 @@ export class Learner extends BaseEntity {
     @Exclude()
     @Column({ type: 'varchar', length: 255, nullable: false })
     @IsString()
+    @Exclude()
     password: string
 
     @Column({ type: 'varchar', length: 30, nullable: true })

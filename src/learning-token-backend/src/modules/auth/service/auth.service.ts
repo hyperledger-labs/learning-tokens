@@ -46,7 +46,6 @@ export class AuthService {
             const user = new User()
             user.name = name
             user.email = email
-            user.publicAddress = '0xaAB3e8fC97dB7202AE0BC5f1622447ba3dd58ad9'
             user.password = this.jwtService.encodePassword(password)
             const registeredUser = await this.userRepository.save(user)
             return {
@@ -64,18 +63,16 @@ export class AuthService {
             user.password = this.jwtService.encodePassword(password)
             user.latitude = latitude
             user.longitude = longitude
-            user.roleId = 4 // default to institution
 
             const role = await this.roleRepository.findOne({
                 where: {
                     name: 'institution'
                 }
             })
+            user.roleId = role.id // default to institution
 
             const registeredUser = await this.institutionRepository.save(user)
-            console.log('registeredUser', registeredUser)
             const wallet = await getWallet('institution', registeredUser.id)
-            console.log('wallet', wallet)
             await this.institutionRepository.update(registeredUser.id, {
                 publicAddress: wallet.address,
                 role: role
@@ -88,6 +85,7 @@ export class AuthService {
                 createdAt: registeredUser.createdAt,
                 updatedAt: registeredUser.updatedAt
             }
+            //no longer registering from the api
         } else if (type == 'Learner') {
             const user = new Learner()
             user.name = name
@@ -193,9 +191,6 @@ export class AuthService {
             // IF PASSWORD DOES NOT MATCH
             return
         }
-        console.log(
-            `User login: ${user.email} ${user.password} ${user.role.name}`
-        )
 
         const token: string = this.jwtService.generateToken(
             user,

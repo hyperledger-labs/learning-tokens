@@ -16,7 +16,7 @@ export class Postevent {
     @Column({ type: 'varchar', length: 30, nullable: true })
     name: string
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
+    @Column({ type: 'varchar', length: 30, nullable: true, unique: true })
     email: string
 
     @CreateDateColumn({ type: 'varchar', length: 30, nullable: true })

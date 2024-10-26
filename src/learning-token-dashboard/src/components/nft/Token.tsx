@@ -23,7 +23,7 @@ const Token: FC<Props> = ({ item }) => {
 
   const getAmount = async () => {
     const contract = await initWeb3Method();
-    const tx = await contract!.balanceOf(auth.user.publicAddress, item.tokenId);    
+    const tx = await contract!.balanceOf(auth.user.publicAddress, item.tokenId);
     if (tx) {
       setAmount(Number(tx));
     } else {
@@ -34,7 +34,7 @@ const Token: FC<Props> = ({ item }) => {
   useEffect(() => {
     getAmount();
   }, []);
-  
+
   return (
     <div className="w-80 group cursor-pointer">
       <div className="h-52 bg-[#013A44]/10 transition-all duration-300 ease-in-out cursor-pointer group-hover:text-white font-bold group-hover:bg-[#013A44] flex items-center justify-center">
@@ -43,7 +43,8 @@ const Token: FC<Props> = ({ item }) => {
       <div className="bg-[#013A44] group-hover:bg-[#013A44]/10 px-1 py-3 transition-all duration-300 ease-in-out">
         <div className="flex items-center justify-between text-xs ">
           <div className="transition-all duration-300 ease-in-out text-white group-hover:text-inherit">
-            <span className="font-bold">Amount: </span>{amount}LTN
+            <span className="font-bold">Amount: </span>
+            {amount}LTN
           </div>
           <div className="flex flex-wrap gap-1">
             <div className="bg-slate-600 text-white rounded-lg py-1 px-2">

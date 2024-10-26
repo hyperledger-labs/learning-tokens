@@ -18,11 +18,11 @@ import {
 } from 'typeorm'
 
 export enum PreEventEnum {
-    DEFINESCORINGGUIDE = 'defineScoringGuide',
     SUBMITPOSTEVENT = 'submitPostEventData',
+    DEFINESCORINGGUIDE = 'submitPostEventData',
     REVIEWWALLETS = 'reviewWallets',
     TOKENDISTRIBUTION = 'tokenDistribution',
-    COMPLETION = 'completion'
+    COMPLETED = 'completion'
 }
 
 @Entity()
@@ -30,7 +30,7 @@ export class Preevent extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
     id: number
 
-    @Column({ type: 'varchar', length: 30, nullable: false }) //will be unique
+    @Column({ type: 'varchar', length: 30, nullable: true, unique: true }) //will be unique
     meetingEventId: string
 
     @OneToOne(() => OnlineEvent)
@@ -52,7 +52,7 @@ export class Preevent extends BaseEntity {
     @Column({ type: 'varchar' })
     organizerName: string
 
-    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar', unique: true })
     organizerEmail: string
 
     @Column({ type: 'simple-array' })
@@ -73,7 +73,7 @@ export class Preevent extends BaseEntity {
     @ManyToOne(() => Instructor, (instructor) => instructor.preevent)
     instructor: Instructor
 
-    @Column({ enum: PreEventEnum, default: PreEventEnum.DEFINESCORINGGUIDE })
+    @Column({ enum: PreEventEnum, default: PreEventEnum.SUBMITPOSTEVENT })
     status: PreEventEnum
 
     @CreateDateColumn()

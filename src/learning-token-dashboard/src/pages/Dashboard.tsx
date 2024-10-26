@@ -26,7 +26,6 @@ function Dashboard() {
   const getLearnerTokenMetadata = async () => {
     const contract = await initWeb3Method();
     const tx = await contract!.getLearnerTokenMetadata(auth.user.publicAddress);
-
     let temp: any = [];
     for (let key in tx) {
       if (tx.hasOwnProperty(key)) {
@@ -66,12 +65,12 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    if (auth.user.type === "learner") {
+    if (auth.user.role === "learner") {
       getLearnerTokenMetadata();
     }
   }, []);
 
-  if (auth.user.type === "learner") {
+  if (auth.user.role === "learner") {
     return (
       <>
         <div className="font-bold text-lg">
