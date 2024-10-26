@@ -173,6 +173,11 @@ export class AuthService {
                 where: { email: loginRequestDto.email },
                 relations: ['role']
             })
+        } else if (loginRequestDto.type == 'Learner') {
+            user = await this.learnerRepository.findOne({
+                where: { email: loginRequestDto.email },
+                relations: ['role']
+            })
         }
         if (!user) {
             // IF USER NOT FOUND
