@@ -49,131 +49,137 @@ export class PreeventService {
         if (!institution) {
             throw new Error('Institution not found')
         }
+
         let preEventData = new Preevent()
-        await this.entityManager.transaction(async () => {
-            const scoringGuide = new ScoringGuide()
-            const savedScoringGuide = await this.entityManager.save(
-                scoringGuide
-            )
-            const onlineEvent = new OnlineEvent({}, savedScoringGuide)
-            const savedEvent = await this.entityManager.save(onlineEvent)
-            // Create Preevent
-            preEventData = this.preeventRepository.create({
-                ...createPreeventDto,
-                onlineEvent: savedEvent,
-                institution: institution
-            })
 
-            await this.preeventRepository.save(preEventData)
-            const instructor = await this.instructorRepository.findOne({
-                where: {
-                    email: createPreeventDto.organizerEmail
-                }
-            })
-            const createdAt = Math.floor(Date.now() / 1000)
+        await this.entityManager.transaction(
+            async (transactionalEntityManager) => {
+                const scoringGuide = new ScoringGuide()
+                const savedScoringGuide = await transactionalEntityManager.save(
+                    scoringGuide
+                )
+                const onlineEvent = new OnlineEvent({}, savedScoringGuide)
+                const savedEvent = await transactionalEntityManager.save(
+                    onlineEvent
+                )
+                // Create Preevent
+                preEventData = this.preeventRepository.create({
+                    ...createPreeventDto,
+                    onlineEvent: savedEvent,
+                    institution: institution
+                })
 
-            let body = {}
-            if (instructor) {
-                await this.preeventRepository.update(preEventData.id, {
-                    instructor: instructor
-                })
-                await this.onlineEventRepository.update(savedEvent.id, {
-                    instructor: instructor
-                })
-                body = {
-                    role: 'instructor',
-                    id: instructor.id,
-                    functionName:
-                        SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR,
-                    params: [instructor.name, createdAt]
-                }
-                await this.smartContractService.onboardingActor(body)
-                body = {
-                    role: 'institution',
-                    id: institution.id,
-                    functionName:
-                        SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
-                    params: [instructor.publicAddress, createdAt]
-                }
-                await this.smartContractService.onboardingActor(body)
-            }
-            if (!instructor) {
-                const role = await this.roleRepository.findOne({
+                await transactionalEntityManager.save(preEventData)
+
+                const instructor = await this.instructorRepository.findOne({
                     where: {
-                        name: 'instructor'
+                        email: createPreeventDto.organizerEmail
                     }
                 })
-                const _instructor = new Instructor()
-                _instructor.name = createPreeventDto.organizerName
-                _instructor.email = createPreeventDto.organizerEmail
-                _instructor.role = role
-                _instructor.roleId = role.id
+                const createdAt = Math.floor(Date.now() / 1000)
 
-                const salt: string = bcrypt.genSaltSync(10)
-                _instructor.password = bcrypt.hashSync('12345678', salt)
+                let body = {}
+                if (instructor) {
+                    await this.preeventRepository.update(preEventData.id, {
+                        instructor: instructor
+                    })
+                    await this.onlineEventRepository.update(savedEvent.id, {
+                        instructor: instructor
+                    })
+                    // body = {
+                    //     role: 'instructor',
+                    //     id: instructor.id,
+                    //     functionName:
+                    //         SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR,
+                    //     params: [instructor.name, createdAt]
+                    // }
+                    // await this.smartContractService.onboardingActor(body)
+                    // body = {
+                    //     role: 'institution',
+                    //     id: institution.id,
+                    //     functionName:
+                    //         SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
+                    //     params: [instructor.publicAddress, createdAt]
+                    // }
+                    // await this.smartContractService.onboardingActor(body)
+                }
+                if (!instructor) {
+                    const role = await this.roleRepository.findOne({
+                        where: {
+                            name: 'instructor'
+                        }
+                    })
+                    const _instructor = new Instructor()
+                    _instructor.name = createPreeventDto.organizerName
+                    _instructor.email = createPreeventDto.organizerEmail
+                    _instructor.role = role
+                    _instructor.roleId = role.id
 
-                let registeredInstructor = await this.instructorRepository.save(
-                    _instructor
-                )
+                    const salt: string = bcrypt.genSaltSync(10)
+                    _instructor.password = bcrypt.hashSync('12345678', salt)
 
-                // await sendLoginCredentials(
-                //     createPreeventDto.organizerEmail,
-                //     createPreeventDto.organizerName,
-                //     '12345678',
-                //     'Dear Instructor, Please login with credentials'
-                // )
-                const _user = await this.instructorRepository.findOneBy({
-                    id: registeredInstructor.id
-                })
+                    let registeredInstructor =
+                        await transactionalEntityManager.save(_instructor)
+                    // await sendLoginCredentials(
+                    //     createPreeventDto.organizerEmail,
+                    //     createPreeventDto.organizerName,
+                    //     '12345678',
+                    //     'Dear Instructor, Please login with credentials'
+                    // )
 
-                _user.role = role
-                _user.roleId = role.id
-                const wallet = await getWallet(
-                    'instructor',
-                    registeredInstructor.id
-                )
-                if (wallet) _user.publicAddress = wallet.address
+                    registeredInstructor.role = role
+                    registeredInstructor.roleId = role.id
+                    const wallet = await getWallet(
+                        'instructor',
+                        registeredInstructor.id
+                    )
+                    if (wallet)
+                        registeredInstructor.publicAddress = wallet.address
 
-                registeredInstructor = await this.instructorRepository.save(
-                    _user
-                )
-                await this.preeventRepository.update(preEventData.id, {
-                    instructor: _user
-                })
-                await this.onlineEventRepository.update(savedEvent.id, {
-                    instructor: _user
-                })
-
-                try {
-                    body = {
-                        role: 'instructor',
-                        id: registeredInstructor.id,
-                        functionName:
-                            SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR,
-                        params: [registeredInstructor.name, createdAt]
-                    }
-                    // console.log('Instructor Onboarding:', body)
-                    const data =
+                    registeredInstructor =
+                        await transactionalEntityManager.save(
+                            registeredInstructor
+                        )
+                    await transactionalEntityManager.update(
+                        Preevent,
+                        preEventData.id,
+                        { instructor: registeredInstructor }
+                    )
+                    await transactionalEntityManager.update(
+                        OnlineEvent,
+                        savedEvent.id,
+                        {
+                            instructor: registeredInstructor
+                        }
+                    )
+                    try {
+                        body = {
+                            role: 'instructor',
+                            id: registeredInstructor.id,
+                            functionName:
+                                SmartcontractFunctionsEnum.REGISTER_INSTRUCTOR,
+                            params: [registeredInstructor.name, createdAt]
+                        }
                         await this.smartContractService.onboardingActor(body)
-                    console.log('Instructor Onboarding:', data)
-                    // Proceed only if the first call succeeds
-                    body = {
-                        role: 'institution',
-                        id: institution.id,
-                        functionName:
-                            SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
-                        params: [registeredInstructor.publicAddress, createdAt]
-                    }
-                    // console.log('Instructor added to institution:', body)
-                    const data2 =
+                        // Proceed only if the first call succeeds
+                        body = {
+                            role: 'institution',
+                            id: institution.id,
+                            functionName:
+                                SmartcontractFunctionsEnum.ADD_INSTRUCTOR_TO_INSTITUTION,
+                            params: [
+                                registeredInstructor.publicAddress,
+                                createdAt
+                            ]
+                        }
                         await this.smartContractService.onboardingActor(body)
-                    console.log('Instructor added to institution:', data2)
-                } catch (error) {
-                    console.error('Error during onboarding:', error)
-                    throw new BadRequestException('Error during onboarding')
+                    } catch (error) {
+                        console.error('Error during onboarding:', error)
+                        throw new BadRequestException('Error during onboarding')
+                    }
                 }
             }
-        })
+        )
 
         return preEventData
     }
@@ -193,7 +199,6 @@ export class PreeventService {
         const orderByCondition: FindOptionsOrder<Preevent> = {
             [orderBy]: desc ? 'DESC' : 'ASC'
         }
-        console.log('reqUser::: ', reqUser)
 
         return await paginate<Preevent>(this.preeventRepository, options, {
             where: {

@@ -7,6 +7,7 @@ import { User } from 'src/modules/admins/entities/user.entity'
 import { RoleEnum } from 'src/modules/admins/enums/user.enum'
 import { use } from 'passport'
 import * as dotenv from 'dotenv'
+import { getWallet } from 'src/utils/kaledio'
 dotenv.config()
 @Injectable()
 export class UserSeed implements OnModuleInit {
@@ -60,12 +61,14 @@ export class UserSeed implements OnModuleInit {
             if (userExist) {
                 return
             } else {
+                // const wallet = await getWallet('admin', 1)
                 const user = new User()
                 user.name = 'Admin'
                 user.publicAddress = process.env.ADMIN_PUBLIC_KEY
                 user.email = 'admin@gmail.com'
                 user.password = hashedPassword
                 user.role = adminRole
+                // user.publicAddress = wallet.address
                 await this.userRepository.save(user)
             }
         }

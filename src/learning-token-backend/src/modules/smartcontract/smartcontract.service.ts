@@ -97,11 +97,10 @@ export class SmartcontractService {
 
             const signer = new ethers.Wallet(actorPrivateKey, provider)
             const contract = new ethers.Contract(contractAddress, abi, signer)
-            console.log(`registerInstution: body: ${JSON.stringify(body)}`);
-            
+
             const result = await contract[body.functionName](...body.params)
             //external sleep for 10 seconds
-            await new Promise((r) => setTimeout(r, 5000))
+            await new Promise((r) => setTimeout(r, 10000))
             // Convert BigInt values to strings if needed
             // const processedResult = this.processResult(result)
             // console.log('View Function Result:', processedResult)
@@ -317,7 +316,7 @@ export class SmartcontractService {
                 },
                 select: ['id']
             })
-            const learnerIds = learnerEntities.map((learner, index) => index)
+            const learnerIds = learnerEntities.map((learner) => learner.id - 1)
             // Retrieve course details
             const courseId =
                 eventDataForTokenDistribution.onlineEvent.scoringGuide
@@ -346,6 +345,7 @@ export class SmartcontractService {
             // Call to create course function with fixed parameters
 
             let result: any
+
             // Call the batchMintAttendanceToken function with fixed parameters
             if (
                 distributeTokenDto.functionName === 'batchMintAttendanceToken'
@@ -355,8 +355,6 @@ export class SmartcontractService {
                         .attendanceToken
                 )
 
-                console.log(`learnerIds: ${learnerIds}`);
-                
                 result = await contract.batchMintAttendanceToken(
                     learnerIds,
                     amount,
@@ -433,6 +431,23 @@ export class SmartcontractService {
                     eventDataForTokenDistribution.onlineEvent.id,
                     {
                         mintInstructorScoreTokenStatus: true
+                    }
+                )
+            }
+
+            if (
+                eventDataForTokenDistribution.onlineEvent
+                    .scoreTokenMintStatus &&
+                eventDataForTokenDistribution.onlineEvent
+                    .attendanceTokenMintStatus &&
+                eventDataForTokenDistribution.onlineEvent.helpTokenMintStatus &&
+                eventDataForTokenDistribution.onlineEvent
+                    .mintInstructorScoreTokenStatus
+            ) {
+                await this.preEventRepository.update(
+                    eventDataForTokenDistribution.id,
+                    {
+                        status: PreEventEnum.COMPLETED
                     }
                 )
             }
