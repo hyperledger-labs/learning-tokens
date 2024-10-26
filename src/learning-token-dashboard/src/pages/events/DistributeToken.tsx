@@ -38,17 +38,30 @@ const DistributeToken = () => {
 
   const handleSubmit = async (values: any) => {
     console.log("Form Submitted with values:", values);
+
+    let functionName = "";
+    switch (values.token_type) {
+      case "attendance_token":
+        functionName = SmartcontractFunctionsEnum.BATCH_MINT_ATTENDANCE_TOKEN;
+        break;
+      case "score_token":
+        functionName = SmartcontractFunctionsEnum.BATCH_MINT_SCORE_TOKEN;
+        break;
+      case "instructorScore_token":
+        functionName = SmartcontractFunctionsEnum.BATCH_MINT_INSTRUCTOR_SCORE_TOKEN;
+        break;
+      default:
+        break;
+    }  
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/token-distributions`, {
-        functionName: SmartcontractFunctionsEnum.BATCH_MINT_ATTENDANCE_TOKEN,
+        functionName: functionName,
         preEventId: eventData.id,
       }, {
         headers: {
           Authorization: `Bearer ${auth.accessToken}`,
         },
       });
-
-      console.log(`eventData: ${eventData}`);
 
       if (response.status === 201) {
         setModalMessage(response.data.message);
