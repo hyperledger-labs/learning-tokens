@@ -1,20 +1,29 @@
-import { useState } from "react";
-import { FaLongArrowAltRight } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import ScoringGuide from "./ScoringGuide";
 import CreateCourse from "./CreateCourse";
 import DistributeToken from "./DistributeToken";
-import { Nav, ProgressBar, Container } from "react-bootstrap";
+import { Nav, Container } from "react-bootstrap";
 import "../../css/EventsAdd.css";
+import { useLocation } from "react-router-dom";
 
 const EventsAdd = () => {
   const [step, setStep] = useState(1);
   const handleStep = (step: number) => setStep(step);
+  const location = useLocation();
 
   const steps = [
     { label: "Scoring Guide", id: 1 },
     { label: "Review Wallets", id: 2 },
     { label: "Distribute Token", id: 3 },
   ];
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const stepParam = params.get("step");
+    if(stepParam) {
+      setStep(parseInt(stepParam, 10));
+    }
+  }, [location]);
 
   return (
     <Container className="my-4">

@@ -15,7 +15,7 @@ const Events = () => {
   const [totalItems, setTotalItems] = useState(0);
   const pagination = usePagination();
   const auth = useSelector((state: RootState) => state.auth);
-
+  
   useEffect(() => {
     const fetchPreeventData = async () => {
       try {
@@ -52,7 +52,24 @@ const Events = () => {
 
   const handleRowclick = (data: any) => {
     setEventData(data); // set the context value
-    navigate(`/events/${data.meetingEventId}`);
+
+    // Step based on Event Status to navigate to the correct page
+    let step = 1;
+    switch (data.status) {
+      case "defineScoringGuide":
+        step = 1;
+        break;
+      case "reviewWallets":
+        step = 2;
+        break;
+      case "tokenDistribution":
+        step = 3;
+        break;
+      default:
+        break
+    }
+    
+    navigate(`/events/${data.meetingEventId}?step=${step}`);
   };
 
   return (
