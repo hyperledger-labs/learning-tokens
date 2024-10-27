@@ -6,6 +6,7 @@ import Button from "../../components/Button";
 import SelectInput from "../../components/SelectInput";
 import { initWeb3 } from "../../utils";
 import toast from "react-hot-toast";
+
 const initialValues = {
   token_type: "attendance_token",
   attendance: null,

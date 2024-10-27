@@ -2,6 +2,8 @@ import { FC, useEffect, useState } from "react";
 import { formatDate, initWeb3Method } from "../../utils";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import { SmartcontractFunctionsEnum } from "../../enums/smartcontract-functions.enum";
+import axios from "axios";
 
 type ItemProps = {
   institutionId: number;
@@ -24,10 +26,24 @@ const Token: FC<Props> = ({ item }) => {
   const getAmount = async () => {
     const contract = await initWeb3Method();
     const tx = await contract!.balanceOf(auth.user.publicAddress, item.tokenId);
-    if (tx) {
-      setAmount(Number(tx));
-    } else {
-      setAmount(null);
+
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/register-actor`, {
+        role: auth.user.role,
+        id: auth.user.id,
+        functionName: SmartcontractFunctionsEnum.BALANCE_OF,
+        params: [auth.user.publicAddress, item.tokenId],
+      }, {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
+      });
+      
+      const tokenBalance = response?.data?.result || 0;
+      setAmount(Number(tokenBalance));
+
+    } catch (error) {
+      console.error("Error invoking balanceOf:", error);
     }
   };
 
