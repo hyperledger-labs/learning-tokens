@@ -35,9 +35,8 @@ const Institution: React.FC = () => {
     try {
       // Await the smart contract call
       await smartContractCallRegisterActor({
-        isAdmin: true,
         role: RoleEnum.ADMIN,
-        id: 0, //HD Wallet accountIndex of Admin - default to 0
+        id: 1, //HD Wallet accountIndex of Admin
         functionName: SmartcontractFunctionsEnum.REGISTER_INSTITUTION,
         params: [
           rowData.name,

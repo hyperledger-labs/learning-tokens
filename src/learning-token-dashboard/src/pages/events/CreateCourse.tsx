@@ -24,11 +24,7 @@ const CreateCourse = () => {
   const { eventData } = useEventContext();
 
   useEffect(() => {
-    console.log(`learnerList: ${learnersList.length>0}`);
-    
-    if (eventData?.eventName && learnersList.length>0) {
-      console.log(`eventData: ${eventData.id}`);
-      console.log(`auth user: ${auth.user.id}`);
+    if (eventData?.eventName && learnersList.length>0 && eventData?.status !== "reviewWallets") {
       setFormEditable(false);
     }
   }, [eventData?.eventName, learnersList.length]);
