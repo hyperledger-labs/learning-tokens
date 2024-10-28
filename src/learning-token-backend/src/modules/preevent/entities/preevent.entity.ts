@@ -52,7 +52,7 @@ export class Preevent extends BaseEntity {
     @Column({ type: 'varchar' })
     organizerName: string
 
-    @Column({ type: 'varchar', unique: true })
+    @Column({ type: 'varchar', unique: false })
     organizerEmail: string
 
     @Column({ type: 'simple-array' })
