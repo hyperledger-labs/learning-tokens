@@ -18,6 +18,7 @@ const CreateCourse = () => {
   const formikRef = useRef<any>(null);
   const auth = useSelector((state: RootState) => state.auth);
   const [learnersList, setLearnersList] = useState([]);
+  const [filteredLearnersList, setFilteredLearnersList] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [formEditable, setFormEditable] = useState(true);
   const [modalMessage, setModalMessage] = useState("");
@@ -38,9 +39,19 @@ const CreateCourse = () => {
           },
         });
 
-        console.log(`response: ${response.data}`);
+        const allLearners = response?.data?.result?.data || [];
+        setLearnersList(allLearners);
         
-        setLearnersList(response?.data?.result?.data || []);
+        // Fetch event details
+        const eventResponse = await axios.get(`${import.meta.env.VITE_API_URL}/postevent/${eventData?.id}`);
+        const eventLearnersEmails = eventResponse.data.map((learner: any) => learner.email);
+
+        // Filter learnersList by the emails fetched from the event
+        const filteredLearners = allLearners.filter((learner: any) =>
+          eventLearnersEmails.includes(learner.email)
+        );
+
+        setFilteredLearnersList(filteredLearners);
       } catch (error) {
         console.error("Error fetching learners list:", error);
       }
@@ -119,7 +130,7 @@ const CreateCourse = () => {
 
                 <h4>Learners List</h4>
                 <Row className="mb-3">
-                  {learnersList.map((learner: any) => (
+                  {filteredLearnersList.map((learner: any) => (
                     <Col key={learner.id} className="mb-2">
                       <div className="border p-2 text-center">
                         {learner.name} - {learner.publicAddress}
