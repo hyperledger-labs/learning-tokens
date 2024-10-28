@@ -80,12 +80,20 @@ export class PreeventService {
 
                 let body = {}
                 if (instructor) {
-                    await this.preeventRepository.update(preEventData.id, {
-                        instructor: instructor
-                    })
-                    await this.onlineEventRepository.update(savedEvent.id, {
-                        instructor: instructor
-                    })
+                    await transactionalEntityManager.update(
+                        Preevent,
+                        preEventData.id,
+                        {
+                            instructor: instructor
+                        }
+                    )
+                    await transactionalEntityManager.update(
+                        OnlineEvent,
+                        savedEvent.id,
+                        {
+                            instructor: instructor
+                        }
+                    )
                     // body = {
                     //     role: 'instructor',
                     //     id: instructor.id,
@@ -162,6 +170,11 @@ export class PreeventService {
                         }
                         await this.smartContractService.onboardingActor(body)
                         // Proceed only if the first call succeeds
+                        await transactionalEntityManager.update(
+                            Instructor,
+                            registeredInstructor.id,
+                            { status: true }
+                        )
                         body = {
                             role: 'institution',
                             id: institution.id,
