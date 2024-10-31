@@ -31,4 +31,17 @@ export class CreatePreeventDto {
     @IsOptional()
     @IsString()
     organization: string
+
+    @IsOptional()
+    @IsString()
+    community: string
+
+    @IsOptional()
+    @IsString()
+    fieldsOfKnowledge: string
+
+    @IsOptional()
+    @IsString()
+    taxonomyOfSkills: string
+
 }

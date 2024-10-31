@@ -64,6 +64,15 @@ export class Preevent extends BaseEntity {
     @Column({ type: 'varchar', length: 225, nullable: true })
     organization: string
 
+    @Column({ type: 'varchar', length: 225, nullable: true })
+    community: string
+
+    @Column({ type: 'varchar', length: 225, nullable: true })
+    fieldsOfKnowledge: string
+
+    @Column({ type: 'varchar', length: 225, nullable: true })
+    taxonomyOfSkills: string
+
     @ManyToOne(() => Institution, (institution) => institution.preevents)
     institution: Institution
 

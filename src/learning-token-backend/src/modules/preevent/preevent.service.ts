@@ -82,7 +82,7 @@ export class PreeventService {
                 if (instructor) {
                     await transactionalEntityManager.update(
                         Preevent,
-                        preEventData.id,
+                        savedEvent.id,
                         {
                             instructor: instructor
                         }
