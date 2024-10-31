@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import abi from "../contracts/LearningToken.json";
-const SMART_CONTRACT = import.meta.env.VITE_SMART_CONTRACT;
+const SMART_CONTRACT =  import.meta.env.VITE_SMART_CONTRACT;
 export const initWeb3 = async () => {
   if ((window as any).ethereum) {
     const provider = new ethers.BrowserProvider((window as any).ethereum);
@@ -16,6 +16,7 @@ export const initWeb3Method = async () => {
     // const accounts = await window.ethereum.request({
     //   method: "eth_requestAccounts",
     // });
+    // const accounts = await window.ethereum.send('eth_requestAccounts');
 
     const signer = await provider.getSigner();
 

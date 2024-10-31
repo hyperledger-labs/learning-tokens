@@ -40,8 +40,8 @@ const config: HardhatUserConfig = {
     //   url: SEPOLIA_RPC_URL,
     //   chainId: 11155111,
     //   accounts: [SEPOLIA_PRIV_KEY],
-    //   // gasPrice: 80000000, // adjust as necessary
-    //   // gas: 124500 // adjust as necessary
+    //  // gasPrice: 80000000, // adjust as necessary
+    //  // gas: 124500 // adjust as necessary
     // },
     // mumbai: {
     //   url: POLYGON_RPC_URL,
