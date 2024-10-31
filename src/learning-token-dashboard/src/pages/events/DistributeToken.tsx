@@ -1,5 +1,5 @@
 import { Form, Formik, FormikProps } from "formik";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { array, number, object, string } from "yup";
 import SelectInput from "../../components/SelectInput";
 import { Container, Card, Button, FormGroup } from "react-bootstrap";
@@ -35,9 +35,58 @@ const DistributeToken = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const auth = useSelector((state: RootState) => state.auth);
+  const [learnersList, setLearnersList] = useState([]);
+  const [filteredLearnersList, setFilteredLearnersList] = useState([]);
+  const [selectedLearners, setSelectedLearners] = useState<Record<number, boolean>>({});
+
+  useEffect(() => {
+    const fetchLearnersList = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/admin/learner-list`, {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+        });
+
+        const allLearners = response?.data?.result?.data || [];
+        setLearnersList(allLearners);
+
+        // Fetch event details
+        const eventResponse = await axios.get(`${import.meta.env.VITE_API_URL}/postevent/${eventData?.id}`);
+        const eventLearnersEmails = eventResponse.data.map((learner: any) => learner.email);
+
+        // Filter learnersList by the emails fetched from the event
+        const filteredLearners = allLearners.filter((learner: any) =>
+          eventLearnersEmails.includes(learner.email)
+        );
+
+        setFilteredLearnersList(filteredLearners);
+      } catch (error) {
+        console.error("Error fetching learners list:", error);
+      }
+    };
+
+    fetchLearnersList();
+  }, []);
+
+  const handleCheckboxChange = (learnerId: number) => {
+    setSelectedLearners((prev) => ({
+      ...prev,
+      [learnerId]: !prev[learnerId],
+    }));
+  }
 
   const handleSubmit = async (values: any) => {
     console.log("Form Submitted with values:", values);
+
+    const submitSelectedLearnerList = Object.keys(selectedLearners)
+      .filter((learner) => selectedLearners[learner])
+      .map((learner) => ({
+        learnerId: Number(learner),
+        //publicAddress: learnersList.find((l) => l.id === Number(learner))?.publicAddress,
+      }));
+
+    values.learnersList = submitSelectedLearnerList;
 
     let functionName = "";
     switch (values.token_type) {
@@ -52,11 +101,15 @@ const DistributeToken = () => {
         break;
       default:
         break;
-    }  
+    }
+
+    console.log(`selectedLearnerList: ${values.learnersList.map((l: any) => l.learnerId)}`);
+    
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/token-distributions`, {
         functionName: functionName,
         preEventId: eventData.id,
+        // learnersList: values.learnersList,
       }, {
         headers: {
           Authorization: `Bearer ${auth.accessToken}`,
@@ -100,7 +153,7 @@ const DistributeToken = () => {
             innerRef={formikRef}
             onSubmit={handleSubmit}
           >
-            {({values}) => (
+            {({ values }) => (
               <Form>
                 <FormGroup>
                   <h5>Token</h5>
@@ -111,6 +164,25 @@ const DistributeToken = () => {
                     options={tokenType}
                   />
                 </FormGroup>
+
+                <FormGroup>
+                  <h5>Learners</h5>
+                  {filteredLearnersList.map((learner) => (
+                    <div key={learner.id} style={{ display: 'flex', alignItems: 'center' }}>
+                      <input
+                        className="ml-2 mr-2"
+                        type="checkbox"
+                        id={`learner-${learner.id}`}
+                        checked={!!selectedLearners[learner.id]}
+                        onChange={() => handleCheckboxChange(learner.id)}
+                      />
+                      <label htmlFor={`learner-${learner.id}`}>
+                        {learner.name} - {learner.publicAddress}
+                      </label>
+                    </div>
+                  ))}
+                </FormGroup>
+
                 <Button
                   size="sm"
                   className="w-100 mt-3"

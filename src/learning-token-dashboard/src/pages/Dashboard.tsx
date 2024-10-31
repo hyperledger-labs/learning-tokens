@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import Token from "../components/nft/Token";
 import { SmartcontractFunctionsEnum } from "../enums/smartcontract-functions.enum";
 import axios from "axios";
-import { Carousel } from "react-bootstrap"
 
 // const initialValues = {
 //   tokenId: 0,
@@ -76,13 +75,11 @@ function Dashboard() {
         </div>
         <div className="flex flex-col items-center mt-2">
           <h4 className="font-bold">Your Tokens</h4>
-          <Carousel className="mt-4">
-            {tokens.map((token: any, index: number) => (
-              <Carousel.Item key={index}>
-                <Token item={token} />
-              </Carousel.Item>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            {tokens.map((token: any) => (
+              <Token  key={`${token.tokenId}-${auth.user.id}`} item={token} />
             ))}
-          </Carousel>
+          </div>
         </div>
 
         {/* <div className="flex flex-col items-center justify-center w-full">
