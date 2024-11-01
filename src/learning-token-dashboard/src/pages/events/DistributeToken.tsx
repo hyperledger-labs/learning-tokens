@@ -70,6 +70,8 @@ const DistributeToken = () => {
   }, []);
 
   const handleCheckboxChange = (learnerId: number) => {
+    console.log("Checkbox changed for learner:", learnerId);
+    
     setSelectedLearners((prev) => ({
       ...prev,
       [learnerId]: !prev[learnerId],
@@ -103,7 +105,7 @@ const DistributeToken = () => {
         break;
     }
 
-    console.log(`selectedLearnerList: ${values.learnersList.map((l: any) => l.learnerId)}`);
+    console.log(`selectedLearnerList: ${values.learnersList}`);
     
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/token-distributions`, {

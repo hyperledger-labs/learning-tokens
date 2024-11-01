@@ -39,7 +39,6 @@ const Token: FC<Props> = ({ item }) => {
 
       const tokenBalance = response?.data?.result || 0;
       setAmount(Number(tokenBalance));
-
     } catch (error) {
       console.error("Error invoking balanceOf:", error);
     }
@@ -69,7 +68,7 @@ const Token: FC<Props> = ({ item }) => {
           </span>
         </div>
         <div className="text-white ml-5">
-          Created: {formatDate(item.createdAt)}
+          Created: {item.createdAt}
         </div>
       </Card.Body>
     </Card>
