@@ -38,6 +38,7 @@ const DistributeToken = () => {
   const [learnersList, setLearnersList] = useState([]);
   const [filteredLearnersList, setFilteredLearnersList] = useState([]);
   const [selectedLearners, setSelectedLearners] = useState<Record<number, boolean>>({});
+  const [allSelected, setAllSelected] = useState(false);
 
   useEffect(() => {
     const fetchLearnersList = async () => {
@@ -69,24 +70,40 @@ const DistributeToken = () => {
     fetchLearnersList();
   }, []);
 
+  useEffect(() => {
+    // Update selectedLearners based on allSelected
+    const updatedSelected = {};
+    filteredLearnersList.forEach(learner => {
+      updatedSelected[learner.id] = allSelected;
+    });
+    setSelectedLearners(updatedSelected);
+  }, [allSelected, filteredLearnersList]);
+
   const handleCheckboxChange = (learnerId: number) => {
     console.log("Checkbox changed for learner:", learnerId);
-    
+
     setSelectedLearners((prev) => ({
       ...prev,
       [learnerId]: !prev[learnerId],
     }));
   }
 
+  const handleSelectAllChange = () => {
+    setAllSelected(!allSelected);
+  }
+
   const handleSubmit = async (values: any) => {
     console.log("Form Submitted with values:", values);
 
-    const submitSelectedLearnerList = Object.keys(selectedLearners)
-      .filter((learner) => selectedLearners[learner])
-      .map((learner) => ({
-        learnerId: Number(learner),
-        //publicAddress: learnersList.find((l) => l.id === Number(learner))?.publicAddress,
-      }));
+    const hasSelectedLearners = Object.values(selectedLearners).some((selected) => selected);
+    let submitSelectedLearnerList = null
+    if (hasSelectedLearners) {
+      submitSelectedLearnerList = Object.keys(selectedLearners)
+        .filter((learner) => selectedLearners[learner])
+        .map((learner) => (Number(learner)));
+    } else { // If no learners are selected, submit all learners
+      submitSelectedLearnerList = filteredLearnersList.map((learner) => learner.id);
+    }
 
     values.learnersList = submitSelectedLearnerList;
 
@@ -106,12 +123,12 @@ const DistributeToken = () => {
     }
 
     console.log(`selectedLearnerList: ${values.learnersList}`);
-    
+
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/token-distributions`, {
         functionName: functionName,
         preEventId: eventData.id,
-        // learnersList: values.learnersList,
+        userIds: values.learnersList,
       }, {
         headers: {
           Authorization: `Bearer ${auth.accessToken}`,
@@ -169,6 +186,17 @@ const DistributeToken = () => {
 
                 <FormGroup>
                   <h5>Learners</h5>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <input
+                      className="ml-2 mr-2"
+                      type="checkbox"
+                      id="select-all"
+                      checked={allSelected}
+                      onChange={handleSelectAllChange}
+                    />
+                    <label htmlFor="select-all">Select All</label>
+                    <hr/>
+                  </div>
                   {filteredLearnersList.map((learner) => (
                     <div key={learner.id} style={{ display: 'flex', alignItems: 'center' }}>
                       <input

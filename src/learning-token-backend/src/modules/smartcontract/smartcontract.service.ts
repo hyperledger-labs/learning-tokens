@@ -347,7 +347,7 @@ export class SmartcontractService {
                     (userId) => userId - 1
                 )
             }
-            return learnerIds
+            //return learnerIds
             // Retrieve course details
             const courseId =
                 eventDataForTokenDistribution.onlineEvent.scoringGuide
