@@ -336,7 +336,18 @@ export class SmartcontractService {
                 },
                 select: ['id']
             })
-            const learnerIds = learnerEntities.map((learner) => learner.id - 1)
+
+            let learnerIds = []
+
+            if (!distributeTokenDto.userIds) {
+                learnerIds = learnerEntities.map((learner) => learner.id - 1)
+            } else {
+                //iterate over userIds and make id -1 and push to learnerIds
+                learnerIds = distributeTokenDto.userIds.map(
+                    (userId) => userId - 1
+                )
+            }
+            return learnerIds
             // Retrieve course details
             const courseId =
                 eventDataForTokenDistribution.onlineEvent.scoringGuide
@@ -494,6 +505,7 @@ export class SmartcontractService {
                 .leftJoinAndSelect('preEvent.postevents', 'postevent')
                 .select([
                     'preEvent.id', // keep the primary preEvent fields you need
+                    'postevent.id',
                     'postevent.name', // select specific fields from postevents
                     'postevent.email'
                 ])
