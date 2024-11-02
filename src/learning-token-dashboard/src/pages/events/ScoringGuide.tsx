@@ -86,8 +86,8 @@ const ScoringGuide = () => {
         initialValues={{
           organizer: eventData?.organizerName || "",
           community: eventData?.community || "",
-          fieldsOfKnowledge: eventData?.onlineEvent?.scoringGuide?.fieldOfKnowledge || "",
-          taxonomyOfSkills: eventData?.onlineEvent?.scoringGuide?.taxonomyOfSkill || "",
+          fieldsOfKnowledge: eventData?.fieldsOfKnowledge || "",
+          taxonomyOfSkills: eventData?.taxonomyOfSkills || "",
           attendanceToken: eventData?.onlineEvent?.scoringGuide?.attendanceToken || 0,
           learnerScoreToken: eventData?.onlineEvent?.scoringGuide?.scoreTokenAmount || 0,
           helpTokenAmount: eventData?.onlineEvent?.scoringGuide?.helpTokenAmount || 0,

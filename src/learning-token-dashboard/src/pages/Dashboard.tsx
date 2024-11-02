@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import Token from "../components/nft/Token";
 import { SmartcontractFunctionsEnum } from "../enums/smartcontract-functions.enum";
 import axios from "axios";
-import { Carousel } from "react-bootstrap"
+import { Spinner } from 'react-bootstrap';
+import { formatDateTime } from "../utils";
 
 // const initialValues = {
 //   tokenId: 0,
@@ -21,11 +22,13 @@ function Dashboard() {
   // const formikRef = useRef<FormikProps<any>>(null);
   // const [balance, setBalance] = useState<any>(null);
   // const [courseIdOptions, setCourseIdOptions] = useState([]);
+  const [loadingSpinner, setLoadingSpinner] = useState(false);
 
   const [tokens, setTokens] = useState([]);
 
   const getLearnerTokenMetadata = async () => {
     try {
+      setLoadingSpinner(true);
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/register-actor`, {
         role: auth.user.role,
         id: auth.user.id,
@@ -43,7 +46,7 @@ function Dashboard() {
           institutionId: item[0],
           instructorId: item[1],
           tokenId: item[2],
-          createdAt: new Date(Number(item[3]) * 1000),
+          createdAt: formatDateTime(new Date(Number(item[3]) * 1000)),
           courseId: item[4],
           fieldOfKnowledge: item[5],
           skill: item[6],
@@ -53,9 +56,10 @@ function Dashboard() {
       if (temp.length > 0) {
         setTokens(temp);
       }
-
     } catch (error) {
       console.error("Error invoking getLearnerTokenMetadata:", error);
+    } finally {
+      setLoadingSpinner(false);
     }
   };
 
@@ -76,13 +80,16 @@ function Dashboard() {
         </div>
         <div className="flex flex-col items-center mt-2">
           <h4 className="font-bold">Your Tokens</h4>
-          <Carousel className="mt-4">
-            {tokens.map((token: any, index: number) => (
-              <Carousel.Item key={index}>
-                <Token item={token} />
-              </Carousel.Item>
-            ))}
-          </Carousel>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            {loadingSpinner ? (
+              <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+              </Spinner>
+            ) : (tokens.map((token: any) => (
+              <Token key={`${token.tokenId}-${auth.user.id}`} item={token} />
+            ))
+            )}
+          </div>
         </div>
 
         {/* <div className="flex flex-col items-center justify-center w-full">
