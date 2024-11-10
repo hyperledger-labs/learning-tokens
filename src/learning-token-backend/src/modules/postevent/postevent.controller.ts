@@ -12,7 +12,7 @@ import {
 import { PosteventService } from './postevent.service'
 import { CreatePosteventDto } from './dto/create-postevent.dto'
 import { UpdatePosteventDto } from './dto/update-postevent.dto'
-import { SecretKeyGuard } from 'src/secret-key/secret-key.guard'
+import { SecretKeyGuard } from '../secret-key/secret-key.guard'
 
 @Controller('postevent')
 export class PosteventController {
@@ -20,7 +20,7 @@ export class PosteventController {
 
     @UseGuards(SecretKeyGuard)
     @Post()
-    async create(@Body() createPosteventDto: CreatePosteventDto[]) {
+    async create(@Body() createPosteventDto: CreatePosteventDto) {
         try {
             const result = await this.posteventService.create(
                 createPosteventDto
@@ -31,6 +31,7 @@ export class PosteventController {
                 result: result
             }
         } catch (error) {
+            console.log(error)
             return {
                 status: HttpStatus.NOT_FOUND,
                 message: 'Something went wrong.'
@@ -38,9 +39,11 @@ export class PosteventController {
         }
     }
 
-    @Get()
-    findAll() {
-        return this.posteventService.findAll()
+    @Get(':preeventId')
+    async findAll(@Param('preeventId') preeventId: string) {
+        console.log('preeventId:::', preeventId);
+        
+        return this.posteventService.findAll(+preeventId)
     }
 
     @Get(':id')

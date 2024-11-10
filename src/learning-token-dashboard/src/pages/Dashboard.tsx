@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { initWeb3Method } from "../utils";
 // import { number, object } from "yup";
 // import { FormikProps } from "formik";
 import { useEffect, useState } from "react";
-
 import Token from "../components/nft/Token";
+import { SmartcontractFunctionsEnum } from "../enums/smartcontract-functions.enum";
+import axios from "axios";
+import { Spinner } from 'react-bootstrap';
+import { formatDateTime } from "../utils";
 
 // const initialValues = {
 //   tokenId: 0,
@@ -20,78 +22,75 @@ function Dashboard() {
   // const formikRef = useRef<FormikProps<any>>(null);
   // const [balance, setBalance] = useState<any>(null);
   // const [courseIdOptions, setCourseIdOptions] = useState([]);
+  const [loadingSpinner, setLoadingSpinner] = useState(false);
 
-  const [tokens, setTokens] = useState([])
-
+  const [tokens, setTokens] = useState([]);
 
   const getLearnerTokenMetadata = async () => {
-    const contract = await initWeb3Method()
-    const tx = await contract!.getLearnerTokenMetadata(auth.user.publicAddress)
-  
-    let temp: any = [];
-    for (let key in tx) {
-      if (tx.hasOwnProperty(key)) {
-        if (Array.isArray(tx[key])) {          
-          let obj: any = {};
-          tx[key].forEach((item: any, index: number) => {
-            if (index === 0) {
-              obj["institutionId"] = Number(item);
-            }
-            if (index === 1) {
-              obj["instructorId"] = Number(item);
-            }
-            if (index === 2) {
-              obj["tokenId"] = Number(item);
-            }
-            if (index === 3) {
-              obj["createdAt"] = Number(item);
-            }
-            if (index === 4) {
-              obj["courseId"] = Number(item);
-            }
-            if (index === 5) {
-              obj["fieldOfKnowledge"] = (item);
-            }
-            if (index === 6) {
-              obj["skill"] = (item);
-            }
-          
-          });
-          temp.push(obj);
-        } 
-      }
-    }
+    try {
+      setLoadingSpinner(true);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/smartcontract/register-actor`, {
+        role: auth.user.role,
+        id: auth.user.id,
+        functionName: SmartcontractFunctionsEnum.GET_LEARNER_TOKEN_METADATA,
+        params: [auth.user.publicAddress],
+      }, {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+        },
+      });
 
-    if (temp.length > 0) {
-      setTokens(temp)
+      const tokenData = response?.data?.result || [];
+      const temp = tokenData.map((item: any) => {
+        return {
+          institutionId: item[0],
+          instructorId: item[1],
+          tokenId: item[2],
+          createdAt: formatDateTime(new Date(Number(item[3]) * 1000)),
+          courseId: item[4],
+          fieldOfKnowledge: item[5],
+          skill: item[6],
+        };
+      });
+
+      if (temp.length > 0) {
+        setTokens(temp);
+      }
+    } catch (error) {
+      console.error("Error invoking getLearnerTokenMetadata:", error);
+    } finally {
+      setLoadingSpinner(false);
     }
-  } 
+  };
 
   useEffect(() => {
-    if (auth.user.type === "learner") {
-      getLearnerTokenMetadata()
+    if (auth.user.role === "learner") {
+      getLearnerTokenMetadata();
     }
   }, []);
 
-
-  
-
-
-  if (auth.user.type === "learner") {
+  if (auth.user.role === "learner") {
     return (
       <>
-        <div className="flex flex-col items-center">
-          <h3 className="font-bold">Your Tokens</h3>
-          <div className="grid grid-cols-4 gap-2">
-            {
-              tokens.length > 0 && tokens.map((token:any,index:number) => {
-                return <Token key={index} item={token}/>
-              })
-            }
+        <div className="font-bold text-lg">
+          Hello <span className="capitalize">{auth.user.name}</span>
+          <div>
+            Public Address: <span>{auth.user.publicAddress}</span>
           </div>
-
         </div>
-
+        <div className="flex flex-col items-center mt-2">
+          <h4 className="font-bold">Your Tokens</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            {loadingSpinner ? (
+              <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+              </Spinner>
+            ) : (tokens.map((token: any) => (
+              <Token key={`${token.tokenId}-${auth.user.id}`} item={token} />
+            ))
+            )}
+          </div>
+        </div>
 
         {/* <div className="flex flex-col items-center justify-center w-full">
           <h3>
@@ -122,7 +121,6 @@ function Dashboard() {
             </Form>
           </Formik>
         </div> */}
-    
       </>
     );
   }
@@ -131,6 +129,9 @@ function Dashboard() {
     <>
       <div className="font-bold text-lg">
         Hello <span className="capitalize">{auth.user.name}</span>
+        <div>
+          Public Address: <span>{auth.user.publicAddress}</span>
+        </div>
       </div>
     </>
   );

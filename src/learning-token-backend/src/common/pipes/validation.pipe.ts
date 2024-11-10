@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common'
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
+import e from 'express'
 
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {
@@ -19,7 +20,7 @@ export class ValidationPipe implements PipeTransform<any> {
             throw new BadRequestException({
                 statusCode: 400,
                 message: 'Validation Error',
-                missingProperty: `${errors[0].property} is missing or it should be ${errors[0].constraints.isString}`
+                missingProperty: `${errors[0].property} is missing or it should be ${errors[0].constraints}`
             })
         }
         return value

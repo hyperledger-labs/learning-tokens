@@ -45,8 +45,7 @@ export class AuthController {
     @Post('admin-login')
     private async login(@Body() loginRequestDto: LoginRequestDto) {
         try {
-            loginRequestDto.type = 'Admin'
-            const result = await this.service.login(loginRequestDto)
+            const result = await this.service.adminLogin(loginRequestDto)
             if (result) {
                 return {
                     status: HttpStatus.CREATED,
@@ -95,6 +94,7 @@ export class AuthController {
                 result: result
             }
         } catch (error) {
+            console.log(error)
             throw new ConflictException(error.message)
         }
     }

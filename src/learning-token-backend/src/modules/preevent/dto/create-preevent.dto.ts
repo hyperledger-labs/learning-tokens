@@ -1,30 +1,47 @@
-import { IsString } from "class-validator";
+import { IsArray, IsOptional, IsString } from 'class-validator'
 
 export class CreatePreeventDto {
     @IsString()
-    eventId: string
+    meetingEventId: string
 
     @IsString()
     eventName: string
-    
+
+    @IsString()
+    organizerName: string
+
+    @IsString()
+    organizerEmail: string
+
     @IsString()
     eventType: string
 
     @IsString()
     description: string
-    
+
     @IsString()
     eventDate: Date
-    
-    @IsString()
-    speakerName: string
 
-    @IsString()
-    speakerEmail: string
+    @IsArray()
+    speakersName: string[]
 
-    @IsString()
-    speakerTitle: string
+    @IsArray()
+    speakersEmail: string[]
 
+    @IsOptional()
     @IsString()
     organization: string
+
+    @IsOptional()
+    @IsString()
+    community: string
+
+    @IsOptional()
+    @IsString()
+    fieldsOfKnowledge: string
+
+    @IsOptional()
+    @IsString()
+    taxonomyOfSkills: string
+
 }

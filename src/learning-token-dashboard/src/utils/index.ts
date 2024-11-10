@@ -30,6 +30,20 @@ export const formatDate = (timestamp: number) => {
   return date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 };
 
+export const formatDateTime = (utc: number) => {
+  const date = new Date(utc);
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timezone: "UTC",
+  };
+
+  return date.toLocaleString('en-US', options);
+};
+
 export const getRandomFileName = () => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(23).substring(2, 5);
 };

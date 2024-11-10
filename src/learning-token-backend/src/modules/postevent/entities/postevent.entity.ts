@@ -1,5 +1,12 @@
-import { Preevent } from "src/modules/preevent/entities/preevent.entity"
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Preevent } from 'src/modules/preevent/entities/preevent.entity'
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn
+} from 'typeorm'
 
 @Entity()
 export class Postevent {
@@ -7,14 +14,11 @@ export class Postevent {
     id: number
 
     @Column({ type: 'varchar', length: 30, nullable: true })
-    eventId: string
-
-    @Column({ type: 'varchar', length: 30, nullable: true })
     name: string
 
-    @Column({ type: 'varchar', length: 30, nullable: true })
+    @Column({ type: 'varchar', length: 30, nullable: true, unique: false })
     email: string
-    
+
     @CreateDateColumn({ type: 'varchar', length: 30, nullable: true })
     joinTime: Date
 
@@ -22,6 +26,5 @@ export class Postevent {
     leaveTime: Date
 
     @ManyToOne(() => Preevent, (preevent) => preevent.postevents)
-    @JoinColumn({ name: 'eventId', referencedColumnName: 'eventId' })
     preevent: Preevent
 }
