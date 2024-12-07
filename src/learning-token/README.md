@@ -1,34 +1,20 @@
 # Learning Token
 
-Run the command on a terminal to start hardhat network && run the testcases
+# Setup the Kaleido infrastructure.
+````
+1. Create a network (Ohio) then create a node using Ethereum then select Hyperledger Besu.
+2. Create an HD wallet for admin, institution, instructor and learner.
+3. Fetch indices 0-3 to get the public and private keys for admin, institution, instructor and learner.
+4. Fund accounts under Digital Assets > Dashboard > Ether Pool > Select HD Wallet > Select Index.
+5. Deploy the smart contract with the command below and verify in Kaleido's Dashboard under Data Explorer > Block Explorer > Transactions.
+````
 
-```
-npx hardhat node
-npx hardhat test test/LearningToken.ts --network localhost
-```
-
-Follow below commands for deploying the contract on hardhat network:
-
-```
-npx hardhat run scripts/studentAttentance.ts
-```
-
+# Run the following command to deploy the smart contract to Kaleido.
 ```shell
-npx hardhat help
-npx hardhat node
-npx hardhat test
-sol2uml class ./contracts/LearningToken.sol
-REPORT_GAS=true npx hardhat test
-npx hardhat run scripts/DeployLocalHardhat.ts --network localhost
+npx hardhat run scripts/DeployLive.ts --network kaleido
 ```
 
-```shell
-npx hardhat compile
-npx hardhat run scripts/DeployLive.ts --network mumbai
-npx hardhat verify --network mumbai <DEPLOYED_CONTRACT_ADDRESS>
-```
-
-Follow below to start fronted and backend
+# Follow below to start fronted and backend
 
 ```
 change .env from learning-token-dashboard with the deployed contract address

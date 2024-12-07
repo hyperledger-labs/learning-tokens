@@ -42,7 +42,13 @@ Before running the application, you have to make an '.env' file using the given 
 ````bash
 On a different termianl tab execute this command to run the application.
 ```bash
-# Run development
+1. Update the CONTRACT_ADDRESS in .env after deploying the smart contract to Kaleido.
+
+2. Update the .env for the created Kaleido HD Wallet accounts. 
+
+3. Update the RPC URLs in .env. There’s a separate RPC url for the node (used for smart contract deployment) and HD Wallet (used in fetching the public and private keys of admin, institution, instructor and learner).
+
+4. Run development
 $ yarn start
 
 # watch mode
@@ -50,6 +56,20 @@ $ yarn start:dev
 
 # production mode
 $ npm run start:prod
+
+5. Register an institution. Then login as admin and activate the institution. Public address is fetched from kaleido wallet with zero index.
+
+6. Login as an institution then generate SDK key.
+
+7. Client’s integration Dev Work: Install LT SDK npm package then import the library. Then run tsc index and node index. This will register the instructor and learners (with default password 12345678) and save pre and post event details. Next step will reflect defineScoringGuide.
+
+8. Login as instructor then proceed on creating the scoring guide. Next step will reflect reviewWallets.
+
+9. Review wallets then submit the form. Then the next step will reflect tokenDistribution.
+
+10. Select a token and learners to distribute a token.
+
+11. Login as Learner and verify the distributed token.
 ````
 
 ## Support
