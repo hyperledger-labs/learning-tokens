@@ -2,17 +2,20 @@ import { Table, Toggle } from "rsuite";
 import ListSkeleton from "../../components/CardSkeleton/listSkeleton";
 import {
   useLazyGetInstructorQuery,
+  useSmartContractCallMutation,
   useUpdateInstructorStatusMutation,
 } from "../../store/features/admin/adminApi";
-import { initWeb3 } from "../../utils";
 import usePagination from "../../hooks/usePagination";
 import { useEffect } from "react";
 import Pagination from "../../components/Pagination";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 const { Column, HeaderCell, Cell } = Table;
 const Instructor = () => {
+  const auth = useSelector((state: RootState) => state.auth);
   const [getInstructor, { data, isLoading }] = useLazyGetInstructorQuery();
   const [updateInstructorStatus] = useUpdateInstructorStatusMutation();
-
+  const [smartContractCall] = useSmartContractCallMutation();
   const pagination = usePagination();
 
   useEffect(() => {
@@ -23,14 +26,18 @@ const Instructor = () => {
   }, [pagination.page, pagination.limit]);
 
   const toggleStatus = async (rowData: any) => {
-    const contract = await initWeb3();
-    const tx = await contract!.addInstructorToInstitution(
-      rowData.publicAddress,
-      Date.now()
-    );
-    if (tx) {
-      await updateInstructorStatus(rowData);
-    }
+    console.log(rowData);
+    smartContractCall({
+      isAdmin: false,
+      isView: false,
+      isWrite: true,
+      type: auth.user.type,
+      id: auth.user.id,
+      functionName: "addInstructorToInstitution",
+      params: [rowData.publicAddress, Date.now()],
+    }).then(() => {
+      updateInstructorStatus(rowData);
+    });
   };
   if (isLoading) {
     return (

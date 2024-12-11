@@ -1,11 +1,15 @@
 import { Exclude } from 'class-transformer'
-import { IsEmail, IsString } from 'class-validator'
+import { IsArray, IsEmail, IsString } from 'class-validator'
+import { Preevent } from 'src/modules/preevent/entities/preevent.entity'
+import { Role } from 'src/modules/role/entities/role.entity'
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm'
@@ -46,6 +50,12 @@ export class Institution extends BaseEntity {
     @Column({ type: 'varchar', length: 50, nullable: true })
     longitude: string
 
+    @Column({ type: 'varchar', length: 50, nullable: true, unique: true })
+    sdkKeys: string
+
+    @ManyToOne(() => Role)
+    role: Role
+
     @CreateDateColumn()
     createdAt: Date
 
@@ -54,4 +64,10 @@ export class Institution extends BaseEntity {
 
     @DeleteDateColumn()
     deletedAt: Date
+
+    @Column({ type: 'int', nullable: false })
+    roleId: number
+
+    @OneToMany(() => Preevent, (preevent) => preevent.institution)
+    preevents: Preevent[]
 }

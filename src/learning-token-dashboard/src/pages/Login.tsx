@@ -45,6 +45,7 @@ const Login = () => {
         loginAdmin({
           email: values.email,
           password: values.password,
+          type: values.type,
         })
           .unwrap()
           .then((res: any) => {

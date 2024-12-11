@@ -10,6 +10,12 @@ import { InstitutionsModule } from './modules/institutions/institutions.module'
 import { InstructorsModule } from './modules/instructors/instructors.module'
 import { LearnersModule } from './modules/learners/learners.module'
 import { RoleModule } from './modules/role/role.module'
+import { SdkKeysModule } from './modules/sdk-keys/sdk-keys.module'
+import { PreeventModule } from './modules/preevent/preevent.module'
+import { PosteventModule } from './modules/postevent/postevent.module'
+import { SmartcontractModule } from './modules/smartcontract/smartcontract.module'
+import { EventModule } from './modules/event/event.module'
+import { SeederModule } from './modules/role/seeder/seeder.module'
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -23,7 +29,13 @@ import { RoleModule } from './modules/role/role.module'
         RoleModule,
         LearnersModule,
         InstructorsModule,
-        InstitutionsModule
+        InstitutionsModule,
+        SdkKeysModule,
+        PreeventModule,
+        PosteventModule,
+        SmartcontractModule,
+        EventModule,
+        SeederModule
     ],
     controllers: [AppController],
     providers: [AppService],

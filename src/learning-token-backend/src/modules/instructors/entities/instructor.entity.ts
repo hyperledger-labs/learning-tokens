@@ -1,14 +1,19 @@
 import { Exclude } from 'class-transformer'
 import { IsEmail, IsString } from 'class-validator'
+import { Preevent } from 'src/modules/preevent/entities/preevent.entity'
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    ManyToOne
 } from 'typeorm'
+import { Role } from 'src/modules/role/entities/role.entity'
+
 @Entity()
 export class Instructor extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
@@ -40,6 +45,9 @@ export class Instructor extends BaseEntity {
     @Column({ type: 'varchar', length: 50, nullable: true, unique: true })
     publicAddress: string
 
+    @OneToMany(() => Preevent, (preevent) => preevent.instructor)
+    preevent: Preevent[]
+
     @CreateDateColumn()
     createdAt: Date
 
@@ -48,4 +56,10 @@ export class Instructor extends BaseEntity {
 
     @DeleteDateColumn()
     deletedAt: Date
+
+    @ManyToOne(() => Role)
+    role: Role
+
+    @Column({ type: 'int', nullable: false })
+    roleId: number;
 }

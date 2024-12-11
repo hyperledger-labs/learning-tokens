@@ -1,7 +1,7 @@
 import { apiSlice } from "../api/apiSlice";
 
 export const institutionApi = apiSlice
-  .enhanceEndpoints({ addTagTypes: ["InstitutionAuth"] })
+  .enhanceEndpoints({ addTagTypes: ["InstitutionAuth", "InstitutionKey"] })
   .injectEndpoints({
     endpoints: (builder) => ({
       loginInstitution: builder.mutation<any, any>({
@@ -20,8 +20,22 @@ export const institutionApi = apiSlice
         }),
         invalidatesTags: ["InstitutionAuth"],
       }),
+      generateSdkKeyInstitution: builder.query<any, any>({
+        query: (id) => `sdk-keys/gen/${id}`,
+        providesTags: ["InstitutionKey"],
+      }),
+      getSdkKeyInstitution: builder.query<any, any>({
+        query: (id) => `sdk-keys/get/${id}`,
+        providesTags: ["InstitutionKey"],
+      }),
     }),
   });
 
-export const { useLoginInstitutionMutation, useRegisterInstitutionMutation } =
-  institutionApi;
+export const {
+  useGetSdkKeyInstitutionQuery,
+  useLazyGetSdkKeyInstitutionQuery,
+  useGenerateSdkKeyInstitutionQuery,
+  useLazyGenerateSdkKeyInstitutionQuery,
+  useLoginInstitutionMutation,
+  useRegisterInstitutionMutation,
+} = institutionApi;

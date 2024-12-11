@@ -14,8 +14,9 @@ export class LoginRequestDto {
     @IsString()
     readonly password: string
 
-    @IsOptional()
-    public type: string
+    @IsString()
+    @IsNotEmpty()
+    type: string
 }
 
 // Registration DTO
@@ -34,9 +35,9 @@ export class RegisterRequestDto {
     @IsOptional()
     public type: string
 
-    @IsString()
-    @IsNotEmpty()
-    publicAddress: string
+    // @IsString()
+    // @IsNotEmpty()
+    // publicAddress: string
 }
 
 // Validate Request DTO
@@ -59,11 +60,11 @@ export class RegisterInstitutionDTO {
     readonly password: string
 
     @IsOptional()
-    public type: string
+    public type: string // TODO: should be enum
 
-    @IsString()
-    @IsNotEmpty()
-    publicAddress: string
+    // @IsString()
+    // @IsNotEmpty()
+    // publicAddress: string
 
     @IsString()
     @IsNotEmpty()

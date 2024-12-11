@@ -6,10 +6,10 @@
 // };
 
 // export default config;
-
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import dotenv from "dotenv";
+// import * from "@nomiclabs/hardhat-waffle";
 dotenv.config();
 const {
   RPC_URL_BESU,
@@ -19,9 +19,12 @@ const {
   SEPOLIA_API_KEY,
   POLYGON_RPC_URL,
   POLYGON_API_KEY,
-  POLYGON_PRIV_KEY
-
+  POLYGON_PRIV_KEY,
+  KALEIDO_RPC_URL,
+  KALEIDO_CHAIN_ID,
+  KALEIDO_PRIV_KEY,
 }: any = process.env;
+
 const config: HardhatUserConfig = {
   networks: {
     // localhost: {
@@ -50,6 +53,13 @@ const config: HardhatUserConfig = {
     //   // gasPrice: 80000000, // adjust as necessary
     //   // gas: 124500 // adjust as necessary
     // },
+    kaleido: {
+      url: KALEIDO_RPC_URL,
+      chainId: 1513174332,
+      accounts: [KALEIDO_PRIV_KEY],
+      // gasPrice: 80000000, // adjust as necessary
+      // gas: 124500 // adjust as necessary
+    },
   },
   solidity: {
     version: "0.8.17",

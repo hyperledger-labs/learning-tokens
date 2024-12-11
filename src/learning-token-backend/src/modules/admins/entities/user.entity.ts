@@ -1,16 +1,18 @@
 import { Exclude } from 'class-transformer'
 import { IsEmail, IsString } from 'class-validator'
+import { Role } from 'src/modules/role/entities/role.entity'
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm'
 @Entity()
-export class Admin extends BaseEntity {
+export class User extends BaseEntity {
     @PrimaryGeneratedColumn('increment')
     id: number
 
@@ -42,8 +44,8 @@ export class Admin extends BaseEntity {
     // })
     // roleId: number
 
-    // @ManyToOne(() => Role)
-    // role: Role
+    @ManyToOne(() => Role)
+    role: Role
 
     @CreateDateColumn()
     createdAt: Date

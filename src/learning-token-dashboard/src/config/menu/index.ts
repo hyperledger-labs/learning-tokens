@@ -5,6 +5,7 @@ const mainMenuItems = [
     name: "Dashboard",
     to: "/",
     icon: BsGrid,
+    requiredPermissions: ["institution", "instructor", "learner", "admin"],
   },
   {
     name: "Instructor",
@@ -26,6 +27,18 @@ const mainMenuItems = [
         name: "List",
         to: "/institution",
         requiredPermissions: ["admin"],
+      },
+    ],
+    icon: BsBoxSeam,
+  },
+  {
+    name: "Events",
+    to: "",
+    subMenu: [
+      {
+        name: "List",
+        to: "/events/list",
+        requiredPermissions: ["instructor"],
       },
     ],
     icon: BsBoxSeam,
@@ -67,6 +80,12 @@ const mainMenuItems = [
         requiredPermissions: ["instructor"],
       },
     ],
+    icon: BsBoxSeam,
+  },
+  {
+    name: "Generate Key",
+    to: "institution-key",
+    requiredPermissions: ["institution"],
     icon: BsBoxSeam,
   },
   // {

@@ -1,35 +1,34 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Admin } from 'src/modules/admins/entities/user.entity'
 import { Repository } from 'typeorm'
 import { Institution } from '../institutions/entities/institution.entity'
 import { Instructor } from '../instructors/entities/instructor.entity'
 import { Learner } from '../learners/entities/learner.entity'
+import { User } from './entities/user.entity'
 
 @Injectable()
 export class AdminService {
     constructor(
-        @InjectRepository(Admin)
-        private readonly adminRepository: Repository<Admin>,
+        @InjectRepository(User)
+        private readonly adminRepository: Repository<User>,
         @InjectRepository(Institution)
         private readonly institutionRepository: Repository<Institution>,
         @InjectRepository(Instructor)
         private readonly instructorRepository: Repository<Instructor>,
         @InjectRepository(Learner)
         private readonly learnerRepository: Repository<Learner>
-    ) {}
+    ) { }
 
     async findAll(page: number, limit: number, type: string) {
         if (type == 'Institution') {
             const offset = (page - 1) * limit
-            const [items, totalCount] =
-                await this.institutionRepository.findAndCount({
-                    skip: offset,
-                    take: limit,
-                    order: {
-                        id: 'ASC'
-                    }
-                })
+            const [items, totalCount] = await this.institutionRepository
+                .createQueryBuilder('institution')
+                .innerJoinAndSelect('institution.role', 'role') //to get the roleId of the user
+                .skip(offset)
+                .take(limit)
+                .orderBy('institution.id', 'ASC')
+                .getManyAndCount();
 
             const totalPages = Math.ceil(totalCount / limit)
 
@@ -100,14 +99,12 @@ export class AdminService {
     async update(uuid: number, type: string) {
         if (type == 'Institution') {
             const institutionDetails =
-                await this.institutionRepository.findOneBy({ id: uuid })
-            if (institutionDetails.status == false) {
+                await this.institutionRepository.findOneBy({ id: uuid });
+            console.log('Activate institution:', institutionDetails);
+            // fix the toggling since button is disabled once activated
+            if (!institutionDetails.status) {
                 institutionDetails.status = true
-                this.institutionRepository.save(institutionDetails)
-                return institutionDetails
-            } else {
-                institutionDetails.status = false
-                this.institutionRepository.save(institutionDetails)
+                await this.institutionRepository.save(institutionDetails)
                 return institutionDetails
             }
         } else if (type == 'Instructor') {
