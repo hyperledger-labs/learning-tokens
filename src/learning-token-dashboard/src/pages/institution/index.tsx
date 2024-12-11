@@ -1,5 +1,11 @@
+<<<<<<< HEAD
+import React, { useEffect } from "react";
+import { Table, Toggle } from "rsuite";
+import ListSkeleton from "../../components/CardSkeleton/listSkeleton";
+=======
 import React, { useEffect, useState } from "react";
 import { Loader, Table, Toggle } from "rsuite";
+>>>>>>> 23ac14b8302586fca24b9aea52b420067da0d7e0
 import {
   useLazyGetInstitutionQuery,
   useSmartContractCallRegisterActorMutation,
@@ -59,8 +65,8 @@ const Institution: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center">
-        <Loader />
+      <div>
+        <ListSkeleton _height={40} />
       </div>
     );
   }
