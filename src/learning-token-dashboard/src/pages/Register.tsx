@@ -194,6 +194,8 @@ const Login = () => {
                   options={[
                     { value: "admin", label: "Admin" },
                     { value: "institution", label: "Institution" },
+                    { value: "instructor", label: "Instructor" },
+                    { value: "learner", label: "Learner" },
                   ]}
                 />
                 {(values.type === "learner" ||
