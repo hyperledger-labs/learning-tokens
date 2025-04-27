@@ -90,6 +90,8 @@ const Login = () => {
                     navigate("/");
                   }
                 });
+            }else if(result && result.status === 302){
+              alert("User already exist")
             }
           });
       } else if (values.type === "institution") {
@@ -123,6 +125,8 @@ const Login = () => {
                     navigate("/");
                   }
                 });
+            }else if(result && result.status === 302){
+              alert("User already exist")
             }
           });
       }
