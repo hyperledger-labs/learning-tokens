@@ -29,7 +29,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
         @InjectRepository(Role)
         private readonly roleRepository: Repository<Role>
-    ) {}
+    ) { }
 
     /**
      * REGISTRATION OF A USER
@@ -43,80 +43,93 @@ export class AuthService {
         longitude
     }: any) {
         if (type == 'Admin') {
-            const user = new User()
-            user.name = name
-            user.email = email
-            user.password = this.jwtService.encodePassword(password)
-            const registeredUser = await this.userRepository.save(user)
-            return {
-                id: registeredUser.id,
-                name: registeredUser.name,
-                email: registeredUser.email,
-                token: null,
-                createdAt: registeredUser.createdAt,
-                updatedAt: registeredUser.updatedAt
+            if (!(await this.checkUser(email, type))) {
+                const user = new User()
+                user.name = name
+                user.email = email
+                user.password = this.jwtService.encodePassword(password)
+                console.log('name,email', user.name, user.email)
+                const registeredUser = await this.userRepository.save(user)
+                return {
+                    id: registeredUser.id,
+                    name: registeredUser.name,
+                    email: registeredUser.email,
+                    token: null,
+                    createdAt: registeredUser.createdAt,
+                    updatedAt: registeredUser.updatedAt
+                }
             }
         } else if (type == 'Institution') {
-            const user = new Institution()
-            user.name = name
-            user.email = email
-            user.password = this.jwtService.encodePassword(password)
-            user.latitude = latitude
-            user.longitude = longitude
+            if (!(await this.checkUser(email, type))) {
+                const user = new Institution()
+                user.name = name
+                user.email = email
+                user.password = this.jwtService.encodePassword(password)
+                user.latitude = latitude
+                user.longitude = longitude
 
-            const role = await this.roleRepository.findOne({
-                where: {
-                    name: 'institution'
+                const role = await this.roleRepository.findOne({
+                    where: {
+                        name: 'institution'
+                    }
+                })
+                user.roleId = role.id // default to institution
+
+                const registeredUser = await this.institutionRepository.save(
+                    user
+                )
+                const wallet = await getWallet('institution', registeredUser.id)
+                await this.institutionRepository.update(registeredUser.id, {
+                    publicAddress: wallet.address,
+                    role: role
+                })
+                return {
+                    id: registeredUser.id,
+                    name: registeredUser.name,
+                    email: registeredUser.email,
+                    token: null,
+                    createdAt: registeredUser.createdAt,
+                    updatedAt: registeredUser.updatedAt
                 }
-            })
-            user.roleId = role.id // default to institution
-
-            const registeredUser = await this.institutionRepository.save(user)
-            const wallet = await getWallet('institution', registeredUser.id)
-            await this.institutionRepository.update(registeredUser.id, {
-                publicAddress: wallet.address,
-                role: role
-            })
-            return {
-                id: registeredUser.id,
-                name: registeredUser.name,
-                email: registeredUser.email,
-                token: null,
-                createdAt: registeredUser.createdAt,
-                updatedAt: registeredUser.updatedAt
             }
             //no longer registering from the api
         } else if (type == 'Learner') {
-            const user = new Learner()
-            user.name = name
-            user.email = email
-            // user.publicAddress = publicAddress
-            user.password = this.jwtService.encodePassword(password)
-            user.latitude = latitude
-            user.longitude = longitude
-            const registeredUser = await this.learnerRepository.save(user)
-            return {
-                id: registeredUser.id,
-                name: registeredUser.name,
-                email: registeredUser.email,
-                token: null,
-                createdAt: registeredUser.createdAt,
-                updatedAt: registeredUser.updatedAt
+            if (!(await this.checkUser(email, type))) {
+                const user = new Learner()
+                user.name = name
+                user.email = email
+                // user.publicAddress = publicAddress
+                user.password = this.jwtService.encodePassword(password)
+                user.latitude = latitude
+                user.longitude = longitude
+                const registeredUser = await this.learnerRepository.save(user)
+                return {
+                    id: registeredUser.id,
+                    name: registeredUser.name,
+                    email: registeredUser.email,
+                    token: null,
+                    createdAt: registeredUser.createdAt,
+                    updatedAt: registeredUser.updatedAt
+                }
             }
         } else if (type == 'Instructor') {
-            const user = new Instructor()
-            user.name = name
-            user.email = email
-            // user.publicAddress = publicAddress
-            user.password = this.jwtService.encodePassword(password)
-            const registeredUser = await this.insturctorRepository.save(user)
-            return {
-                id: registeredUser.id,
-                name: registeredUser.name,
-                email: registeredUser.email,
-                token: null,
-                createdAt: registeredUser.createdAt,
-                updatedAt: registeredUser.updatedAt
+            if (!(await this.checkUser(email, type))) {
+                const user = new Instructor()
+                user.name = name
+                user.email = email
+                // user.publicAddress = publicAddress
+                user.password = this.jwtService.encodePassword(password)
+                const registeredUser = await this.insturctorRepository.save(
+                    user
+                )
+                return {
+                    id: registeredUser.id,
+                    name: registeredUser.name,
+                    email: registeredUser.email,
+                    token: null,
+                    createdAt: registeredUser.createdAt,
+                    updatedAt: registeredUser.updatedAt
+                }
             }
         }
     }
@@ -206,6 +219,30 @@ export class AuthService {
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
             role: user.role.name
+        }
+    }
+
+    public checkUser = async (email, type) => {
+        if (type == 'Admin') {
+            const found = await this.userRepository.findOne({
+                where: { email: email }
+            })
+            return found ? true : false
+        } else if (type == 'Learner') {
+            const found = await this.learnerRepository.findOne({
+                where: { email: email }
+            })
+            return found ? true : false
+        } else if (type == 'Instructor') {
+            const found = await this.insturctorRepository.findOne({
+                where: { email: email }
+            })
+            return found ? true : false
+        } else if (type == 'Institution') {
+            const found = await this.institutionRepository.findOne({
+                where: { email: email }
+            })
+            return found ? true : false
         }
     }
 
