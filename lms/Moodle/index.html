@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodle Learning Tokens</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status.loading { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover { background: #2980b9; }
+        .btn.secondary { background: #95a5a6; }
+        .btn.secondary:hover { background: #7f8c8d; }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .course-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .course-card:hover { transform: translateY(-2px); }
+        
+        .course-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .course-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .students-table th,
+        .students-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .students-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .tokens {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .score {
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .quiz-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .question-item {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .question-number {
+            background: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .answer-option {
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .answer-option.correct {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .answer-option.chosen {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+            font-weight: bold;
+        }
+        
+        .answer-option.chosen.correct {
+            background: #d1e7dd;
+            border-color: #badbcc;
+            color: #0f5132;
+        }
+        
+        .attempt-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+        
+        .attempt-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .attempt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .attempt-number {
+            background: #6c757d;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .attempt-score {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .student-response {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        
+        .response-label {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .back-btn {
+            margin-bottom: 20px;
+        }
+        
+        .hidden { display: none; }
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .courses-grid { grid-template-columns: 1fr; }
+            .summary-stats { grid-template-columns: 1fr; }
+            .students-table { font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🪙 Moodle Learning Tokens</h1>
+            <p>Analyze quiz performance and award learning tokens</p>
+            <div id="connection-status"></div>
+        </div>
+
+        <!-- Courses List View -->
+        <div id="courses-view">
+            <div class="card">
+                <h2>📚 Available Courses</h2>
+                <button class="btn" onclick="loadCourses()">🔄 Refresh Courses</button>
+                <div id="courses-container"></div>
+            </div>
+        </div>
+
+        <!-- Course Detail View -->
+        <div id="course-view" class="hidden">
+            <button class="btn secondary back-btn" onclick="showCoursesView()">← Back to Courses</button>
+            <div id="course-details"></div>
+        </div>
+
+        <!-- Quiz Questions View -->
+        <div id="quiz-view" class="hidden">
+            <button class="btn secondary back-btn" onclick="showCourseView()">← Back to Course</button>
+            <div id="quiz-details"></div>
+        </div>
+
+        <!-- Student Attempts View -->
+        <div id="student-attempts-view" class="hidden">
+            <button class="btn secondary back-btn" onclick="showCourseView()">← Back to Course</button>
+            <div id="student-attempts-details"></div>
+        </div>
+
+        <!-- Attempt Detail View -->
+        <div id="attempt-detail-view" class="hidden">
+            <button class="btn secondary back-btn" onclick="showStudentAttemptsView()">← Back to Attempts</button>
+            <div id="attempt-details"></div>
+        </div>
+
+        <!-- Quiz Attempts View -->
+        <div id="quiz-attempts-view" class="hidden">
+            <button class="btn secondary back-btn" onclick="showCourseView()">← Back to Course</button>
+            <div id="quiz-attempts-details"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentCourseId = null;
+
+        // Check connection on load
+        document.addEventListener('DOMContentLoaded', checkConnection);
+
+        async function checkConnection() {
+            try {
+                const response = await fetch('/api/test');
+                const data = await response.json();
+                
+                const statusDiv = document.getElementById('connection-status');
+                if (data.status === 'success') {
+                    statusDiv.innerHTML = `<div class="status success">✅ Connected to ${data.siteName} (${data.moodleVersion})</div>`;
+                    loadCourses();
+                } else {
+                    statusDiv.innerHTML = `<div class="status error">❌ Connection failed: ${data.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('connection-status').innerHTML = 
+                    `<div class="status error">❌ Cannot connect to server</div>`;
+            }
+        }
+
+        async function loadCourses() {
+            const container = document.getElementById('courses-container');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading courses...</div>';
+
+            try {
+                const response = await fetch('/api/courses');
+                const courses = await response.json();
+
+                if (courses.error) {
+                    container.innerHTML = `<div class="status error">Error: ${courses.error}</div>`;
+                    return;
+                }
+
+                if (courses.length === 0) {
+                    container.innerHTML = '<div class="status error">No courses found</div>';
+                    return;
+                }
+
+                const coursesHtml = courses.map(course => `
+                    <div class="course-card">
+                        <div class="course-title">${course.fullname}</div>
+                        <div class="course-meta">ID: ${course.id} | Short: ${course.shortname}</div>
+                        <button class="btn" onclick="loadCourse(${course.id})">📊 View Details</button>
+                    </div>
+                `).join('');
+
+                container.innerHTML = `<div class="courses-grid">${coursesHtml}</div>`;
+            } catch (error) {
+                container.innerHTML = `<div class="status error">Error loading courses: ${error.message}</div>`;
+            }
+        }
+
+        async function loadCourse(courseId) {
+            currentCourseId = courseId;
+            const container = document.getElementById('course-details');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading course data...</div>';
+
+            try {
+                const response = await fetch(`/api/courses/${courseId}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    container.innerHTML = `<div class="status error">Error: ${data.error}</div>`;
+                    return;
+                }
+
+                const studentsHtml = data.students.map(student => `
+                    <tr>
+                        <td>
+                            <strong>${student.name}</strong><br>
+                            <small>${student.email}</small>
+                        </td>
+                        <td class="score">${student.score}%</td>
+                        <td>${student.quizzesTaken}</td>
+                        <td><span class="tokens">${student.tokens} tokens</span></td>
+                        <td>
+                            <button class="btn" onclick="viewStudentAttempts(${student.id}, '${student.name}')">📊 View Attempts</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                const quizzesHtml = data.quizzes.map(quiz => `
+                    <div class="quiz-card">
+                        <h4>${quiz.name}</h4>
+                        <p>Max Grade: ${quiz.maxGrade} | Time Limit: ${quiz.timeLimit ? `${quiz.timeLimit/60} min` : 'None'}</p>
+                        <button class="btn" onclick="loadQuizQuestions(${quiz.id})">❓ View Questions</button>
+                        <button class="btn secondary" onclick="showQuizAttempts(${quiz.id}, '${quiz.name}')">📋 View All Attempts</button>
+                    </div>
+                `).join('');
+
+                container.innerHTML = `
+                    <div class="card">
+                        <h2>📖 ${data.course.name}</h2>
+                        <p><strong>Course ID:</strong> ${data.course.id} | <strong>Students:</strong> ${data.course.studentCount}</p>
+                    </div>
+
+                    <div class="summary-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">${data.summary.totalStudents}</div>
+                            <div>Students</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${data.summary.totalTokens}</div>
+                            <div>Total Tokens</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${data.summary.averageScore}%</div>
+                            <div>Average Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${data.summary.totalQuizzes}</div>
+                            <div>Quizzes</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>👥 Students & Tokens</h3>
+                        <table class="students-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Average Score</th>
+                                    <th>Quizzes Taken</th>
+                                    <th>Tokens</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>${studentsHtml}</tbody>
+                        </table>
+                    </div>
+
+                    <div class="card">
+                        <h3>❓ Course Quizzes</h3>
+                        ${quizzesHtml || '<p>No quizzes found in this course.</p>'}
+                    </div>
+                `;
+
+                showCourseView();
+            } catch (error) {
+                container.innerHTML = `<div class="status error">Error loading course: ${error.message}</div>`;
+            }
+        }
+
+        async function loadQuizQuestions(quizId) {
+            const container = document.getElementById('quiz-details');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading quiz questions...</div>';
+
+            try {
+                const response = await fetch(`/api/quizzes/${quizId}/questions?includeAnswers=true`);
+                const data = await response.json();
+
+                if (data.error) {
+                    container.innerHTML = `<div class="status error">Error: ${data.error}</div>`;
+                    return;
+                }
+
+                const questionsHtml = data.questions.map(question => {
+                    let answersHtml = '';
+                    if (question.answers) {
+                        answersHtml = question.answers.map(answer => `
+                            <div class="answer-option ${answer.isCorrect ? 'correct' : 'incorrect'}">
+                                ${answer.isCorrect ? '✅' : '❌'} ${answer.text}
+                                ${answer.feedback ? `<br><small><em>${answer.feedback}</em></small>` : ''}
+                            </div>
+                        `).join('');
+                    }
+
+                    return `
+                        <div class="question-item">
+                            <div>
+                                <span class="question-number">Q${question.number}</span>
+                                <strong>${question.type}</strong> (${question.maxMark} points)
+                            </div>
+                            <p><strong>${question.questionText}</strong></p>
+                            ${answersHtml ? `<div style="margin-top: 15px;">${answersHtml}</div>` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = `
+                    <div class="card">
+                        <h2>❓ ${data.quiz.name}</h2>
+                        <p>${data.quiz.intro}</p>
+                        <div style="margin: 15px 0;">
+                            <strong>Max Grade:</strong> ${data.quiz.maxGrade} | 
+                            <strong>Time Limit:</strong> ${data.quiz.timeLimit ? `${data.quiz.timeLimit/60} minutes` : 'None'} |
+                            <strong>Questions:</strong> ${data.quiz.totalQuestions} |
+                            <strong>Total Attempts:</strong> ${data.totalAttempts}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>📝 Questions & Answers</h3>
+                        ${questionsHtml || '<p>No questions found or no attempts made yet.</p>'}
+                    </div>
+                `;
+
+                showQuizView();
+            } catch (error) {
+                container.innerHTML = `<div class="status error">Error loading questions: ${error.message}</div>`;
+            }
+        }
+
+        function showCoursesView() {
+            document.getElementById('courses-view').classList.remove('hidden');
+            document.getElementById('course-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('student-attempts-view').classList.add('hidden');
+            document.getElementById('attempt-detail-view').classList.add('hidden');
+            document.getElementById('quiz-attempts-view').classList.add('hidden');
+        }
+
+        function showCourseView() {
+            document.getElementById('courses-view').classList.add('hidden');
+            document.getElementById('course-view').classList.remove('hidden');
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('student-attempts-view').classList.add('hidden');
+            document.getElementById('attempt-detail-view').classList.add('hidden');
+            document.getElementById('quiz-attempts-view').classList.add('hidden');
+        }
+
+        function showQuizView() {
+            document.getElementById('courses-view').classList.add('hidden');
+            document.getElementById('course-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.remove('hidden');
+            document.getElementById('student-attempts-view').classList.add('hidden');
+            document.getElementById('attempt-detail-view').classList.add('hidden');
+            document.getElementById('quiz-attempts-view').classList.add('hidden');
+        }
+
+        async function viewStudentAttempts(userId, studentName) {
+            const container = document.getElementById('student-attempts-details');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading student attempts...</div>';
+
+            try {
+                // Get all quizzes for current course first
+                const courseResponse = await fetch(`/api/courses/${currentCourseId}`);
+                const courseData = await courseResponse.json();
+                
+                if (courseData.error) {
+                    container.innerHTML = `<div class="status error">Error: ${courseData.error}</div>`;
+                    return;
+                }
+
+                let attemptsHtml = '';
+                
+                for (const quiz of courseData.quizzes) {
+                    const response = await fetch(`/api/students/${userId}/quiz/${quiz.id}/attempts`);
+                    const data = await response.json();
+                    
+                    if (!data.error && data.attempts && data.attempts.length > 0) {
+                        const attemptsList = data.attempts.map(attempt => `
+                            <div class="attempt-card">
+                                <div class="attempt-header">
+                                    <span class="attempt-number">Attempt ${attempt.attempt}</span>
+                                    <span class="attempt-score">${attempt.percentage}%</span>
+                                </div>
+                                <p><strong>Score:</strong> ${attempt.sumGrades} / ${quiz.maxGrade}</p>
+                                <p><strong>Tokens:</strong> ${attempt.tokens}</p>
+                                <p><strong>Time:</strong> ${attempt.timeStart ? new Date(attempt.timeStart * 1000).toLocaleString() : 'Unknown'}</p>
+                                <p><strong>Status:</strong> ${attempt.state}</p>
+                                <button class="btn" onclick="viewAttemptDetails(${attempt.id}, '${studentName}', '${quiz.name}')">
+                                    📝 View Detailed Answers
+                                </button>
+                            </div>
+                        `).join('');
+
+                        attemptsHtml += `
+                            <div class="card">
+                                <h3>❓ ${quiz.name}</h3>
+                                <p><strong>Total Attempts:</strong> ${data.totalAttempts}</p>
+                                ${data.bestAttempt ? `<p><strong>Best Score:</strong> ${data.bestAttempt.percentage}% (${data.bestAttempt.tokens} tokens)</p>` : ''}
+                                <div class="attempts-list">
+                                    ${attemptsList}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                if (!attemptsHtml) {
+                    attemptsHtml = '<div class="status error">No quiz attempts found for this student.</div>';
+                }
+
+                container.innerHTML = `
+                    <div class="card">
+                        <h2>📊 ${studentName}'s Quiz Attempts</h2>
+                        <p>All quiz attempts and performance details</p>
+                    </div>
+                    ${attemptsHtml}
+                `;
+
+                showStudentAttemptsView();
+            } catch (error) {
+                container.innerHTML = `<div class="status error">Error loading attempts: ${error.message}</div>`;
+            }
+        }
+
+        async function viewAttemptDetails(attemptId, studentName, quizName) {
+            const container = document.getElementById('attempt-details');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Loading attempt details...</div>';
+
+            try {
+                const response = await fetch(`/api/attempts/${attemptId}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    container.innerHTML = `<div class="status error">Error: ${data.error}</div>`;
+                    return;
+                }
+
+                const questionsHtml = data.questions.map(question => {
+                    let answersHtml = '';
+                    
+                    if (question.answerOptions && question.answerOptions.length > 0) {
+                        answersHtml = question.answerOptions.map(option => {
+                            let optionClass = '';
+                            let optionIcon = '';
+                            
+                            if (option.chosen && option.isCorrect) {
+                                optionClass = 'chosen correct';
+                                optionIcon = '✅ 👆 ';
+                            } else if (option.chosen && !option.isCorrect) {
+                                optionClass = 'chosen';
+                                optionIcon = '❌ 👆 ';
+                            } else if (!option.chosen && option.isCorrect) {
+                                optionClass = 'correct';
+                                optionIcon = '✅ ';
+                            } else {
+                                optionClass = 'incorrect';
+                                optionIcon = '❌ ';
+                            }
+                            
+                            return `
+                                <div class="answer-option ${optionClass}">
+                                    ${optionIcon}${option.text}
+                                    ${option.feedback ? `<br><small><em>${option.feedback}</em></small>` : ''}
+                                </div>
+                            `;
+                        }).join('');
+                    }
+
+                    return `
+                        <div class="question-item">
+                            <div>
+                                <span class="question-number">Q${question.number}</span>
+                                <strong>${question.questionType}</strong> 
+                                (${question.mark}/${question.maxMark} points)
+                                ${question.isCorrect ? '✅' : '❌'}
+                            </div>
+                            <p><strong>${question.questionText}</strong></p>
+                            
+                            ${question.studentAnswer !== 'No answer' ? `
+                                <div class="student-response">
+                                    <div class="response-label">Student's Answer:</div>
+                                    <div><strong>${question.studentAnswer}</strong></div>
+                                </div>
+                            ` : '<div class="student-response"><div class="response-label">No answer provided</div></div>'}
+                            
+                            ${answersHtml ? `
+                                <div style="margin-top: 15px;">
+                                    <strong>Answer Options:</strong>
+                                    <div style="margin-top: 10px;">${answersHtml}</div>
+                                    <small><em>👆 = Student's choice</em></small>
+                                </div>
+                            ` : ''}
+                            
+                            ${question.feedback ? `
+                                <div style="margin-top: 10px; padding: 10px; background: #e9ecef; border-radius: 4px;">
+                                    <strong>Feedback:</strong> ${question.feedback}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = `
+                    <div class="card">
+                        <h2>📝 Detailed Attempt Analysis</h2>
+                        <p><strong>Student:</strong> ${studentName}</p>
+                        <p><strong>Quiz:</strong> ${quizName}</p>
+                        <p><strong>Attempt ID:</strong> ${attemptId}</p>
+                        ${data.attempt.timeStart ? `<p><strong>Started:</strong> ${new Date(data.attempt.timeStart * 1000).toLocaleString()}</p>` : ''}
+                        ${data.attempt.timeFinish ? `<p><strong>Finished:</strong> ${new Date(data.attempt.timeFinish * 1000).toLocaleString()}</p>` : ''}
+                    </div>
+
+                    <div class="summary-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">${data.summary.correctAnswers}</div>
+                            <div>Correct</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${data.summary.incorrectAnswers}</div>
+                            <div>Incorrect</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${data.summary.percentage}%</div>
+                            <div>Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${data.summary.tokens}</div>
+                            <div>Tokens</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>📋 Question-by-Question Analysis</h3>
+                        <p>Detailed breakdown showing student's chosen answers vs correct answers</p>
+                        ${questionsHtml}
+                    </div>
+                `;
+
+                showAttemptDetailView();
+            } catch (error) {
+                container.innerHTML = `<div class="status error">Error loading attempt details: ${error.message}</div>`;
+            }
+        }
+
+        function showStudentAttemptsView() {
+            document.getElementById('courses-view').classList.add('hidden');
+            document.getElementById('course-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('student-attempts-view').classList.remove('hidden');
+            document.getElementById('attempt-detail-view').classList.add('hidden');
+            document.getElementById('quiz-attempts-view').classList.add('hidden');
+        }
+
+        function showAttemptDetailView() {
+            document.getElementById('courses-view').classList.add('hidden');
+            document.getElementById('course-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('student-attempts-view').classList.add('hidden');
+            document.getElementById('attempt-detail-view').classList.remove('hidden');
+            document.getElementById('quiz-attempts-view').classList.add('hidden');
+        }
+
+        function showQuizAttempts(quizId, quizName) {
+            // Simple implementation - for now just show message
+            const container = document.getElementById('quiz-attempts-details');
+            container.innerHTML = `
+                <div class="card">
+                    <h2>📋 All Attempts for: ${quizName}</h2>
+                    <p>Quiz ID: ${quizId}</p>
+                    <div class="status loading">
+                        This feature shows all student attempts for this quiz.<br>
+                        For now, use "View Attempts" on individual students to see their detailed attempts.
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('courses-view').classList.add('hidden');
+            document.getElementById('course-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('student-attempts-view').classList.add('hidden');
+            document.getElementById('attempt-detail-view').classList.add('hidden');
+            document.getElementById('quiz-attempts-view').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
