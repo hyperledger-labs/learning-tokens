@@ -32,10 +32,19 @@ export class AuthController {
         try {
             registerRequestDto.type = 'Admin'
             const result = await this.service.register(registerRequestDto)
-            return {
-                status: HttpStatus.CREATED,
-                message: 'User has been created',
-                result: result
+            if (result) {
+                console.log('registered', result)
+                return {
+                    status: HttpStatus.CREATED,
+                    message: 'User has been created',
+                    result: result
+                }
+            } else {
+                return {
+                    status: HttpStatus.FOUND,
+                    message: 'User already registered',
+                    result: null
+                }
             }
         } catch (error) {
             throw new ConflictException(error.message)
@@ -88,10 +97,19 @@ export class AuthController {
         try {
             registerRequestDto.type = 'Institution'
             const result = await this.service.register(registerRequestDto)
-            return {
-                status: HttpStatus.CREATED,
-                message: 'User has been created',
-                result: result
+            if (result) {
+                console.log('registered', result)
+                return {
+                    status: HttpStatus.CREATED,
+                    message: 'User has been created',
+                    result: result
+                }
+            } else {
+                return {
+                    status: HttpStatus.FOUND,
+                    message: 'User already registered',
+                    result: null
+                }
             }
         } catch (error) {
             console.log(error)
@@ -127,10 +145,19 @@ export class AuthController {
         try {
             registerRequestDto.type = 'Learner'
             const result = await this.service.register(registerRequestDto)
-            return {
-                status: HttpStatus.CREATED,
-                message: 'User has been created',
-                result: result
+            if (result) {
+                console.log('registered', result)
+                return {
+                    status: HttpStatus.CREATED,
+                    message: 'User has been created',
+                    result: result
+                }
+            } else {
+                return {
+                    status: HttpStatus.FOUND,
+                    message: 'User already registered',
+                    result: null
+                }
             }
         } catch (error) {
             throw new ConflictException(error.message)
@@ -165,10 +192,19 @@ export class AuthController {
         try {
             registerRequestDto.type = 'Instructor'
             const result = await this.service.register(registerRequestDto)
-            return {
-                status: HttpStatus.CREATED,
-                message: 'User has been created',
-                result: result
+            if (result) {
+                console.log('registered', result)
+                return {
+                    status: HttpStatus.CREATED,
+                    message: 'User has been created',
+                    result: result
+                }
+            } else {
+                return {
+                    status: HttpStatus.FOUND,
+                    message: 'User already registered',
+                    result: null
+                }
             }
         } catch (error) {
             throw new ConflictException(error.message)
