@@ -72,7 +72,7 @@ Edit the `.env` file:
 MOODLE_URL=https://your-moodle-site.com
 
 # Your 32-character Web Services token
-MOODLE_TOKEN=55a93e43d39a7904cccfa39410825e62
+MOODLE_TOKEN=
 
 # Server port (optional)
 PORT=5000
@@ -150,18 +150,6 @@ curl "http://localhost:5000/api/attempts/89"
 2. Check quiz-related functions are enabled in web service
 3. Verify quiz permissions for the token user
 
-## 📋 Required Moodle Functions
-
-Your Moodle web service must include:
-
-```
-core_webservice_get_site_info
-core_course_get_courses
-core_enrol_get_enrolled_users
-mod_quiz_get_quizzes_by_courses
-mod_quiz_get_user_attempts
-mod_quiz_get_attempt_data
-```
 
 ## 🎯 What You Get
 
@@ -172,17 +160,5 @@ mod_quiz_get_attempt_data
 - **Real-time Data**: Always up-to-date information from your Moodle
 - **Simple Interface**: Easy to use web dashboard
 
-## 🤝 Support
-
-- Create an issue on GitHub for bugs
-- Check the troubleshooting section above
-- Run `npm test` to diagnose connection problems
-- Ensure your Moodle configuration is correct
-
-## 📄 License
-
-MIT License - feel free to use and modify for your needs.
-
----
 
 **Built for educators who want to gamify learning with real Moodle data! 🎓**
