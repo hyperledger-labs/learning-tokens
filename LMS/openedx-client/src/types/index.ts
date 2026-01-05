@@ -1,3 +1,5 @@
+// src/types/index.ts
+
 export interface Assessment {
   id: string;
   type: string;  // e.g., "quiz", "homework"

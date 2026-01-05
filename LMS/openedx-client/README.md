@@ -41,7 +41,9 @@ src/
      BASE_URL=http://local.openedx.io
      ACCESS_TOKEN=your-access-token
      ```
+
 ## Running the Client
+
 - **Development mode (TypeScript, with hot reload):**
   ```sh
   npm run dev
