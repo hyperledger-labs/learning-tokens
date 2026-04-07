@@ -43,7 +43,7 @@
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^6.4.2"
   },
   "packageManager": "yarn@4.1.0+sha512.5b7bc055cad63273dda27df1570a5d2eb4a9f03b35b394d3d55393c2a5560a17f5cef30944b11d6a48bcbcfc1c3a26d618aae77044774c529ba36cb771ad5b0f"
 }
