@@ -13,7 +13,7 @@
     "@metismenu/react": "^0.0.3",
     "@pinata/sdk": "^2.1.0",
     "@reduxjs/toolkit": "^1.9.6",
-    "axios": "^1.6.2",
+    "axios": "^1.15.0",
     "bootstrap": "^5.3.3",
     "ethers": "^6.7.1",
     "formik": "^2.4.5",
