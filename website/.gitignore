@@ -10,12 +10,12 @@ node_modules/
 .wrangler/
 wrangler.jsonc
 
-# design source material kept out of the repo:
-# the Gerzso paintings are third-party copyrighted works (the /brand page states
-# they are not reproduced here), and the deck is CC BY-NC-ND, which does not sit
-# well inside an Apache-2.0 repository. The LT monogram references stay.
-docs/references/Learning Tokens - Paleta - Pinturas de GuntherGerzso/
-docs/references/*.pdf
+# Design source material, kept out of the repo. The Gerzso paintings are
+# third-party copyrighted works (the /brand page states they are not reproduced
+# here); the deck is CC BY-NC-ND, which does not sit well inside an Apache-2.0
+# repository; and the pre-vector logo rasters are superseded by the traced
+# masters in public/brand/. What the site ships lives in public/.
+docs/
 
 # env & misc
 .env
