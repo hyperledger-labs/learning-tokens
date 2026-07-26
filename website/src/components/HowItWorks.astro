@@ -1,0 +1,39 @@
+---
+const steps = [
+    { role: 'Institution', body: 'Registers on Learning Tokens and receives a verifiable institution ID — the root of trust for everything minted beneath it.' },
+    { role: 'Instructor', body: 'Is registered by the institution, then registers a course with its fields of knowledge (CIP) and skills (WEF taxonomy).' },
+    { role: 'Course', body: 'Publishes a scoring guide: the transparent policy of points available at each step. This guide is the oracle.' },
+    { role: 'Learner', body: 'Enrols, attends, is assessed and helps peers. Each recognised act mints a token transferred to the learner’s wallet.' },
+    { role: 'Verifier', body: 'Any employer or institution reads the learner’s tokens directly from the ledger — no phone call to a registrar required.' },
+];
+---
+
+<section id="how" class="border-b border-paper-line bg-paper py-22 md:py-26">
+    <div class="container-lt">
+        <p class="eyebrow text-muted">The lifecycle</p>
+        <h2 class="mt-4 max-w-narrow font-display text-h1 text-ink">
+            From institution to verifier, in five moves
+        </h2>
+
+        <div class="mt-12 grid gap-px overflow-hidden rounded-card border border-paper-line bg-paper-line md:grid-cols-5">
+            {
+                steps.map((s, i) => (
+                    <div class="flex flex-col bg-paper-raised p-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono text-sm text-gold">{String(i + 1).padStart(2, '0')}</span>
+                            {i < steps.length - 1 && (
+                                <span class="hidden text-paper-line md:inline" aria-hidden="true">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3 8h8m0 0L8 5m3 3l-3 3" stroke="#BDB8A6" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </span>
+                            )}
+                        </div>
+                        <h3 class="mt-4 font-display text-h3 text-ink">{s.role}</h3>
+                        <p class="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,24 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# cloudflare — the preview is personal infrastructure, run from a local machine.
+# wrangler.jsonc carries an individual account_id; the project deploys via Pages.
+.wrangler/
+wrangler.jsonc
+
+# design source material kept out of the repo:
+# the Gerzso paintings are third-party copyrighted works (the /brand page states
+# they are not reproduced here), and the deck is CC BY-NC-ND, which does not sit
+# well inside an Apache-2.0 repository. The LT monogram references stay.
+docs/references/Learning Tokens - Paleta - Pinturas de GuntherGerzso/
+docs/references/*.pdf
+
+# env & misc
+.env
+.env.production
+.DS_Store
+npm-debug.log*

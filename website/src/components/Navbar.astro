@@ -1,0 +1,39 @@
+---
+import LtMark from './LtMark.astro';
+
+const links = [
+    { label: 'Protocol', href: '#thesis' },
+    { label: 'Tokens', href: '#tokens' },
+    { label: 'How it works', href: '#how' },
+    { label: 'Integrations', href: '#integrations' },
+    { label: 'Talent Angels', href: '#talent-angels' },
+    { label: 'Contributors', href: '#contributors' },
+];
+const repo = 'https://github.com/hyperledger-labs/learning-tokens';
+---
+
+<header class="sticky top-0 z-50 border-b border-white/10 bg-ink/85 backdrop-blur-md">
+    <nav class="container-lt flex h-16 items-center justify-between">
+        <a href="#top" class="flex items-center gap-2.5 text-paper">
+            <LtMark class="h-7 w-7 text-gold" />
+            <span class="font-display text-[0.95rem] font-600 tracking-tight">Learning&nbsp;Tokens</span>
+        </a>
+
+        <div class="hidden items-center gap-6 lg:flex">
+            {
+                links.map((l) => (
+                    <a href={l.href} class="font-mono text-[0.8rem] text-paper/70 transition-colors hover:text-paper">
+                        {l.label}
+                    </a>
+                ))
+            }
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a href={repo} class="btn-ghost-dark hidden sm:inline-flex py-2 px-4 text-[0.8rem]" target="_blank" rel="noopener">
+                GitHub ↗
+            </a>
+            <a href="#start" class="btn-primary py-2 px-4 text-[0.8rem]">Get started</a>
+        </div>
+    </nav>
+</header>

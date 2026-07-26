@@ -1,0 +1,78 @@
+---
+const tokens = [
+    {
+        name: 'Attendance',
+        holder: 'for Learners',
+        kind: 'Non-fungible',
+        dot: 'bg-token-attendance',
+        ring: 'group-hover:border-token-attendance/50',
+        body: 'Proof of presence to acquire a unit of competence. Minted by the instructor once the learner’s attendance is confirmed — the first link in the chain of engagement.',
+    },
+    {
+        name: 'Score',
+        holder: 'for Learners',
+        kind: 'Non-fungible',
+        dot: 'bg-token-score',
+        ring: 'group-hover:border-token-score/50',
+        body: 'The value of acquiring a competence, awarded against the scoring guide. Metadata records the field of knowledge, the skill, and the course, instructor and institution IDs.',
+    },
+    {
+        name: 'Help',
+        holder: 'for Learners',
+        kind: 'Fungible · ERC-20',
+        dot: 'bg-token-help',
+        ring: 'group-hover:border-token-help/50',
+        body: 'Recognition of collaborative support — answering forum questions, reviewing peers, grading together. Fungible by design, so help can be exchanged for waivers, scholarships and standing.',
+    },
+    {
+        name: 'Score',
+        holder: 'for Instructors',
+        kind: 'Non-fungible',
+        dot: 'bg-token-instructor',
+        ring: 'group-hover:border-token-instructor/50',
+        body: 'Learners assess teaching performance at set points in a course. Feedback becomes a credential for the instructor, closing the loop between teaching and outcomes.',
+    },
+];
+---
+
+<section id="tokens" class="border-b border-ink-line bg-ink py-22 text-paper md:py-26">
+    <div class="container-lt">
+        <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <div>
+                <p class="eyebrow">The instruments</p>
+                <h2 class="mt-4 font-display text-h1 text-paper">Four tokens, one taxonomy</h2>
+            </div>
+            <p class="max-w-md text-sm leading-relaxed text-paper/60">
+                Two templates built on the InterWork Alliance Token Taxonomy Framework: a non-fungible
+                formula for attendance and scores, and a fungible formula for help.
+            </p>
+        </div>
+
+        <div class="mt-12 grid gap-4 sm:grid-cols-2">
+            {
+                tokens.map((t) => (
+                    <article class={`group rounded-card-lg border border-white/12 bg-ink-soft/60 p-7 transition-colors ${t.ring}`}>
+                        <div class="flex items-center justify-between">
+                            <span class="flex items-center gap-2.5">
+                                <span class={`inline-block h-2.5 w-2.5 rounded-full ${t.dot}`} />
+                                <span class="font-mono text-[0.7rem] uppercase tracking-wider text-paper/55">
+                                    {t.kind}
+                                </span>
+                            </span>
+                        </div>
+                        <h3 class="mt-5 font-display text-2xl text-paper">
+                            {t.name}
+                            <span class="ml-1.5 text-base font-400 text-paper/50">{t.holder}</span>
+                        </h3>
+                        <p class="mt-3 leading-relaxed text-paper/70">{t.body}</p>
+                    </article>
+                ))
+            }
+        </div>
+
+        <p class="mt-8 font-mono text-xs text-paper/45">
+            Scoring guides act as the <span class="text-gold">oracle</span> — the transparent grading policy
+            that authorises every mint and transfer.
+        </p>
+    </div>
+</section>

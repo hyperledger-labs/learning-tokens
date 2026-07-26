@@ -1,0 +1,71 @@
+---
+import LtMark from './LtMark.astro';
+
+const repo = 'https://github.com/hyperledger-labs/learning-tokens';
+const cols = [
+    {
+        title: 'Protocol',
+        links: [
+            { label: 'Token types', href: '#tokens' },
+            { label: 'Lifecycle', href: '#how' },
+            { label: 'Architecture', href: '#architecture' },
+            { label: 'Contributors', href: '#contributors' },
+        ],
+    },
+    {
+        title: 'Build',
+        links: [
+            { label: 'GitHub repo', href: repo },
+            { label: 'ltsdk on npm', href: 'https://www.npmjs.com/package/ltsdk' },
+            { label: 'Talent Angels', href: '#talent-angels' },
+        ],
+    },
+    {
+        title: 'Standards',
+        links: [
+            { label: 'IWA TTF', href: 'https://github.com/InterWorkAlliance/TokenTaxonomyFramework' },
+            { label: 'LF Decentralized Trust Labs', href: 'https://lf-decentralized-trust-labs.github.io/' },
+            { label: 'Apache-2.0 License', href: repo + '/blob/main/LICENSE' },
+        ],
+    },
+];
+---
+
+<footer class="bg-ink py-16 text-paper">
+    <div class="container-lt">
+        <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+            <div>
+                <a href="#top" class="flex items-center gap-2.5 text-paper">
+                    <LtMark class="h-[26px] w-[26px] text-gold" />
+                    <span class="font-display text-base font-600">Learning Tokens</span>
+                </a>
+                <p class="mt-4 max-w-xs text-sm leading-relaxed text-paper/55">
+                    A currency of expertise. An open-source Lab from the Learning Tokens community at
+                    Linux Foundation Decentralized Trust.
+                </p>
+            </div>
+
+            {
+                cols.map((col) => (
+                    <div>
+                        <p class="font-mono text-[0.7rem] uppercase tracking-wider text-paper/45">{col.title}</p>
+                        <ul class="mt-4 space-y-2.5">
+                            {col.links.map((l) => (
+                                <li>
+                                    <a href={l.href} class="text-sm text-paper/70 transition-colors hover:text-paper" target={l.href.startsWith('http') ? '_blank' : undefined} rel={l.href.startsWith('http') ? 'noopener' : undefined}>
+                                        {l.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+        </div>
+
+        <div class="mt-12 flex flex-col justify-between gap-3 border-t border-white/10 pt-6 md:flex-row">
+            <p class="font-mono text-xs text-paper/40">© 2024 Learning Tokens contributors · Apache-2.0</p>
+            <p class="font-mono text-xs text-paper/40">Linux Foundation Decentralized Trust Lab</p>
+        </div>
+    </div>
+</footer>

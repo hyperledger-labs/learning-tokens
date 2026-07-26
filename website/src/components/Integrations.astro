@@ -1,0 +1,58 @@
+---
+const connectors = [
+    { name: 'Open edX', auth: 'OAuth 2.0 · authorization code' },
+    { name: 'Moodle', auth: 'Web services token' },
+    { name: 'Canvas', auth: 'Personal API token' },
+    { name: 'Google Classroom', auth: 'OAuth consent flow' },
+];
+---
+
+<section id="integrations" class="border-b border-ink-line bg-ink py-22 text-paper md:py-26">
+    <div class="container-lt grid gap-14 lg:grid-cols-[1fr_1fr] lg:items-center">
+        <div>
+            <p class="eyebrow">The bridge · ltsdk</p>
+            <h2 class="mt-4 font-display text-h1 text-paper">
+                Plug in the LMS you already teach on
+            </h2>
+            <p class="mt-5 max-w-md leading-relaxed text-paper/70">
+                The Learning Tokens SDK connects your existing Learning Management System to the protocol.
+                It unifies authentication, pulls course and grade data, and shows it in a dashboard so your
+                team can review everything <em>before</em> any token is issued.
+            </p>
+            <p class="mt-4 max-w-md text-sm leading-relaxed text-paper/55">
+                Credentials never leave your machine — the SDK stores them locally and keeps them out of
+                git and the published package.
+            </p>
+
+            <div class="mt-8 grid grid-cols-2 gap-3">
+                {
+                    connectors.map((c) => (
+                        <div class="rounded-card border border-white/12 bg-ink-soft/60 px-4 py-3.5">
+                            <p class="font-display text-base text-paper">{c.name}</p>
+                            <p class="mt-1 font-mono text-[0.68rem] text-paper/50">{c.auth}</p>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+
+        <!-- Terminal card -->
+        <div class="rounded-card-lg border border-white/12 bg-[#0E0D08] shadow-card">
+            <div class="flex items-center gap-1.5 border-b border-white/8 px-4 py-3">
+                <span class="h-2.5 w-2.5 rounded-full bg-[#ff5f57]"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-[#febc2e]"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-[#28c840]"></span>
+                <span class="ml-3 font-mono text-[0.68rem] text-paper/40">bash — ltsdk</span>
+            </div>
+            <pre class="overflow-x-auto px-5 py-5 font-mono text-[0.8rem] leading-relaxed"><code><span class="text-paper/40">$</span> <span class="text-paper">npm install ltsdk</span>
+<span class="text-paper/40">$</span> <span class="text-paper">npx ltsdk start</span>
+
+<span class="text-mint">✓</span> <span class="text-paper/70">access key verified</span>
+<span class="text-mint">✓</span> <span class="text-paper/70">auth server   → localhost:5002</span>
+<span class="text-mint">✓</span> <span class="text-paper/70">dashboard     → localhost:3000</span>
+
+<span class="text-gold">→</span> <span class="text-paper/70">connect Moodle · Canvas · edX · Classroom</span>
+<span class="text-gold">→</span> <span class="text-paper/70">review course data, then issue tokens</span></code></pre>
+        </div>
+    </div>
+</section>

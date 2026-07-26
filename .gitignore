@@ -3,5 +3,8 @@ Labs/.DS_Store
 src/.DS_Store
 *.cjs
 *.mjs
+# the website's build config is source, not a build artifact
+!website/**/*.mjs
 /src/learning-token-backend/.yarn
 .env
+.gstack/

@@ -1,0 +1,38 @@
+---
+const layers = [
+    { name: 'Smart contracts', tech: 'Solidity · Hardhat', body: 'LearningToken contracts define the mint and transfer rules for every token template.' },
+    { name: 'Backend', tech: 'NestJS · TypeScript', body: 'Registers institutions, instructors and courses; orchestrates minting against scoring guides.' },
+    { name: 'Dashboard', tech: 'React · Vite · Tailwind', body: 'The console where teams review LMS data and issue tokens to learners.' },
+    { name: 'SDK', tech: 'ltsdk · npm', body: 'The LMS bridge and local review dashboard that runs on the implementer’s machine.' },
+    { name: 'Network', tech: 'Hyperledger Besu · Quorum', body: 'Runs on a local EVM node, a testnet, or a permissioned Besu / Quorum network.' },
+];
+---
+
+<section id="architecture" class="border-b border-paper-line bg-paper py-22 md:py-26">
+    <div class="container-lt">
+        <div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <div>
+                <p class="eyebrow text-muted">Under the hood</p>
+                <h2 class="mt-4 font-display text-h1 text-ink">An open, modular stack</h2>
+            </div>
+            <p class="max-w-md text-sm leading-relaxed text-muted">
+                Every layer is open source and independently runnable — deploy to a local Hardhat node in
+                minutes, or to a permissioned enterprise network.
+            </p>
+        </div>
+
+        <div class="mt-12 overflow-hidden rounded-card border border-paper-line">
+            {
+                layers.map((l, i) => (
+                    <div class={`grid gap-4 px-6 py-6 md:grid-cols-[200px_1fr] md:items-baseline md:px-8 ${i % 2 === 0 ? 'bg-paper-raised' : 'bg-paper'} ${i < layers.length - 1 ? 'border-b border-paper-line' : ''}`}>
+                        <div>
+                            <h3 class="font-display text-h3 text-ink">{l.name}</h3>
+                            <p class="mt-1 font-mono text-[0.7rem] text-gold">{l.tech}</p>
+                        </div>
+                        <p class="max-w-2xl leading-relaxed text-muted">{l.body}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
