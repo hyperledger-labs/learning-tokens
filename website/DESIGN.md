@@ -121,7 +121,9 @@ Scale (fluid): display `clamp(2.75–4.5rem)`, h1 `clamp(2–2.75rem)`, h2
 
 ## 5. Sources
 
-- **Monogram:** `docs/references/Learning Tokens - Logo Completo/` (the LT greca).
+- **Monogram:** the LT greca, traced to vector from the original artwork. The
+  master is `public/brand/lt-mark.svg`; the pre-vector rasters it came from are
+  kept outside this repository.
 - **Palette:** sampled from the paintings of Gunther Gerzso (1915–2000), Mexican
   geometric abstraction. Every hex above was drawn from those canvases. The works
   are under copyright and are deliberately not reproduced in this repository —
