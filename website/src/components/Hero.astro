@@ -1,0 +1,123 @@
+---
+// The signature: a ledger where each learning event is minted into a token.
+const ledger = [
+    { id: '0x7f3a…c21', event: 'Attended · Intro to Cryptography', type: 'Attendance', color: 'text-token-attendance', kind: 'NFT' },
+    { id: '0x9b12…e04', event: 'Scored 94/100 · Assessment 3', type: 'Score · Learner', color: 'text-token-score', kind: 'NFT' },
+    { id: '0x2d88…a7f', event: 'Helped 6 peers · Forum review', type: 'Help', color: 'text-token-help', kind: 'ERC-20' },
+    { id: '0x4e60…19b', event: 'Rated teaching · Module 2', type: 'Score · Instructor', color: 'text-token-instructor', kind: 'NFT' },
+];
+---
+
+<section id="top" class="relative overflow-hidden bg-ink-grad text-paper">
+    <div class="ruled absolute inset-0 opacity-60" aria-hidden="true"></div>
+    <div class="container-lt relative grid gap-14 py-24 md:py-30 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <!-- Left: thesis -->
+        <div>
+            <p class="eyebrow">Linux Foundation Decentralized Trust Lab</p>
+            <h1 class="mt-5 font-display text-display">
+                A currency of<br /><span class="text-gold">expertise.</span>
+            </h1>
+            <p class="mt-6 max-w-narrow text-lg leading-relaxed text-paper/75">
+                Learning Tokens turns the learning process itself into verifiable credit. Every unit of
+                competence — attendance, a score, an act of help — is minted on-chain the moment it happens,
+                not certified years later at graduation.
+            </p>
+
+            <div class="mt-9 flex flex-wrap items-center gap-3">
+                <a href="#start" class="btn-primary">Read the protocol</a>
+                <a
+                    href="https://www.npmjs.com/package/ltsdk"
+                    target="_blank"
+                    rel="noopener"
+                    class="btn-ghost-dark"
+                >
+                    <span class="text-gold">$</span> npx ltsdk start
+                </a>
+            </div>
+
+            <dl class="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-white/10 pt-6">
+                <div>
+                    <dt class="font-display text-2xl text-paper">4</dt>
+                    <dd class="mt-1 font-mono text-xs text-paper/55">token templates</dd>
+                </div>
+                <div>
+                    <dt class="font-display text-2xl text-paper">4</dt>
+                    <dd class="mt-1 font-mono text-xs text-paper/55">LMS connectors</dd>
+                </div>
+                <div>
+                    <dt class="font-display text-2xl text-paper">EVM</dt>
+                    <dd class="mt-1 font-mono text-xs text-paper/55">Besu · Quorum</dd>
+                </div>
+            </dl>
+        </div>
+
+        <!-- Right: the ledger being minted -->
+        <div class="relative">
+            <div class="rounded-card-lg border border-white/12 bg-ink-soft/70 shadow-card backdrop-blur-sm">
+                <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
+                    <span class="font-mono text-xs text-paper/60">learning-token-register</span>
+                    <span class="flex items-center gap-1.5 font-mono text-[0.68rem] text-mint">
+                        <span class="inline-block h-1.5 w-1.5 rounded-full bg-mint"></span> minted
+                    </span>
+                </div>
+
+                <div class="divide-y divide-white/8">
+                    {
+                        ledger.map((row, i) => (
+                            <div
+                                class="ledger-row flex items-center gap-4 px-5 py-4"
+                                style={`animation-delay:${i * 140}ms`}
+                            >
+                                <span class={`font-mono text-xs ${row.color}`}>{row.id}</span>
+                                <div class="min-w-0 flex-1">
+                                    <p class="truncate text-sm text-paper/90">{row.event}</p>
+                                    <p class={`font-mono text-[0.68rem] ${row.color}`}>{row.type}</p>
+                                </div>
+                                <span class="shrink-0 rounded-sm border border-white/15 px-2 py-0.5 font-mono text-[0.62rem] text-paper/60">
+                                    {row.kind}
+                                </span>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <div class="flex items-center justify-end border-t border-white/10 px-5 py-3">
+                    <span class="font-mono text-[0.68rem] text-paper/45">block #1,284,097</span>
+                </div>
+            </div>
+
+            <!-- verified seal -->
+            <div
+                class="absolute -bottom-5 -left-5 hidden h-20 w-20 place-items-center rounded-full border border-gold/40 bg-ink shadow-seal sm:grid"
+                aria-hidden="true"
+            >
+                <span class="text-center font-mono text-[0.55rem] leading-tight text-gold">
+                    SKILL<br />VERIFIED
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .ledger-row {
+        opacity: 0;
+        animation: mint 0.6s ease-out forwards;
+    }
+    @keyframes mint {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .ledger-row {
+            opacity: 1;
+            animation: none;
+        }
+    }
+</style>

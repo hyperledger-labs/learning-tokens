@@ -1,0 +1,44 @@
+---
+import '../styles/global.css';
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+// BASE_URL is '/' at the root and '/learning-tokens/' on Pages; strip the
+// trailing slash so the paths below read the same in both.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const {
+    title = 'Learning Tokens — a currency of expertise',
+    description = 'Learning Tokens is an open-source Linux Foundation Decentralized Trust Lab that tokenizes the learning process, turning granular skill acquisition into verifiable, on-chain credentials.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+        <meta name="generator" content={Astro.generator} />
+
+        <title>{title}</title>
+        <meta name="description" content={description} />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>

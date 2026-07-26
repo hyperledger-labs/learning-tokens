@@ -1,0 +1,196 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LtMark from '../components/LtMark.astro';
+import LtBadge from '../components/LtBadge.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const grounds = [
+    { name: 'Ink', hex: '#16150F', role: 'Primary dark ground', on: '#E7E2CE' },
+    { name: 'Basalt', hex: '#2A2823', role: 'Raised surface / dark', on: '#E7E2CE' },
+    { name: 'Paper', hex: '#E7E2CE', role: 'Primary light ground', on: '#16150F' },
+    { name: 'Bone', hex: '#F3EFE2', role: 'Raised surface / light', on: '#16150F' },
+];
+const ochre = [
+    { name: 'Ochre', hex: '#A98B4B', role: 'Brand primary · the mark', on: '#16150F' },
+    { name: 'Gilt', hex: '#C9A24E', role: 'Hover · links on dark', on: '#16150F' },
+    { name: 'Olive', hex: '#6E6B45', role: 'Dividers on dark', on: '#E7E2CE' },
+];
+const slate = [
+    { name: 'Slate', hex: '#B3C2C1', role: 'Cool secondary surface', on: '#16150F' },
+    { name: 'Pine', hex: '#3C4A46', role: 'Secondary dark accent', on: '#E7E2CE' },
+];
+const accent = [{ name: 'Terracotta', hex: '#B4471F', role: 'One hot moment per view', on: '#F3EFE2' }];
+---
+
+<Layout title="Learning Tokens — Brand" description="The Learning Tokens visual identity: logo, palette, and type, drawn from a Gunther Gerzso palette.">
+    <main class="min-h-screen bg-[#E7E2CE] font-sans text-[#16150F]">
+        <!-- ── Masthead ────────────────────────────────────────── -->
+        <header class="mx-auto flex max-w-[1080px] items-center justify-between px-6 py-6">
+            <div class="flex items-center gap-3">
+                <LtBadge class="h-9 w-9" />
+                <span class="font-display text-lg font-600 tracking-tight">Learning Tokens</span>
+            </div>
+            <span class="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[#6B6858]">Identity · v1</span>
+        </header>
+
+        <!-- ── Hero ────────────────────────────────────────────── -->
+        <section class="bg-[#16150F] text-[#E7E2CE]">
+            <div class="mx-auto grid max-w-[1080px] items-center gap-12 px-6 py-20 md:grid-cols-[1fr_320px]">
+                <div>
+                    <p class="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-[#C9A24E]">The identity</p>
+                    <h1 class="mt-5 font-display text-[clamp(2.4rem,5vw,3.8rem)] font-600 leading-[1.03] tracking-[-0.02em]">
+                        A currency of expertise,<br />minted in <span class="text-[#C9A24E]">geometric gold.</span>
+                    </h1>
+                    <p class="mt-6 max-w-xl leading-relaxed text-[#B9B4A0]">
+                        The mark is an interlocking <strong class="text-[#E7E2CE]">LT greca</strong> — a
+                        stepped-key meander from Mesoamerican design. The palette is sampled straight from the
+                        canvases of <strong class="text-[#E7E2CE]">Gunther Gerzso</strong>, the master of
+                        Mexican geometric abstraction. Warm, earthy, deliberate.
+                    </p>
+                </div>
+                <div class="justify-self-center text-center">
+                    <img
+                        src={`${base}/brand/lt-painterly.png`}
+                        width="290"
+                        height="290"
+                        alt="Learning Tokens mark, painted in the Gerzso palette"
+                        class="rounded-[10px] shadow-[0_24px_70px_-20px_rgba(0,0,0,0.7)]"
+                    />
+                    <p class="mt-4 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-[#B9B4A0]">The original — painted</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── The mark ────────────────────────────────────────── -->
+        <section class="mx-auto max-w-[1080px] px-6 py-20">
+            <p class="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-[#6B6858]">01 · The mark</p>
+            <h2 class="mt-4 font-display text-[2rem] font-600 tracking-[-0.01em]">An interlocking LT greca</h2>
+            <p class="mt-3 max-w-2xl leading-relaxed text-[#6B6858]">
+                A square holding an interlocking L and T as a stepped-key greca — a Mesoamerican meander.
+                The letters read in the negative space; the counters carry the ground colour straight
+                through. One vector, any colour.
+            </p>
+
+            <!-- variants -->
+            <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <figure class="grid place-items-center rounded-[6px] border border-[#DCD7C4] bg-[#F3EFE2] p-6">
+                    <LtMark class="h-28 w-28 text-[#16150F]" />
+                    <figcaption class="mt-4 font-mono text-[0.68rem] text-[#6B6858]">Mono · ink on light</figcaption>
+                </figure>
+                <figure class="grid place-items-center rounded-[6px] border border-[#DCD7C4] bg-[#16150F] p-6">
+                    <LtMark class="h-28 w-28 text-[#E7E2CE]" />
+                    <figcaption class="mt-4 font-mono text-[0.68rem] text-[#B9B4A0]">Reversed · on ink</figcaption>
+                </figure>
+                <figure class="grid place-items-center rounded-[6px] border border-[#DCD7C4] bg-[#F3EFE2] p-6">
+                    <LtBadge class="h-28 w-28" />
+                    <figcaption class="mt-4 font-mono text-[0.68rem] text-[#6B6858]">Badge · primary</figcaption>
+                </figure>
+                <figure class="grid place-items-center rounded-[6px] border border-[#DCD7C4] bg-[#F3EFE2] p-6">
+                    <LtBadge class="h-28 w-28" mark="#3C4A46" />
+                    <figcaption class="mt-4 font-mono text-[0.68rem] text-[#6B6858]">Heritage · slate on gold</figcaption>
+                </figure>
+            </div>
+
+            <!-- size ramp + lockup -->
+            <div class="mt-4 flex flex-wrap items-center gap-8 rounded-[6px] border border-[#DCD7C4] bg-[#F3EFE2] px-8 py-7">
+                <div class="flex items-end gap-5">
+                    <LtBadge class="h-16 w-16" />
+                    <LtBadge class="h-10 w-10" />
+                    <LtBadge class="h-7 w-7" />
+                    <LtBadge class="h-5 w-5" />
+                </div>
+                <span class="font-mono text-[0.68rem] text-[#6B6858]">holds down to 20px</span>
+                <div class="ml-auto flex items-center gap-3">
+                    <LtBadge class="h-11 w-11" />
+                    <span class="font-display text-2xl font-600 tracking-tight">Learning&nbsp;Tokens</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Palette ─────────────────────────────────────────── -->
+        <section class="bg-[#16150F] text-[#E7E2CE]">
+            <div class="mx-auto max-w-[1080px] px-6 py-20">
+                <p class="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-[#C9A24E]">02 · Palette</p>
+                <h2 class="mt-4 font-display text-[2rem] font-600 tracking-[-0.01em]">Sampled from Gerzso</h2>
+                <p class="mt-3 max-w-2xl leading-relaxed text-[#B9B4A0]">
+                    Every value below was pulled from the reference paintings: near-black olive grounds,
+                    parchment light, ochre gold as the primary, pale slate as the cool foil, and one hot
+                    terracotta — Gerzso’s red — used once per view.
+                </p>
+
+                {[
+                    { label: 'Grounds', set: grounds },
+                    { label: 'Ochre — primary', set: ochre },
+                    { label: 'Slate — secondary', set: slate },
+                    { label: 'Terracotta — accent', set: accent },
+                ].map((group) => (
+                    <div class="mt-10">
+                        <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[#B9B4A0]">{group.label}</p>
+                        <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                            {group.set.map((c) => (
+                                <div class="overflow-hidden rounded-[6px] border border-white/10">
+                                    <div class="flex h-24 items-end p-3" style={`background:${c.hex};color:${c.on}`}>
+                                        <span class="font-mono text-[0.72rem]">{c.hex}</span>
+                                    </div>
+                                    <div class="bg-[#2A2823] px-3 py-2.5">
+                                        <p class="font-display text-sm font-600">{c.name}</p>
+                                        <p class="font-mono text-[0.64rem] text-[#B9B4A0]">{c.role}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+                <p class="mt-8 font-mono text-[0.66rem] text-[#B9B4A0]/70">
+                    Palette reference: paintings of Gunther Gerzso (1915–2000). Colors sampled for the identity;
+                    the works themselves are not reproduced here.
+                </p>
+            </div>
+        </section>
+
+        <!-- ── Type ────────────────────────────────────────────── -->
+        <section class="mx-auto max-w-[1080px] px-6 py-20">
+            <p class="font-mono text-[0.72rem] uppercase tracking-[0.2em] text-[#6B6858]">03 · Typography</p>
+            <h2 class="mt-4 font-display text-[2rem] font-600 tracking-[-0.01em]">Geometric, quiet, institutional</h2>
+            <p class="mt-3 max-w-2xl leading-relaxed text-[#6B6858]">
+                The type stays quiet so the mark and color carry the personality.
+            </p>
+
+            <div class="mt-10 space-y-4">
+                <div class="rounded-[6px] border border-[#DCD7C4] bg-[#F3EFE2] p-8">
+                    <div class="flex items-baseline justify-between">
+                        <span class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[#6B6858]">Display</span>
+                        <span class="font-mono text-[0.68rem] text-[#6B6858]">Space Grotesk · 600 / 700</span>
+                    </div>
+                    <p class="mt-3 font-display text-[clamp(2rem,5vw,3rem)] font-600 tracking-[-0.02em]">A currency of expertise</p>
+                </div>
+                <div class="rounded-[6px] border border-[#DCD7C4] bg-[#F3EFE2] p-8">
+                    <div class="flex items-baseline justify-between">
+                        <span class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[#6B6858]">Body</span>
+                        <span class="font-mono text-[0.68rem] text-[#6B6858]">Inter · 400 / 500</span>
+                    </div>
+                    <p class="mt-3 max-w-2xl text-lg leading-relaxed">
+                        Every unit of competence — attendance, a score, an act of help — is minted on-chain the
+                        moment it happens, tagged with a standard field of knowledge and skill.
+                    </p>
+                </div>
+                <div class="rounded-[6px] border border-[#DCD7C4] bg-[#F3EFE2] p-8">
+                    <div class="flex items-baseline justify-between">
+                        <span class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[#6B6858]">Data · labels</span>
+                        <span class="font-mono text-[0.68rem] text-[#6B6858]">IBM Plex Mono · 400 / 500</span>
+                    </div>
+                    <p class="mt-3 font-mono text-sm text-[#3C4A46]">0x7f3a…c21 · ATTENDANCE · block #1,284,097</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Footer ──────────────────────────────────────────── -->
+        <footer class="bg-[#16150F] text-[#B9B4A0]">
+            <div class="mx-auto flex max-w-[1080px] flex-col justify-between gap-3 px-6 py-10 sm:flex-row">
+                <span class="font-mono text-[0.7rem]">Learning Tokens · identity system v1</span>
+                <a href={`${base}/`} class="font-mono text-[0.7rem] text-[#C9A24E] hover:underline">← back to site</a>
+            </div>
+        </footer>
+    </main>
+</Layout>

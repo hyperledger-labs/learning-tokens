@@ -1,0 +1,46 @@
+---
+const points = [
+    {
+        n: '01',
+        title: 'Recognition arrives too late',
+        body: 'A degree summarises years into a single line. The partial efforts — the assessment passed, the concept mastered, the peer helped — leave no durable trace anyone can verify.',
+    },
+    {
+        n: '02',
+        title: 'Skills are the missing unit',
+        body: 'Learning Tokens records competence at the granularity it actually happens, tagged with standard fields of knowledge (CIP) and skills (WEF Reskilling Revolution taxonomy).',
+    },
+    {
+        n: '03',
+        title: 'The learner owns the proof',
+        body: 'Each token is a portable, tamper-evident credential the learner holds — threadable across curricula, institutions and borders, without asking a registrar for permission.',
+    },
+];
+---
+
+<section id="thesis" class="border-b border-paper-line bg-paper py-22 md:py-26">
+    <div class="container-lt">
+        <div class="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div class="lg:sticky lg:top-24">
+                <p class="eyebrow text-muted">The thesis</p>
+                <h2 class="mt-4 max-w-narrow font-display text-h1 text-ink">
+                    Learning happens in steps. So should its recognition.
+                </h2>
+            </div>
+
+            <ol class="-mt-2 rounded-card border border-paper-line bg-paper-raised">
+                {
+                    points.map((p) => (
+                        <li class="grid grid-cols-[auto_1fr] gap-5 border-b border-paper-line px-6 py-6 last:border-b-0 md:px-8">
+                            <span class="font-mono text-sm text-gold">{p.n}</span>
+                            <div>
+                                <h3 class="font-display text-h3 text-ink">{p.title}</h3>
+                                <p class="mt-2 max-w-xl leading-relaxed text-muted">{p.body}</p>
+                            </div>
+                        </li>
+                    ))
+                }
+            </ol>
+        </div>
+    </div>
+</section>

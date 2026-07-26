@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        color-scheme: light;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        @apply bg-paper text-ink font-sans;
+    }
+
+    ::selection {
+        background: rgba(201, 162, 78, 0.28);
+    }
+
+    :focus-visible {
+        outline: 2px solid #c9a24e;
+        outline-offset: 3px;
+        border-radius: 2px;
+    }
+}
+
+@layer components {
+    .container-lt {
+        @apply mx-auto w-full max-w-container px-6 md:px-8;
+    }
+
+    .eyebrow {
+        @apply font-mono text-eyebrow uppercase text-gold;
+    }
+
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-card px-5 py-3 font-mono text-sm font-medium transition-colors duration-150;
+    }
+
+    .btn-primary {
+        @apply btn bg-gold text-ink hover:bg-[#d9b05c];
+    }
+
+    .btn-ghost-light {
+        @apply btn border border-ink/15 text-ink hover:border-ink/40;
+    }
+
+    .btn-ghost-dark {
+        @apply btn border border-white/20 text-paper hover:border-white/50;
+    }
+
+    /* Ledger ruling — the structural signature of the page */
+    .ruled {
+        background-image: repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent calc(2rem - 1px),
+            rgba(110, 107, 69, 0.28) 2rem
+        );
+    }
+
+    .ruled-light {
+        background-image: repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent calc(2rem - 1px),
+            rgba(220, 215, 196, 0.9) 2rem
+        );
+    }
+
+    .hairline {
+        @apply border-t border-paper-line;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}

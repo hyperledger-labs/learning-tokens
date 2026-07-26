@@ -1,0 +1,105 @@
+---
+// Talent Angels — a recognized sister project of the Learning Tokens Lab.
+// Neither the repo nor the site is public yet, so both read as coming soon.
+// One assistant, four map-work skills (ADR-0003: skills + tools, not peer agents).
+const skills = [
+    { name: 'Locate', body: 'Free text to a precise point on the map, with confidence.' },
+    { name: 'Connect', body: 'Neighbors, hierarchy and gaps around any point.' },
+    { name: 'Pathfind', body: 'Routes between two points, under the rules you set.' },
+    { name: 'Evaluate', body: 'Score and rank those routes by a documented policy.' },
+];
+const taxonomies = ['O*NET', 'BLS', 'ESCO', 'SFIA', 'Sweden JobTech'];
+---
+
+<section id="talent-angels" class="border-b border-paper-line bg-paper py-22 md:py-26">
+    <div class="container-lt">
+        <div class="overflow-hidden rounded-card-lg border border-ink/12 bg-ink text-paper">
+            <div class="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+                <!-- Left: the pitch -->
+                <div class="p-8 md:p-12">
+                    <p class="eyebrow">Sister project · Learning Tokens Lab</p>
+                    <h2 class="mt-4 font-display text-h1 text-paper">Talent&nbsp;Angels</h2>
+                    <p class="mt-4 max-w-xl leading-relaxed text-paper/75">
+                        If Learning Tokens mints the <em>proof</em> of skills, Talent Angels helps you
+                        <em>navigate</em> them. One agentic AI — Graph-RAG over the world’s occupational
+                        taxonomies — that owns your goal end to end: reads the intent, plans a route, and
+                        answers with evidence and confidence. Built by the same mentorship lab under LF
+                        Decentralized Trust.
+                    </p>
+
+                    <p class="mt-8 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-paper/45">
+                        One assistant · four navigation skills
+                    </p>
+                    <div class="mt-3 grid grid-cols-2 gap-3">
+                        {
+                            skills.map((s) => (
+                                <div class="rounded-card border border-white/12 bg-ink-soft/60 p-4">
+                                    <p class="font-display text-base text-gold">{s.name}</p>
+                                    <p class="mt-1 text-sm leading-snug text-paper/65">{s.body}</p>
+                                </div>
+                            ))
+                        }
+                    </div>
+
+                    <div class="mt-8 flex flex-wrap items-center gap-3">
+                        {
+                            ['Website', 'GitHub'].map((what) => (
+                                <span class="inline-flex items-center gap-2 rounded-card border border-dashed border-white/20 px-4 py-2.5 font-mono text-[0.75rem] text-paper/55">
+                                    {what}
+                                    <span class="text-gold/70">coming soon</span>
+                                </span>
+                            ))
+                        }
+                    </div>
+                </div>
+
+                <!-- Right: the graph motif + taxonomies -->
+                <div class="relative flex flex-col justify-between gap-8 border-t border-white/10 bg-ink-soft/40 p-8 md:p-12 lg:border-l lg:border-t-0">
+                    <div class="ruled absolute inset-0 opacity-40" aria-hidden="true"></div>
+                    <div class="relative">
+                        <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-paper/45">
+                            Skills are the currency of talent
+                        </p>
+                        <p class="mt-3 max-w-sm text-sm leading-relaxed text-paper/70">
+                            One assistant plans, then dispatches its skills — no maze of hand-off agents.
+                            Determinism lives in the graph tools; the model decides what to ask and how to
+                            answer, over a living ontology of talent.
+                        </p>
+                    </div>
+
+                    <!-- graph-agent motif -->
+                    <svg class="relative my-2 h-32 w-full" viewBox="0 0 240 120" fill="none" aria-hidden="true">
+                        <g stroke="#6E6B45" stroke-width="1">
+                            <line x1="40" y1="60" x2="110" y2="28" />
+                            <line x1="40" y1="60" x2="110" y2="92" />
+                            <line x1="110" y1="28" x2="180" y2="52" />
+                            <line x1="110" y1="92" x2="180" y2="52" />
+                            <line x1="110" y1="28" x2="110" y2="92" />
+                            <line x1="180" y1="52" x2="210" y2="96" />
+                        </g>
+                        <g>
+                            <circle cx="40" cy="60" r="5" fill="#C9A24E" />
+                            <circle cx="110" cy="28" r="4" fill="#B3C2C1" />
+                            <circle cx="110" cy="92" r="4" fill="#B3C2C1" />
+                            <circle cx="180" cy="52" r="6" fill="#C9A24E" />
+                            <circle cx="210" cy="96" r="3.5" fill="#B4471F" />
+                        </g>
+                    </svg>
+
+                    <div class="relative">
+                        <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-paper/40">Grounded in</p>
+                        <ul class="mt-3 flex flex-wrap gap-2">
+                            {
+                                taxonomies.map((t) => (
+                                    <li class="rounded-sm border border-white/15 px-2.5 py-1 font-mono text-[0.7rem] text-paper/70">
+                                        {t}
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

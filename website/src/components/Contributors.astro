@@ -1,0 +1,151 @@
+---
+// The people ledger — every mentorship cohort that built this Lab, entered like
+// register lines. Roles and workstreams are derived from the repo history
+// (git log + merged PRs) and the report authorship in README.md.
+const gh = 'https://github.com/';
+
+const cohorts = [
+    {
+        term: '2022',
+        program: 'Hyperledger Mentorship Program',
+        people: [
+            { name: 'Alfonso Govela', handle: 'AlfonsoGovela', role: 'Mentor', work: 'Token model and the Learning Tokens thesis' },
+            { name: 'José Marvin Henriquez Alfaro', handle: 'Jmarvin-12', role: 'Mentee', work: 'First contracts and the initial Lab' },
+        ],
+    },
+    {
+        term: '2023',
+        program: 'Hyperledger Mentorship Program',
+        people: [
+            { name: 'Alfonso Govela', handle: 'AlfonsoGovela', role: 'Mentor', work: 'IWA TTF token templates, project report' },
+            { name: 'Tanjin Alam', handle: 'TanjinAlam', role: 'Mentee', work: 'Protocol implementation — contracts, backend, dashboard' },
+        ],
+    },
+    {
+        term: '2024',
+        program: 'LFX Mentorship · LF Decentralized Trust',
+        people: [
+            { name: 'Alfonso Govela', handle: 'AlfonsoGovela', role: 'Mentor', work: 'Program lead' },
+            { name: 'Tanjin Alam', handle: 'TanjinAlam', role: 'Mentor', work: 'Smart contracts, NestJS backend, token distribution' },
+            { name: 'Neo', handle: 'NeoZ666', role: 'Mentee', work: 'Dashboard UI, invitations, the ltsdk npm package' },
+            { name: 'Weber Dubois', handle: 'weber77', role: 'Mentee', work: 'SDK key CRUD and UI' },
+            { name: 'Khairul Hasan', handle: 'khairul111010', role: 'Mentee', work: 'Event flow and mail delivery' },
+            { name: 'Ciel Recuerdo', handle: 'skyrocket55', role: 'Mentee', work: 'Institution and instructor registration, learner dashboard' },
+        ],
+    },
+    {
+        term: '2025',
+        program: 'LFX Mentorship · LF Decentralized Trust',
+        people: [
+            { name: 'Alfonso Govela', handle: 'AlfonsoGovela', role: 'Mentor', work: 'Program lead' },
+            { name: 'Neo', handle: 'NeoZ666', role: 'Mentor', work: 'Maintainer — reviews, repo hygiene, releases' },
+            { name: 'Harsh Parihar', handle: 'harsh-a-parihar', role: 'Mentee', work: 'ltsdk SDK and its integration with the backend' },
+            { name: 'Ankita Maurya', handle: 'Ankita0112', role: 'Mentee', work: 'Canvas LMS connector' },
+            { name: 'Hariom Dhage', handle: 'HariomDhage', role: 'Mentee', work: 'Moodle LMS connector' },
+            { name: 'Aviral', handle: 'AviraL0013', role: 'Mentee', work: 'Open edX client — courses, enrollments, grades' },
+            { name: 'Vaibhav Mittal', handle: 'Vaibhav701161', role: 'Mentee', work: 'Google Classroom LMS connector' },
+        ],
+    },
+];
+
+// Everyone else who left something in the register.
+const community = [
+    { name: 'Ry Jones', handle: 'ryjones' },
+    { name: 'Deepak Tiwari', handle: 'iron-prog' },
+    { name: 'Pratik v Patil', handle: 'Godzilaa' },
+    { name: 'Nilanchal', handle: 'NilanchalaPanda' },
+    { name: 'Sancheet', handle: 'sancheet230' },
+    { name: 'Jaimukund Bhan', handle: 'Survey845' },
+    { name: 'Harshdev', handle: 'Harshdev098' },
+];
+---
+
+<section id="contributors" class="relative border-b border-paper-line bg-paper-raised py-22 md:py-26">
+    <div class="ruled-light absolute inset-0 opacity-70" aria-hidden="true"></div>
+
+    <div class="container-lt relative">
+        <p class="eyebrow">The register · mentors &amp; mentees</p>
+        <h2 class="mt-4 max-w-narrow font-display text-h1">
+            Built by four cohorts of mentees
+        </h2>
+        <p class="mt-5 max-w-narrow leading-relaxed text-muted">
+            Learning Tokens has been a mentorship Lab since 2022. Every line below is someone who
+            spent a term of the Linux Foundation mentorship program building part of this protocol —
+            and whose own skills, fittingly, are recorded in the ledger they helped write.
+        </p>
+
+        <div class="mt-14 space-y-12">
+            {
+                cohorts.map((c) => (
+                    <div class="grid gap-x-10 gap-y-5 border-t border-ink/12 pt-6 md:grid-cols-[8.5rem_1fr]">
+                        <div>
+                            <p class="font-display text-h2 leading-none text-ink">{c.term}</p>
+                            <p class="mt-2 font-mono text-[0.68rem] leading-snug text-muted">{c.program}</p>
+                        </div>
+
+                        <ul class="divide-y divide-ink/10">
+                            {c.people.map((p) => (
+                                <li class="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-3 first:pt-0">
+                                    <span
+                                        class={`shrink-0 rounded-sm px-2 py-0.5 font-mono text-[0.62rem] uppercase tracking-[0.1em] ${
+                                            p.role === 'Mentor'
+                                                ? 'bg-ochre/25 text-[#5E4C21]'
+                                                : 'bg-ink/6 text-muted'
+                                        }`}
+                                    >
+                                        {p.role}
+                                    </span>
+                                    <a
+                                        href={gh + p.handle}
+                                        target="_blank"
+                                        rel="noopener"
+                                        class="font-display text-base text-ink underline decoration-ink/20 underline-offset-4 transition-colors hover:decoration-ochre"
+                                    >
+                                        {p.name}
+                                    </a>
+                                    <span class="w-full text-sm leading-snug text-muted sm:w-auto sm:min-w-0 sm:flex-1">
+                                        {p.work}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+        </div>
+
+        <div class="mt-14 border-t border-ink/12 pt-6">
+            <p class="font-mono text-[0.7rem] uppercase tracking-wider text-muted">
+                And the wider community
+            </p>
+            <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+                {
+                    community.map((p) => (
+                        <li>
+                            <a
+                                href={gh + p.handle}
+                                target="_blank"
+                                rel="noopener"
+                                class="text-sm text-muted transition-colors hover:text-ink"
+                            >
+                                {p.name}
+                            </a>
+                        </li>
+                    ))
+                }
+            </ul>
+            <p class="mt-6 font-mono text-[0.7rem] text-muted/80">
+                Missing from this ledger?{' '}
+                <a
+                    href="https://github.com/hyperledger-labs/learning-tokens/issues/new"
+                    target="_blank"
+                    rel="noopener"
+                    class="underline decoration-ink/25 underline-offset-4 hover:text-ink"
+                >
+                    open an issue
+                </a>{' '}
+                and we will enter you.
+            </p>
+        </div>
+    </div>
+</section>

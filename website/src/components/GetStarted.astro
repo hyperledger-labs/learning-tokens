@@ -1,0 +1,54 @@
+---
+const repo = 'https://github.com/hyperledger-labs/learning-tokens';
+const standards = ['IWA Token Taxonomy Framework', 'CIP — Classification of Instructional Programs', 'WEF Reskilling Revolution skills taxonomy'];
+---
+
+<section id="start" class="bg-ink-grad py-22 text-paper md:py-26">
+    <div class="container-lt">
+        <div class="grid gap-5 md:grid-cols-2">
+            <!-- Developers -->
+            <article class="flex flex-col rounded-card-lg border border-white/12 bg-ink-soft/50 p-8">
+                <p class="eyebrow">For developers</p>
+                <h3 class="mt-4 font-display text-h2 text-paper">Deploy it locally today</h3>
+                <p class="mt-3 leading-relaxed text-paper/70">
+                    Spin up the contracts on a Hardhat node, start the backend and dashboard, or run the whole
+                    stack on Hyperledger Besu. Everything is Apache-2.0 and documented in the repo.
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <a href={repo} target="_blank" rel="noopener" class="btn-primary">Clone the repo ↗</a>
+                    <a href={repo + '#readme'} target="_blank" rel="noopener" class="btn-ghost-dark">Read the docs</a>
+                </div>
+            </article>
+
+            <!-- Institutions -->
+            <article class="flex flex-col rounded-card-lg border border-white/12 bg-ink-soft/50 p-8">
+                <p class="eyebrow">For institutions</p>
+                <h3 class="mt-4 font-display text-h2 text-paper">Connect your LMS</h3>
+                <p class="mt-3 leading-relaxed text-paper/70">
+                    Install the SDK, connect Moodle, Canvas, Open edX or Google Classroom, and review your
+                    course data before issuing a single token. Your credentials stay on your machine.
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <a href="https://www.npmjs.com/package/ltsdk" target="_blank" rel="noopener" class="btn-primary">
+                        Get ltsdk ↗
+                    </a>
+                    <code class="btn-ghost-dark cursor-default">npx ltsdk start</code>
+                </div>
+            </article>
+        </div>
+
+        <div class="mt-12 border-t border-white/10 pt-8">
+            <p class="font-mono text-[0.7rem] uppercase tracking-wider text-paper/45">Built on open standards</p>
+            <ul class="mt-4 flex flex-wrap gap-x-8 gap-y-3">
+                {
+                    standards.map((s) => (
+                        <li class="flex items-center gap-2 text-sm text-paper/70">
+                            <span class="inline-block h-1.5 w-1.5 rounded-full bg-gold"></span>
+                            {s}
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+    </div>
+</section>
