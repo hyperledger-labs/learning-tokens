@@ -1,4 +1,4 @@
-FROM docker.elastic.co/beats/filebeat:7.14.1
+FROM docker.elastic.co/beats/filebeat:9.4.4
 ENV ENV_NAME dev
 ENV IP_ADDRESS "127.0.0.1"
 ENV REDIS_HOST localhost
