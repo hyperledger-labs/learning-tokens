@@ -26,7 +26,7 @@ x-besu-def:
 
 x-splunk-def:
   &splunk-def
-  image: splunk/splunk:8.2
+  image: splunk/splunk:10.4
   container_name: splunk
   environment:
     - SPLUNK_START_ARGS=--accept-license
@@ -47,7 +47,7 @@ x-splunk-def:
 
 x-otelcollector-def:
   &otelcollector-def
-  image: quay.io/signalfx/splunk-otel-collector:0.26.0
+  image: quay.io/signalfx/splunk-otel-collector:0.157.0
   container_name: otelcollector
   depends_on:
     - splunk
@@ -64,7 +64,7 @@ x-otelcollector-def:
 
 x-ethlogger-def:
   &ethlogger-def
-  image: ghcr.io/splunkdlt/ethlogger:3.0.1
+  image: ghcr.io/splunkdlt/ethlogger:3.5.8
   container_name: ethlogger
   environment:
     - COLLECT_PEER_INFO=true
@@ -123,7 +123,7 @@ x-chainlensapi-ref:
 
 x-chainlensmongodb-ref:
   &chainlensmongodb-def
-  image: mongo:5.0.8
+  image: mongo:8.2.12
   container_name: chainlensmongodb
   environment:
     - COMPOSE_HTTP_TIMEOUT=900
@@ -375,7 +375,7 @@ services:
 
   cadvisor:
     container_name: cadvisor
-    image: gcr.io/cadvisor/cadvisor:v0.39.0
+    image: gcr.io/cadvisor/cadvisor:v0.55.1
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
