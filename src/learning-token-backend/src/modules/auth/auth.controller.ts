@@ -48,28 +48,7 @@ export class AuthController {
             const result = await this.service.adminLogin(loginRequestDto)
             if (result) {
                 return {
-                    status: HttpStatus.CREATED,
-                    message: 'User has logged in successfully',
-                    result: result
-                }
-            } else {
-                throw new NotFoundException('Invalid Credentials')
-            }
-        } catch (error) {
-            throw new NotFoundException('Invalid Credentials')
-        }
-    }
-
-    @Post('institution-login')
-    private async institution_login(
-        @Body() loginRequestDto: InstitutionLoginRequestDto
-    ) {
-        try {
-            loginRequestDto.type = 'Institution'
-            const result = await this.service.login(loginRequestDto)
-            if (result) {
-                return {
-                    status: HttpStatus.CREATED, // TODO: should be 200
+                    status: HttpStatus.OK,
                     message: 'User has logged in successfully',
                     result: result
                 }
@@ -108,7 +87,7 @@ export class AuthController {
             const result = await this.service.login(loginRequestDto)
             if (result) {
                 return {
-                    status: HttpStatus.CREATED,
+                    status: HttpStatus.OK,
                     message: 'User has logged in successfully',
                     result: result
                 }
@@ -146,7 +125,7 @@ export class AuthController {
             const result = await this.service.login(loginRequestDto)
             if (result) {
                 return {
-                    status: HttpStatus.CREATED,
+                    status: HttpStatus.OK,
                     message: 'User has logged in successfully',
                     result: result
                 }
@@ -182,7 +161,7 @@ export class AuthController {
     @Get('refresh-access-token')
     refreshAccessToken(@Request() req) {
         return {
-            status: HttpStatus.CREATED,
+            status: HttpStatus.OK,
             message: 'Access token generated',
             result: this.service.refreshToken(req.user)
         }

@@ -24,7 +24,7 @@ export class AuthService {
         @InjectRepository(Learner)
         private readonly learnerRepository: Repository<Learner>,
         @InjectRepository(Instructor)
-        private readonly insturctorRepository: Repository<Instructor>,
+        private readonly instructorRepository: Repository<Instructor>,
         @Inject(JwtService)
         private readonly jwtService: JwtService,
         @InjectRepository(Role)
@@ -109,7 +109,7 @@ export class AuthService {
             user.email = email
             // user.publicAddress = publicAddress
             user.password = this.jwtService.encodePassword(password)
-            const registeredUser = await this.insturctorRepository.save(user)
+            const registeredUser = await this.instructorRepository.save(user)
             return {
                 id: registeredUser.id,
                 name: registeredUser.name,
@@ -162,7 +162,7 @@ export class AuthService {
         let user = null
         if (loginRequestDto.type == 'Instructor') {
             //find instructor
-            user = await this.insturctorRepository.findOne({
+            user = await this.instructorRepository.findOne({
                 where: { email: loginRequestDto.email },
                 relations: ['role']
             })
