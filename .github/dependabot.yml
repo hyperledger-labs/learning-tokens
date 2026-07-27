@@ -1,0 +1,83 @@
+version: 2
+
+updates:
+  # ---------------------------------------------------------------- npm ----
+  # Covers the root manifest plus every nested package.json / lockfile:
+  # Lms|LMS/canvas/backend, LMS/google-classroom, lms/moodle, LMS/Moodle,
+  # LMS/openedx-client, "npm_package ltsdk"(/frontend),
+  # src/learning-token{,-backend,-dashboard},
+  # src/quorum-test-network/{extra,smart_contracts,dapps/quorumToken{,/frontend}}
+  - package-ecosystem: "npm"
+    directories:
+      - "/"
+      - "/**/*"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      npm:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  # ------------------------------------------------------------- docker ----
+  # Dockerfiles under src/learning-token-backend, src/learning-token-dashboard,
+  # src/quorum-test-network/{config/tessera,filebeat,logstash,metricbeat}
+  - package-ecosystem: "docker"
+    directories:
+      - "/**/*"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      docker:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      docker-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  # ----------------------------------------------------- docker-compose ----
+  # src/learning-token-backend, src/learning-token-dashboard,
+  # src/quorum-test-network
+  - package-ecosystem: "docker-compose"
+    directories:
+      - "/**/*"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      docker-compose:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      docker-compose-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  # ----------------------------------------------------- github-actions ----
+  # No workflows exist yet; this entry activates as soon as one is added.
+  # Dependabot preserves SHA pinning and refreshes the `# vX.Y.Z` comment.
+  - package-ecosystem: "github-actions"
+    directories:
+      - "/"
+      - "/.github/workflows"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      github-actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
