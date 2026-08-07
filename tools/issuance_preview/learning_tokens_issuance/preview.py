@@ -231,7 +231,7 @@ def _add_output_flags(parser: argparse.ArgumentParser) -> None:
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Learning Tokens Python tools for issuance previews and Talent Angels graph agents."
+        description="Learning Tokens Python tools for issuance previews."
     )
     subparsers = parser.add_subparsers(dest="command")
 
@@ -242,38 +242,6 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     preview_parser.add_argument("--payload", required=True, help="Path to normalized LMS payload JSON")
     preview_parser.add_argument("--policy", required=True, help="Path to issuance policy JSON")
     _add_output_flags(preview_parser)
-
-    locate_parser = subparsers.add_parser("locate", help="Run the Talent Angels Locator agent")
-    locate_parser.add_argument("query", help="Natural-language skill, task, or occupation query")
-    locate_parser.add_argument("--graph", help="Path to a TalentGraph JSON file; defaults to the repository seed graph")
-    locate_parser.add_argument("--kind", action="append", dest="kinds", help="Filter by node kind; can be repeated")
-    locate_parser.add_argument("--taxonomy", action="append", dest="taxonomies", help="Filter by taxonomy; can be repeated")
-    locate_parser.add_argument("--limit", type=int, default=5, help="Maximum number of matches")
-    _add_output_flags(locate_parser)
-
-    connect_parser = subparsers.add_parser("connect", help="Run the Talent Angels Connector agent")
-    connect_parser.add_argument("node_id", help="Graph node id to inspect")
-    connect_parser.add_argument("--graph", help="Path to a TalentGraph JSON file; defaults to the repository seed graph")
-    connect_parser.add_argument("--direction", choices=["incoming", "outgoing", "both"], default="both")
-    connect_parser.add_argument("--relation", action="append", dest="relations", help="Filter by relation; can be repeated")
-    _add_output_flags(connect_parser)
-
-    path_parser = subparsers.add_parser("path", help="Run the Talent Angels Pathfinder agent")
-    path_parser.add_argument("start_id", help="Start graph node id")
-    path_parser.add_argument("end_id", help="End graph node id")
-    path_parser.add_argument("--graph", help="Path to a TalentGraph JSON file; defaults to the repository seed graph")
-    path_parser.add_argument("--max-depth", type=int, default=4, help="Maximum traversal depth")
-    path_parser.add_argument("--limit", type=int, default=5, help="Maximum number of paths")
-    path_parser.add_argument("--relation", action="append", dest="relations", help="Filter by relation; can be repeated")
-    _add_output_flags(path_parser)
-
-    plan_parser = subparsers.add_parser("plan", help="Build issuance preview and Talent Angels recommendations")
-    plan_parser.add_argument("--payload", required=True, help="Path to normalized LMS payload JSON")
-    plan_parser.add_argument("--policy", required=True, help="Path to issuance policy JSON")
-    plan_parser.add_argument("--graph", help="Path to a TalentGraph JSON file; defaults to the repository seed graph")
-    plan_parser.add_argument("--target-kind", default="occupation", help="Recommendation target kind")
-    plan_parser.add_argument("--limit", type=int, default=5, help="Maximum number of recommendations")
-    _add_output_flags(plan_parser)
 
     # Backward compatibility for the first revision of this tool, which accepted
     # --payload/--policy at the top level without an explicit subcommand.
@@ -291,13 +259,6 @@ def _write_json(payload: Mapping[str, Any], *, pretty: bool = False, out: str | 
         print(body)
 
 
-def _load_graph(path: str | None = None):
-    from .agents import load_default_graph
-    from .talent_graph import TalentGraph
-
-    return TalentGraph.from_json(path) if path else load_default_graph()
-
-
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
     command = args.command or ("preview" if args.payload and args.policy else None)
@@ -307,42 +268,6 @@ def main(argv: list[str] | None = None) -> int:
 
     if command == "preview":
         result = build_preview(load_json(args.payload), load_json(args.policy))
-    elif command == "locate":
-        from .agents import LocatorAgent
-
-        result = LocatorAgent(_load_graph(args.graph)).run(
-            args.query,
-            kinds=args.kinds,
-            taxonomies=args.taxonomies,
-            limit=args.limit,
-        ).to_dict()
-    elif command == "connect":
-        from .agents import ConnectorAgent
-
-        result = ConnectorAgent(_load_graph(args.graph)).run(
-            args.node_id,
-            direction=args.direction,
-            relations=args.relations,
-        ).to_dict()
-    elif command == "path":
-        from .agents import PathfinderAgent
-
-        result = PathfinderAgent(_load_graph(args.graph)).run(
-            args.start_id,
-            args.end_id,
-            max_depth=args.max_depth,
-            limit=args.limit,
-            relations=args.relations,
-        ).to_dict()
-    elif command == "plan":
-        from .agents import LearningTokenPlannerAgent
-
-        result = LearningTokenPlannerAgent(_load_graph(args.graph)).run(
-            load_json(args.payload),
-            load_json(args.policy),
-            target_kind=args.target_kind,
-            recommendation_limit=args.limit,
-        ).to_dict()
     else:
         raise PolicyError(f"Unknown command: {command}")
 
