@@ -56,7 +56,7 @@ export class AuthController {
                 throw new NotFoundException('Invalid Credentials')
             }
         } catch (error) {
-            throw new NotFoundException('Invalid Credentials')
+            throw new NotFoundException('An error occured')
         }
     }
 
