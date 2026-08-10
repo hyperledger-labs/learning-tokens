@@ -54,9 +54,9 @@ const config: HardhatUserConfig = {
     //   // gas: 124500 // adjust as necessary
     // },
     kaleido: {
-      url: KALEIDO_RPC_URL,
-      chainId: 1513174332,
-      accounts: [KALEIDO_PRIV_KEY],
+      url: process.env.KALEIDO_RPC_URL,
+      chainId: parseInt(process.env.KALEIDO_CHAIN_ID || "0"),
+      accounts: [process.env.KALEDIO_PRIV_KEY || ""]
       // gasPrice: 80000000, // adjust as necessary
       // gas: 124500 // adjust as necessary
     },
@@ -72,7 +72,7 @@ const config: HardhatUserConfig = {
   },
 
   etherscan: {
-    apiKey: POLYGON_API_KEY,
+    apiKey: process.env.POLYGON_API_KEY,
     //   constructorArguments: [owners, numConfirmationsRequired],
   },
 };
