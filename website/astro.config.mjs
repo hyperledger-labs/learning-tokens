@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
 
 // The site is served from a subpath on GitHub Pages
 // (labs.hyperledger.org/learning-tokens/), so every absolute asset URL has to be
@@ -10,6 +9,7 @@ const base = process.env.SITE_BASE || '/learning-tokens';
 export default defineConfig({
     site: 'https://labs.hyperledger.org',
     base,
-    integrations: [tailwind()],
+    // Tailwind runs through postcss.config.js; @astrojs/tailwind was
+    // dropped because its peer range stops at astro 5.
     output: 'static',
 });
