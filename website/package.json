@@ -13,12 +13,12 @@
   "dependencies": {
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^5.7.10",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.6",
+    "@astrojs/check": "^0.9.10",
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "typescript": "^5.9.3"
+    "postcss": "^8.5.26",
+    "typescript": "^7.0.2"
   }
 }
