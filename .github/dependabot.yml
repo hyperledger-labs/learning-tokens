@@ -23,6 +23,20 @@ updates:
         applies-to: security-updates
         patterns:
           - "*"
+    ignore:
+      # Majors that need a manual migration before they can land, so they are
+      # held back to keep the grouped PRs mergeable.
+      #
+      # astro 5 -> 7 breaks `npm ci`: @astrojs/tailwind@6 declares
+      # `peer astro: ^3 || ^4 || ^5`. Clearing the astro advisories needs
+      # >= 7.1.0 *and* a move to @tailwindcss/vite. Tracked separately.
+      #
+      # NOTE: ignore also suppresses security updates for these packages.
+      # Remove each entry as soon as its migration is done.
+      - dependency-name: "astro"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
 
   # ------------------------------------------------------------- docker ----
   # Dockerfiles under src/learning-token-backend, src/learning-token-dashboard,
