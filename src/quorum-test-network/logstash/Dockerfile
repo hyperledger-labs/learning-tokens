@@ -1,4 +1,4 @@
-FROM docker.elastic.co/logstash/logstash:9.5.0
+FROM docker.elastic.co/logstash/logstash:9.5.2
 
 ENV ES_HOST http://localhost:9200
 ENV REDIS_HOST localhost
