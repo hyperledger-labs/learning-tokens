@@ -47,7 +47,7 @@ x-splunk-def:
 
 x-otelcollector-def:
   &otelcollector-def
-  image: quay.io/signalfx/splunk-otel-collector:0.157.0
+  image: quay.io/signalfx/splunk-otel-collector:0.159.0
   container_name: otelcollector
   depends_on:
     - splunk
