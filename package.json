@@ -6,6 +6,6 @@
     "stop:dev": "(pkill -f \"local-server/server.js\" || true)"
   },
   "devDependencies": {
-    "dotenv": "^16.1.4"
+    "dotenv": "^17.4.2"
   }
 }
