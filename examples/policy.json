@@ -1,0 +1,26 @@
+{
+    "courseId": "1001",
+    "wallets": {
+      "21": "0x1111111111111111111111111111111111111111"
+    },
+    "tokens": [
+      {
+        "id": "attendance-submitted",
+        "tokenType": "attendance",
+        "amount": 1,
+        "condition": {
+          "field": "submission.workflow_state",
+          "equals": "submitted"
+        }
+      },
+      {
+        "id": "score-above-80",
+        "tokenType": "score",
+        "amount": 10,
+        "condition": {
+          "field": "grade.percentage",
+          "gte": 80
+        }
+      }
+    ]
+  }

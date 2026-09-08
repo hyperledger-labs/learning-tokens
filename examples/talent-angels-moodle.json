@@ -1,0 +1,79 @@
+{
+  "source": {
+    "lms": "moodle",
+    "rawCourseId": "1001",
+    "fetchedAt": "2025-10-10T12:47:09.057Z"
+  },
+  "institution": {
+    "id": "55"
+  },
+  "course": {
+    "id": "1001",
+    "name": "Moodle 101",
+    "startDate": "2025-02-01T00:00:00.000Z",
+    "endDate": "2025-06-01T00:00:00.000Z",
+    "metadata": {}
+  },
+  "instructors": [
+    {
+      "instructor_id": "11",
+      "instructor_email": "teacher@example.edu",
+      "instructor_name": "Dr Moodle",
+      "instructor_username": "teacher@example.edu"
+    }
+  ],
+  "learners": [
+    {
+      "id": "21",
+      "email": "studentA@example.edu",
+      "name": "Student A",
+      "username": "studentA@example.edu",
+      "assignments": [
+        {
+          "id": "500",
+          "type": "assign",
+          "title": "Knowledge graphs pathfinder project",
+          "maxScore": 50,
+          "is_quiz_assignment": false,
+          "subsection_name": "General",
+          "submissions": [
+            {
+              "submitted_at": "2025-03-01T12:00:00.000Z",
+              "workflow_state": "submitted",
+              "grades": [
+                {
+                  "score": 45,
+                  "totalscore": 50,
+                  "percentage": "90.00"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "chat": [
+    {
+      "channel": "forum",
+      "messages": [
+        {
+          "id": "9001",
+          "from": "21",
+          "text": "I need help",
+          "ts": "2025-03-02T08:30:00.000Z"
+        }
+      ]
+    }
+  ],
+  "diagnostics": {
+    "missingEmailCount": 0,
+    "notes": [],
+    "activities": {
+      "total": 1,
+      "withSubmissions": 1,
+      "submissionsTotal": 1
+    }
+  },
+  "transcript": []
+}
