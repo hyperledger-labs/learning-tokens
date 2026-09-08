@@ -94,6 +94,8 @@ export class JwtService {
     public async verify(token: string): Promise<any> {
         try {
             return this.jwt.verify(token)
-        } catch (err) {}
+        } catch (err) {
+            return null
+        }
     }
 }
