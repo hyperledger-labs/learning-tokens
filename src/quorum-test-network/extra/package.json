@@ -5,9 +5,9 @@
   "scripts": {},
   "license": "Apache-2.0",
   "dependencies": {
-    "secp256k1": "^4.0.0",
+    "secp256k1": "^5.0.2",
     "keccak": "^3.0.0",
     "ethereumjs-wallet": "^1.0.2",
-    "yargs": "^17.2.1"
+    "yargs": "^18.1.0"
   }
 }
