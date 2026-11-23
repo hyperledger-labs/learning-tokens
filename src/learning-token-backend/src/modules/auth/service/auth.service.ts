@@ -151,7 +151,7 @@ export class AuthService {
             token: token,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
-            role: user.role.name
+            role: user.role?.name
         }
     }
 

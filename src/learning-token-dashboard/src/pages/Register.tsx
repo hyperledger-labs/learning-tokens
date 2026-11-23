@@ -74,6 +74,7 @@ const Login = () => {
           name: values.name,
           email: values.email,
           password: values.password,
+          type: 'Admin'
         })
           .unwrap()
           .then((result: any) => {
@@ -81,6 +82,7 @@ const Login = () => {
               loginAdmin({
                 email: values.email,
                 password: values.password,
+                type: 'Admin'
               })
                 .unwrap()
                 .then((res: any) => {
